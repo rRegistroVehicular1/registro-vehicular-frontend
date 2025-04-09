@@ -36,7 +36,7 @@ function Home() {
         onSubmit={(e) => e.preventDefault()}
       >
         <label className="block mb-4">
-          <span className="text-gray-700">Ingrese su placa</span>
+          <span className="text-gray-700">Ingrese su placa =</span>
           <input
             type="text"
             value={placa}
