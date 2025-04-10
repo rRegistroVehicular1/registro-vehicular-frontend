@@ -105,28 +105,27 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                     className="max-w-full h-auto"
                 />
             </div>
-
-            {/* Botones de Atras y Siguiente */}
-            <div className="flex justify-between mt-4">
-                    <button
-                        type="button"
-                        className="bg-gray-500 text-white px-4 py-2 rounded"
-                        onClick={handlePreviousStep}
-                    >
-                        Atrás
-                    </button>
-                    <button
-                        type="button"
-                        className="bg-blue-500 text-white px-4 py-2 rounded"
-                        onClick={() => {
-                            if (validateStep3()) {
-                                handleNextStep();
-                            }
-                        }}
-                    >
-                        Siguiente
-                    </button>
-            </div>
+        </div>
+        {/* Botones de Atras y Siguiente */}
+        <div className="flex justify-between mt-4">
+                <button
+                    type="button"
+                    className="bg-gray-500 text-white px-4 py-2 rounded"
+                    onClick={handlePreviousStep}
+                >
+                    Atrás
+                </button>
+                <button
+                    type="button"
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    onClick={() => {
+                        if (validateStep3()) {
+                            handleNextStep();
+                        }
+                    }}
+                >
+                    Siguiente
+                </button>
         </div>
     );
 }
