@@ -102,7 +102,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                 {/* Imagen de referencia - 1/3 del ancho */}
                 <div className="flex justify-center items-start">
                     <img
-                        src="/Indicador.png"  {/* Asegúrate de que esté en /public */}
+                        src="src/assets/Indicador.png"  {/* Asegúrate de que esté en /public */}
                         alt="Indicador"
                         className="max-w-full h-auto"
                     />
