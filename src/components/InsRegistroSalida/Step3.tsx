@@ -96,6 +96,17 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                     ))}
                 </div>
             </div>
+            
+            {/* Imagen al costado derecho */}
+            <div className="flex justify-center items-start">
+                <img
+                    src="https://github.com/rRegistroVehicular1/registro-vehicular-frontend/blob/main/src/assets/Indicador.png"
+                    alt="Descripción de las llantas de las unidades"
+                    className="max-w-full h-auto"
+                />
+            </div>
+
+            {/* Botones de Atras y Siguiente */}
             <div className="flex justify-between mt-4">
                     <button
                         type="button"
@@ -115,14 +126,6 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                     >
                         Siguiente
                     </button>
-            </div>
-            {/* Imagen al costado derecho */}
-            <div className="flex justify-center items-start">
-                <img
-                    src="https://github.com/rRegistroVehicular1/registro-vehicular-frontend/blob/main/src/assets/Indicador.png"
-                    alt="Descripción de las llantas de las unidades"
-                    className="max-w-full h-auto"
-                />
             </div>
         </div>
     );
