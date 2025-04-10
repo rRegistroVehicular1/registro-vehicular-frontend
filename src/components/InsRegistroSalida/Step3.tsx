@@ -121,8 +121,8 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                 {/* Imagen al costado derecho */}
             <div className="flex justify-center items-start">
                 <img
-                    src="/ruta/a/tu-imagen.jpg"
-                    alt="Descripción de la imagen"
+                    src="https://github.com/rRegistroVehicular1/registro-vehicular-frontend/blob/main/src/assets/Indicador.png"
+                    alt="Descripción de las llantas de las unidades"
                     className="max-w-full h-auto"
                 />
             </div>
