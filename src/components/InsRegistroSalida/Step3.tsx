@@ -109,6 +109,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                 </div>
             </div>  
         </div>
+        
          {/* Botones debajo del grid, ocupando 100% */}
         <div className="flex justify-between mt-6 w-full">
             <button
