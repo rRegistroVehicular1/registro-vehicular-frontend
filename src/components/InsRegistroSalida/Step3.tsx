@@ -49,6 +49,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Opciones (columna izquierda, 2 columnas en total) */}
             {/* Sección de opciones de llantas (ocupa dos columnas en pantallas medianas o más grandes) */}
             <div className="md:col-span-2">
                 <h2 className="text-xl font-bold mb-4">Revisión de Llantas (Parte 1)</h2>
@@ -97,35 +98,35 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                 </div>
             </div>
             
-            {/* Imagen al costado derecho */}
+             {/* Imagen (columna derecha) */}
             <div className="flex justify-center items-start">
                 <img
-                    src="https://github.com/rRegistroVehicular1/registro-vehicular-frontend/blob/main/src/assets/Indicador.png"
-                    alt="Descripción de las llantas de las unidades"
+                    src="https://raw.githubusercontent.com/rRegistroVehicular1/registro-vehicular-frontend/main/src/assets/Indicador.png"
+                    alt="Indicador"
                     className="max-w-full h-auto"
                 />
             </div>
         </div>
-        {/* Botones de Atras y Siguiente */}
-        <div className="flex justify-between mt-4">
-                <button
-                    type="button"
-                    className="bg-gray-500 text-white px-4 py-2 rounded"
-                    onClick={handlePreviousStep}
-                >
-                    Atrás
-                </button>
-                <button
-                    type="button"
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                    onClick={() => {
-                        if (validateStep3()) {
-                            handleNextStep();
-                        }
-                    }}
-                >
-                    Siguiente
-                </button>
+        {/* Botones debajo de ambas columnas */}
+        <div className="flex justify-between mt-6 w-full">
+            <button
+                type="button"
+                className="bg-gray-500 text-white px-6 py-3 rounded"
+                onClick={handlePreviousStep}
+            >
+                Atrás
+            </button>
+            <button
+                type="button"
+                className="bg-blue-500 text-white px-6 py-3 rounded"
+                onClick={() => {
+                    if (validateStep3()) {
+                        handleNextStep();
+                    }
+                }}
+            >
+                Siguiente
+            </button>
         </div>
     );
 }
