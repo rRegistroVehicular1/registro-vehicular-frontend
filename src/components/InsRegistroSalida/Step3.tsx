@@ -51,9 +51,18 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
         <div className="w-full">
             <div className="w-full">
                 {/* Contenedor principal con grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Columna de opciones - 2/3 del ancho */}
-                    <div className="md:col-span-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Imagen de referencia - 50% del ancho - orden primero */}
+                    <div className="flex justify-center items-start order-1 md:order-1">
+                        <img
+                            src="src/assets/Indicador.png"
+                            alt="Indicador"
+                            className="max-w-full h-auto"
+                        />
+                    </div>
+                
+                    {/* Columna de opciones - 50% del ancho - orden segundo */}
+                    <div className="order-2 md:order-2">
                         <h2 className="text-xl font-bold mb-4">Revisión de Llantas (Parte 1)</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {llantasParte1.map((llanta, index) => (
@@ -99,17 +108,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                             ))}
                         </div>
                     </div>
-            
-                    {/* Imagen de referencia - 1/3 del ancho */}
-                    <div className="flex justify-center items-start">
-                        <img
-                            src="src/assets/Indicador.png"  {/* Asegúrate de que esté en /public */}
-                            alt="Indicador"
-                            className="max-w-full h-auto"
-                        />
-                    </div>
-                </div>  
-            </div>
+                </div>
             
              {/* Botones debajo del grid, ocupando 100% */}
             <div className="flex justify-between mt-6 w-full">
