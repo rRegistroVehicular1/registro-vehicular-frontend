@@ -55,7 +55,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                     {/* Imagen de referencia - 50% del ancho - orden primero */}
                     <div className="flex justify-center items-start order-1 md:order-1">
                         <img
-                            src="/src/assets/Indicador.png"
+                            src=".../src/assets/Inspeccion 10 llantas.png"
                             alt="Indicador"
                             className="max-w-full h-auto"
                         />
