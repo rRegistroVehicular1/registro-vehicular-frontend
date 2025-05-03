@@ -53,11 +53,11 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                 {/* Contenedor principal con grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Imagen de referencia - 50% del ancho - orden primero */}
-                    <div className="flex justify-center items-center order-1 md:order-1 md:sticky md:top-0 md-h[100vh-200px]">
+                    <div className="flex justify-center items-center order-1 md:order-1 mb-4 mb:mb-0 md:self-start md:overflow-hidden">
                         <img
                             src="/assets/Inspeccion_10llantas.jpg"
                             alt="Ejemplo Diagrama de inspección de llantas"
-                            className="max-w-full md:max-w-md h-auto object-contain"
+                            className="max-w-full max-h-[80vh] w-auto object-contain"
                         />
                     </div>
                 
