@@ -50,7 +50,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
     return (
         <div className="w-full">
             <div className="w-full">
-                <h2 className="text-xl font-bold mb-4">Revisión de Llantas (Parte 1)</h2>
+                <h2 className="text-xl font-bold mb-4 text-center">Revisión de Llantas (Parte 1)</h2>
                 {/* Contenedor principal con grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                     {/* Imagen de referencia - 50% del ancho - orden primero */}
