@@ -50,6 +50,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
     return (
         <div className="w-full">
             <div className="w-full">
+                <h2 className="text-xl font-bold mb-4">Revisión de Llantas (Parte 1)</h2>
                 {/* Contenedor principal con grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                     {/* Imagen de referencia - 50% del ancho - orden primero */}
@@ -63,7 +64,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
                 
                     {/* Columna de opciones - 50% del ancho - orden segundo */}
                     <div className="order-2 md:order-2">
-                        <h2 className="text-xl font-bold mb-4">Revisión de Llantas (Parte 1)</h2>
+                        {/*<h2 className="text-xl font-bold mb-4">Revisión de Llantas (Parte 1)</h2>*/}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {llantasParte1.map((llanta, index) => (
                                 <div key={llanta.id} className="mb-4">
