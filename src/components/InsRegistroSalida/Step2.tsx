@@ -10,10 +10,6 @@ type Step2Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    setLlantasParte1: (llantas: Llantas[]) => void;
-    initialLlantasParte1: Llantas[];
-    setLlantasParte2: (llantas: Llantas[]) => void;
-    initialLlantasParte2: Llantas[];
 }
 
 function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, onPrevious, onNext, datos }: Step2Props) {
@@ -61,11 +57,7 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
                 Tipo de Vehículo:
                 <select
                     value={tipoVehiculo}
-                    onChange={(e) => {setTipoVehiculo(e.target.value);
-                        // Resetear las llantas al cambiar tipo
-                        setLlantasParte1(initialLlantasParte1(e.target.value));
-                        setLlantasParte2(initialLlantasParte2(e.target.value));
-                    }}
+                    onChange={(e) => setTipoVehiculo(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 >
