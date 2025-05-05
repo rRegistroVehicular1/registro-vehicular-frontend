@@ -13,7 +13,7 @@ type Step2Props = {
 }
 
 function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, onPrevious, onNext, datos }: Step2Props) {
-
+    //prueba
     const validateStep2 = () => {
         if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
             alert('Todos los campos de este paso son obligatorios.');
