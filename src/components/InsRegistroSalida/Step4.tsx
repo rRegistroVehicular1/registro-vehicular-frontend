@@ -12,6 +12,7 @@ interface StepCuatroProps {
     llantasParte2: Llantas[];
     setLlantasParte2: (llantas: Llantas[]) => void;
     tipoVehiculo: string;
+    setTipoVehiculo: (tipo: string) => void;
     observacionGeneralLlantas: string;
     setObservacionGeneralLlantas: (observacion: string) => void;
     handlePreviousStep: () => void;
