@@ -9,14 +9,22 @@ interface Llantas {
 }
 
 interface StepCuatroProps {
-    llantasParte2: Llantas[];
+    tipoVehiculo={tipoVehiculo}
+    setTipoVehiculo={setTipoVehiculo}
+    llantasParte2={llantasParte2}
+    setLlantasParte2={setLlantasParte2}
+    observacionGeneralLlantas={observacionGeneralLlantas}
+    setObservacionGeneralLlantas={setObservacionGeneralLlantas}
+    handlePreviousStep={handlePreviousStep}
+    handleNextStep={handleNextStep}
+    /*llantasParte2: Llantas[];
     setLlantasParte2: (llantas: Llantas[]) => void;
     tipoVehiculo: string;
     setTipoVehiculo: (tipo: string) => void;
     observacionGeneralLlantas: string;
     setObservacionGeneralLlantas: (observacion: string) => void;
     handlePreviousStep: () => void;
-    handleNextStep: () => void;
+    handleNextStep: () => void;*/
 }
 
 function StepCuatro({ llantasParte2, setLlantasParte2, tipoVehiculo, setTipoVehiculo, observacionGeneralLlantas, setObservacionGeneralLlantas, handlePreviousStep, handleNextStep }: StepCuatroProps) {
