@@ -91,7 +91,7 @@ function StepCuatro({ llantasParte2, setLlantasParte2, tipoVehiculo, setTipoVehi
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {llantasParte2.map((llanta, index) => (
                                 <div key={llanta.id} className="mb-4">
-                                    <h3 className="font-bold">Llanta #{llanta.id}</h3>
+                                    <h3 className="font-bold">Llanta #{llanta.id} - {tipoVehiculo}</h3>
                                     <label className="inline-flex items-center mr-4">
                                         <input
                                             type="radio"
