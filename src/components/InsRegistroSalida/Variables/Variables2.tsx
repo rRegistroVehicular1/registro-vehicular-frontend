@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-//prueba
 function Variables2() {
 
   const [llantasParte1, setLlantasParte1] = useState(
