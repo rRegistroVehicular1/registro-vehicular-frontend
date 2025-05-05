@@ -13,7 +13,7 @@ interface StepTresProps {
     handleNextStep: () => void;
 }
 
-function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleNextStep }: StepTresProps) {
+function StepTres({ llantasParte1, setLlantasParte1, tipoVehiculo, setTipoVehiculo, handlePreviousStep, handleNextStep }: StepTresProps) {
     const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
         const updatedLlantas = llantasParte1.map((llanta, i) => {
             if (i === index) {
@@ -34,6 +34,14 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
     };
 
     const validateStep3 = () => {
+        // Validar que las llantas requeridas estén completas
+        const llantasRequeridas = tipoVehiculo === 'camion' ? 6 : 4;
+
+        if (llantasParte1.length !== (tipoVehiculo === 'camion' ? 4 : 3)) {
+          alert(`Debe revisar todas las llantas requeridas para ${tipoVehiculo}`);
+          return false;
+        }
+        
         const isInvalid = llantasParte1.some((llanta) => {
             const noOptionSelected = !llanta.fp && !llanta.pe && !llanta.pa && !llanta.desgaste;
             return noOptionSelected;
