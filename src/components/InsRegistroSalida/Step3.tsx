@@ -10,6 +10,7 @@ interface StepTresProps {
     llantasParte1: Llantas[];
     setLlantasParte1: (llantas: Llantas[]) => void;
     tipoVehiculo: string;
+    setTipoVehiculo: (tipo: string) => void;
     handlePreviousStep: () => void;
     handleNextStep: () => void;
 }
