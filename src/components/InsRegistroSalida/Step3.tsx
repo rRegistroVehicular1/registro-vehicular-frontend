@@ -7,12 +7,12 @@ interface Llantas {
 }
 
 interface StepTresProps {
-    tipoVehiculo={tipoVehiculo}
-    setTipoVehiculo={setTipoVehiculo}
-    llantasParte1={llantasParte1}
-    setLlantasParte1={setLlantasParte1}
-    handlePreviousStep={handlePreviousStep}
-    handleNextStep={handleNextStep}
+    tipoVehiculo: {tipoVehiculo};
+    setTipoVehiculo: {setTipoVehiculo};
+    llantasParte1: {llantasParte1};
+    setLlantasParte1: {setLlantasParte1};
+    handlePreviousStep: {handlePreviousStep};
+    handleNextStep: {handleNextStep};
     /*llantasParte1: Llantas[];
     setLlantasParte1: (llantas: Llantas[]) => void;
     tipoVehiculo: string;
