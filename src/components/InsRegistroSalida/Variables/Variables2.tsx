@@ -19,8 +19,8 @@ function Variables2() {
   };
 
   const [tipoVehiculo, setTipoVehiculo] = useState('');
-  const [llantasParte1, setLlantasParte1] = useState([]);
-  const [llantasParte2, setLlantasParte2] = useState([]);
+  const [llantasParte1, setLlantasParte1] = useState<Llantas[]>([]);
+  const [llantasParte2, setLlantasParte2] = useState<Llantas[]>([]);
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
   // Función para inicializar llantas cuando se selecciona el tipo
