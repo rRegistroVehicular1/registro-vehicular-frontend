@@ -63,7 +63,7 @@ function StepTres({ llantasParte1, setLlantasParte1, tipoVehiculo, setTipoVehicu
                 {/* Contenedor principal con grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                     {/* Imagen de referencia - 50% del ancho - orden primero */}
-                    <div className="flex justify-center items-center order-1 md:order-1 mb-4 mb:mb-0 md:h-[calc(100vh-200px) md:sticky md:top-20]">
+                    <div className="flex justify-center items-center order-1 md:order-1 mb-4 mb:mb-0 md:h-[calc(100vh-200px)] md:sticky md:top-20">
                         <img
                             src="/assets/Inspeccion_10llantas.jpg"
                             alt="Ejemplo Diagrama de inspección de llantas"
