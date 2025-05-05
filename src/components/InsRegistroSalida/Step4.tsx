@@ -9,14 +9,14 @@ interface Llantas {
 }
 
 interface StepCuatroProps {
-    tipoVehiculo={tipoVehiculo};
-    setTipoVehiculo={setTipoVehiculo};
-    llantasParte2={llantasParte2};
-    setLlantasParte2={setLlantasParte2};
-    observacionGeneralLlantas={observacionGeneralLlantas};
-    setObservacionGeneralLlantas={setObservacionGeneralLlantas};
-    handlePreviousStep={handlePreviousStep};
-    handleNextStep={handleNextStep};
+    tipoVehiculo: {tipoVehiculo};
+    setTipoVehiculo: {setTipoVehiculo};
+    llantasParte2: {llantasParte2};
+    setLlantasParte2: {setLlantasParte2};
+    observacionGeneralLlantas: {observacionGeneralLlantas};
+    setObservacionGeneralLlantas: {setObservacionGeneralLlantas};
+    handlePreviousStep: {handlePreviousStep};
+    handleNextStep: {handleNextStep};
     
     /*llantasParte2: Llantas[];
     setLlantasParte2: (llantas: Llantas[]) => void;
