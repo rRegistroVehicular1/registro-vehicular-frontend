@@ -7,21 +7,13 @@ interface Llantas {
 }
 
 interface StepTresProps {
-    tipoVehiculo: {tipoVehiculo};
-    setTipoVehiculo: {setTipoVehiculo};
-    llantasParte1: {llantasParte1};
-    setLlantasParte1: {setLlantasParte1};
-    handlePreviousStep: {handlePreviousStep};
-    handleNextStep: {handleNextStep};
-    /*llantasParte1: Llantas[];
+    llantasParte1: Llantas[];
     setLlantasParte1: (llantas: Llantas[]) => void;
-    tipoVehiculo: string;
-    setTipoVehiculo: (tipo: string) => void;
     handlePreviousStep: () => void;
-    handleNextStep: () => void;*/
+    handleNextStep: () => void;
 }
 
-function StepTres({ llantasParte1, setLlantasParte1, tipoVehiculo, setTipoVehiculo, handlePreviousStep, handleNextStep }: StepTresProps) {
+function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleNextStep }: StepTresProps) {
     const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
         const updatedLlantas = llantasParte1.map((llanta, i) => {
             if (i === index) {
@@ -42,14 +34,6 @@ function StepTres({ llantasParte1, setLlantasParte1, tipoVehiculo, setTipoVehicu
     };
 
     const validateStep3 = () => {
-        // Validar que las llantas requeridas estén completas
-        const llantasRequeridas = tipoVehiculo === 'camion' ? 6 : 4;
-
-        if (llantasParte1.length !== (tipoVehiculo === 'camion' ? 4 : 3)) {
-          alert(`Debe revisar todas las llantas requeridas para ${tipoVehiculo}`);
-          return false;
-        }
-        
         const isInvalid = llantasParte1.some((llanta) => {
             const noOptionSelected = !llanta.fp && !llanta.pe && !llanta.pa && !llanta.desgaste;
             return noOptionSelected;
@@ -70,7 +54,7 @@ function StepTres({ llantasParte1, setLlantasParte1, tipoVehiculo, setTipoVehicu
                 {/* Contenedor principal con grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                     {/* Imagen de referencia - 50% del ancho - orden primero */}
-                    <div className="flex justify-center items-center order-1 md:order-1 mb-4 mb:mb-0 md:h-[calc(100vh-200px)] md:sticky md:top-20">
+                    <div className="flex justify-center items-center order-1 md:order-1 mb-4 mb:mb-0 md:h-[calc(100vh-200px) md:sticky md:top-20]">
                         <img
                             src="/assets/Inspeccion_10llantas.jpg"
                             alt="Ejemplo Diagrama de inspección de llantas"
@@ -84,7 +68,7 @@ function StepTres({ llantasParte1, setLlantasParte1, tipoVehiculo, setTipoVehicu
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {llantasParte1.map((llanta, index) => (
                                 <div key={llanta.id} className="mb-4">
-                                    <h3 className="font-bold">Llanta #{llanta.id} - {tipoVehiculo} <span className="text-red-500">*</span></h3>
+                                    <h3 className="font-bold">Llanta #{llanta.id}</h3>
                                     <label className="inline-flex items-center mr-4">
                                         <input
                                             type="radio"
@@ -153,4 +137,3 @@ function StepTres({ llantasParte1, setLlantasParte1, tipoVehiculo, setTipoVehicu
 }
 
 export default StepTres;
-
