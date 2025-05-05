@@ -9,26 +9,15 @@ interface Llantas {
 }
 
 interface StepCuatroProps {
-    tipoVehiculo: {tipoVehiculo};
-    setTipoVehiculo: {setTipoVehiculo};
-    llantasParte2: {llantasParte2};
-    setLlantasParte2: {setLlantasParte2};
-    observacionGeneralLlantas: {observacionGeneralLlantas};
-    setObservacionGeneralLlantas: {setObservacionGeneralLlantas};
-    handlePreviousStep: {handlePreviousStep};
-    handleNextStep: {handleNextStep};
-    
-    /*llantasParte2: Llantas[];
+    llantasParte2: Llantas[];
     setLlantasParte2: (llantas: Llantas[]) => void;
-    tipoVehiculo: string;
-    setTipoVehiculo: (tipo: string) => void;
     observacionGeneralLlantas: string;
     setObservacionGeneralLlantas: (observacion: string) => void;
     handlePreviousStep: () => void;
-    handleNextStep: () => void;*/
+    handleNextStep: () => void;
 }
 
-function StepCuatro({ llantasParte2, setLlantasParte2, tipoVehiculo, setTipoVehiculo, observacionGeneralLlantas, setObservacionGeneralLlantas, handlePreviousStep, handleNextStep }: StepCuatroProps) {
+function StepCuatro({ llantasParte2, setLlantasParte2, observacionGeneralLlantas, setObservacionGeneralLlantas, handlePreviousStep, handleNextStep }: StepCuatroProps) {
     const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
         const updatedLlantas = llantasParte2.map((llanta, i) => {
             if (i === index) {
@@ -51,14 +40,6 @@ function StepCuatro({ llantasParte2, setLlantasParte2, tipoVehiculo, setTipoVehi
     };
 
     const validateStep4 = () => {
-        // Validar cantidad de llantas según tipo de vehículo
-        const llantasEsperadasParte2 = tipoVehiculo === 'camion' ? 2 : 1;
-        
-        if (llantasParte2.length !== llantasEsperadasParte2) {
-            alert(`Debe revisar todas las llantas requeridas para ${tipoVehiculo}`);
-            return false;
-        }
-        
         // Validar que cada llanta tenga al menos una selección
         const isInvalid = llantasParte2.some((llanta) => {
             const noOptionSelected = !llanta.fp && !llanta.pe && !llanta.pa && !llanta.desgaste;
@@ -101,7 +82,7 @@ function StepCuatro({ llantasParte2, setLlantasParte2, tipoVehiculo, setTipoVehi
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {llantasParte2.map((llanta, index) => (
                                 <div key={llanta.id} className="mb-4">
-                                    <h3 className="font-bold">Llanta #{llanta.id} - {tipoVehiculo}<span className="text-red-500">*</span></h3>
+                                    <h3 className="font-bold">Llanta #{llanta.id}</h3>
                                     <label className="inline-flex items-center mr-4">
                                         <input
                                             type="radio"
