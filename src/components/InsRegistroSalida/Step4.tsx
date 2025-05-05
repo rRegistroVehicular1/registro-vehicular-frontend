@@ -11,13 +11,14 @@ interface Llantas {
 interface StepCuatroProps {
     llantasParte2: Llantas[];
     setLlantasParte2: (llantas: Llantas[]) => void;
+    tipoVehiculo: string;
     observacionGeneralLlantas: string;
     setObservacionGeneralLlantas: (observacion: string) => void;
     handlePreviousStep: () => void;
     handleNextStep: () => void;
 }
 
-function StepCuatro({ llantasParte2, setLlantasParte2, observacionGeneralLlantas, setObservacionGeneralLlantas, handlePreviousStep, handleNextStep }: StepCuatroProps) {
+function StepCuatro({ llantasParte2, setLlantasParte2, tipoVehiculo, setTipoVehiculo, observacionGeneralLlantas, setObservacionGeneralLlantas, handlePreviousStep, handleNextStep }: StepCuatroProps) {
     const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
         const updatedLlantas = llantasParte2.map((llanta, i) => {
             if (i === index) {
@@ -40,6 +41,14 @@ function StepCuatro({ llantasParte2, setLlantasParte2, observacionGeneralLlantas
     };
 
     const validateStep4 = () => {
+        // Validar cantidad de llantas según tipo de vehículo
+        const llantasEsperadasParte2 = tipoVehiculo === 'camion' ? 2 : 1;
+        
+        if (llantasParte2.length !== llantasEsperadasParte2) {
+            alert(`Debe revisar todas las llantas requeridas para ${tipoVehiculo}`);
+            return false;
+        }
+        
         // Validar que cada llanta tenga al menos una selección
         const isInvalid = llantasParte2.some((llanta) => {
             const noOptionSelected = !llanta.fp && !llanta.pe && !llanta.pa && !llanta.desgaste;
