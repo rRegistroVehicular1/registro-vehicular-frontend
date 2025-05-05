@@ -10,9 +10,10 @@ type Step2Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
+    actualizarLlantasPorTipo: (tipo: string) => void;
 }
 
-function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, onPrevious, onNext, datos }: Step2Props) {
+function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, onPrevious, onNext, datos, actualizarLlantasPorTipo}: Step2Props) {
     
     const validateStep2 = () => {
         if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
@@ -21,6 +22,11 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
         }
         return true;
     };
+
+    const handleTipoVehiculoChange = (value: string) => {
+        setTipoVehiculo(value);
+        actualizarLlantasPorTipo(value); // Actualiza las llantas al cambiar el tipo
+      };
 
 
     return (
@@ -57,7 +63,7 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
                 Tipo de Vehículo:
                 <select
                     value={tipoVehiculo}
-                    onChange={(e) => setTipoVehiculo(e.target.value)}
+                    onChange={(e) => handleTipoVehiculoChange(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 >
