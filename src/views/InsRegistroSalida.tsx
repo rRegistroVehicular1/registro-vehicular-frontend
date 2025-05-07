@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../validation/url';
 import { useNavigate } from 'react-router-dom';
+import { Llanta } from '@/types/llantas';
 
 function RegistroInspeccionSalida() {
 
@@ -126,8 +127,8 @@ function RegistroInspeccionSalida() {
 
         {step === 3 && (
           <StepTres
-            llantasParte1={llantasParte1}
-            setLlantasParte1={setLlantasParte1}
+            llantasParte1: Llanta[];
+            setLlantasParte1: (llantas: Llanta[]) => void;
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
           />
@@ -135,8 +136,8 @@ function RegistroInspeccionSalida() {
 
         {step === 4 && (
           <StepCuatro
-            llantasParte2={llantasParte2}
-            setLlantasParte2={setLlantasParte2}
+            llantasParte2: Llanta[];
+            setLlantasParte2: (llantas: Llanta[]) => void;
             observacionGeneralLlantas={observacionGeneralLlantas}
             setObservacionGeneralLlantas={setObservacionGeneralLlantas}
             handlePreviousStep={handlePreviousStep}
