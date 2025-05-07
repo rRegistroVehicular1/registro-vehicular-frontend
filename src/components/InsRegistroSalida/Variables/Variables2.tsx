@@ -25,22 +25,23 @@ function Variables2() {
   const [llantasParte2, setLlantasParte2] = useState(llantasBase.slice(2, 4)); // Default: sedan/pickup/panel
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
-  const actualizarLlantasPorTipo = (tipoVehiculo: string) => {
+  const actualizarLlantasPorTipo = (tipoVehiculo: string): void => {
     if (tipoVehiculo === 'camion') {
-      // Para camión: 1, 2, 5, 6 en parte 1 y 7, 8 en parte 2
       setLlantasParte1(llantasBase.filter(llanta => [1, 2, 5, 6].includes(llanta.id)));
       setLlantasParte2(llantasBase.filter(llanta => [7, 8].includes(llanta.id)));
     } else {
-      // Para otros vehículos: 1, 2 en parte 1 y 5, 7 en parte 2
       setLlantasParte1(llantasBase.filter(llanta => [1, 2].includes(llanta.id)));
       setLlantasParte2(llantasBase.filter(llanta => [5, 7].includes(llanta.id)));
     }
   };
 
   return {
-    llantasParte1, setLlantasParte1,
-    llantasParte2, setLlantasParte2,
-    observacionGeneralLlantas, setObservacionGeneralLlantas,
+    llantasParte1, 
+    setLlantasParte1: setLlantasParte1 as (llantas: Llanta[]) => void,
+    llantasParte2, 
+    setLlantasParte2: setLlantasParte2 as (llantas: Llanta[]) => void,
+    observacionGeneralLlantas, 
+    setObservacionGeneralLlantas,
     actualizarLlantasPorTipo
   };
 }
