@@ -57,14 +57,28 @@ function RegistroInspeccionSalida() {
   const totalSteps = 10;
   const navigate = useNavigate();
 
+  const prepararLlantasParaEnvio = (llantas: Llanta[], tipoVehiculo: string) => {
+    const idsPermitidos = tipoVehiculo === 'camion' ? [1, 2, 5, 6, 7, 8] : [1, 2, 5, 7];
+    return llantas.map(llanta => ({
+      ...llanta,
+      fp: idsPermitidos.includes(llanta.id) ? llanta.fp : false,
+      pe: idsPermitidos.includes(llanta.id) ? llanta.pe : false,
+      pa: idsPermitidos.includes(llanta.id) ? llanta.pa : false,
+      desgaste: idsPermitidos.includes(llanta.id) ? llanta.desgaste : false
+    }));
+  };
+
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setIsSubmitting(true);
+
+    const llantasParte1ParaEnvio = prepararLlantasParaEnvio(llantasParte1, tipoVehiculo);
+    const llantasParte2ParaEnvio = prepararLlantasParaEnvio(llantasParte2, tipoVehiculo);
+    
     try {
       await handleSubmit({
         placa, conductor, sucursal, tipoVehiculo, odometroSalida,
-        llantasParte1, llantasParte2, observacionGeneralLlantas, fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales, luces,
+        llantasParte1: llantasParte1ParaEnvio, llantasParte2: llantasParte2ParaEnvio, observacionGeneralLlantas, fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales, luces,
         insumos, documentacion, danosCarroceria
       });
       navigate('/');
