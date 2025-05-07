@@ -1,16 +1,10 @@
 import React from 'react';
+import { Llanta } from '@/types/llantas';
 
-interface Llantas {
-    id: number;
-    fp: boolean;
-    pe: boolean;
-    pa: boolean;
-    desgaste: boolean;
-}
 
 interface StepCuatroProps {
-    llantasParte2: Llantas[];
-    setLlantasParte2: (llantas: Llantas[]) => void;
+    llantasParte2: Llanta[];
+    setLlantasParte2: (llantas: Llanta[]) => void;
     observacionGeneralLlantas: string;
     setObservacionGeneralLlantas: (observacion: string) => void;
     handlePreviousStep: () => void;
