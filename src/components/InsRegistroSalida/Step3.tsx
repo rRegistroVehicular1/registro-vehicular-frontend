@@ -1,14 +1,8 @@
-interface Llantas {
-    id: number;
-    fp: boolean;
-    pe: boolean;
-    pa: boolean;
-    desgaste: boolean;
-}
+import { Llanta } from '@/types/llantas';
 
 interface StepTresProps {
-    llantasParte1: Llantas[];
-    setLlantasParte1: (llantas: Llantas[]) => void;
+    llantasParte1: Llanta[];
+    setLlantasParte1: (llantas: Llanta[]) => void;
     handlePreviousStep: () => void;
     handleNextStep: () => void;
 }
