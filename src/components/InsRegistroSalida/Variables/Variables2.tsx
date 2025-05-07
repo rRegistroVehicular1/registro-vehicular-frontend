@@ -2,15 +2,6 @@
 import { useState } from 'react';
 import { Llanta } from '@/types/llantas';
 
-/*export interface Llanta {
-  id: number;
-  nombre: string;
-  fp: boolean;
-  pe: boolean;
-  pa: boolean;
-  desgaste: boolean;
-}*/
-
 function Variables2() {
   const [llantasBase] = useState<Llanta[]>([
     { id: 1, nombre: 'Llanta Delantera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
