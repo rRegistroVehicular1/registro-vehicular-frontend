@@ -127,8 +127,8 @@ function RegistroInspeccionSalida() {
 
         {step === 3 && (
           <StepTres
-            llantasParte1: Llanta[];
-            setLlantasParte1: (llantas: Llanta[]) => void;
+            llantasParte1={llantasParte1}
+            setLlantasParte1={setLlantasParte1}
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
           />
@@ -136,8 +136,8 @@ function RegistroInspeccionSalida() {
 
         {step === 4 && (
           <StepCuatro
-            llantasParte2: Llanta[];
-            setLlantasParte2: (llantas: Llanta[]) => void;
+            llantasParte2={llantasParte2}
+            setLlantasParte2={setLlantasParte2}
             observacionGeneralLlantas={observacionGeneralLlantas}
             setObservacionGeneralLlantas={setObservacionGeneralLlantas}
             handlePreviousStep={handlePreviousStep}
