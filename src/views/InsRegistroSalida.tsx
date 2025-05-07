@@ -1,4 +1,3 @@
-
 import StepUno from '../components/InsRegistroSalida/Step1';
 import StepDos from '../components/InsRegistroSalida/Step2';
 import StepTres from '../components/InsRegistroSalida/Step3';
@@ -28,7 +27,7 @@ function RegistroInspeccionSalida() {
   } = Variables1();
 
   const {
-    llantasParte1, setLlantasParte1, llantasParte2, setLlantasParte2, observacionGeneralLlantas, setObservacionGeneralLlantas,
+    llantasParte1, setLlantasParte1, llantasParte2, setLlantasParte2, observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
   } = Variables2();
 
   const {
@@ -121,6 +120,7 @@ function RegistroInspeccionSalida() {
             tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
             odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
             onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
+            actualizarLlantasPorTipo={actualizarLlantasPorTipo}
           />
         )}
 
