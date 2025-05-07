@@ -36,11 +36,11 @@ function Variables2() {
   };
 
   return {
-    llantasParte1, 
+    llantasParte1,
     setLlantasParte1: setLlantasParte1 as (llantas: Llanta[]) => void,
-    llantasParte2, 
+    llantasParte2,
     setLlantasParte2: setLlantasParte2 as (llantas: Llanta[]) => void,
-    observacionGeneralLlantas, 
+    observacionGeneralLlantas,
     setObservacionGeneralLlantas,
     actualizarLlantasPorTipo
   };
