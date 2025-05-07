@@ -1,9 +1,18 @@
 // components/InsRegistroSalida/Variables/Variables2.tsx
 import { useState } from 'react';
 
+export interface Llanta {
+  id: number;
+  nombre: string;
+  fp: boolean;
+  pe: boolean;
+  pa: boolean;
+  desgaste: boolean;
+}
+
 function Variables2() {
   // Estado base de todas las llantas posibles
-  const [llantasBase] = useState([
+  const [llantasBase] = useState<Llanta[]([
     { id: 1, nombre: 'Llanta Delantera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
     { id: 2, nombre: 'Llanta Delantera Derecha', fp: false, pe: false, pa: false, desgaste: false },
     { id: 5, nombre: 'Llanta Trasera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
