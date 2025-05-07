@@ -1,14 +1,15 @@
 // components/InsRegistroSalida/Variables/Variables2.tsx
 import { useState } from 'react';
+import { Llanta } from '@/types/llantas';
 
-export interface Llanta {
+/*export interface Llanta {
   id: number;
   nombre: string;
   fp: boolean;
   pe: boolean;
   pa: boolean;
   desgaste: boolean;
-}
+}*/
 
 function Variables2() {
   const [llantasBase] = useState<Llanta[]>([
@@ -36,9 +37,9 @@ function Variables2() {
 
   return {
     llantasParte1, 
-    setLlantasParte1,
+    setLlantasParte1: setLlantasParte1 as (llantas: Llanta[]) => void,
     llantasParte2, 
-    setLlantasParte2,
+    setLlantasParte2: setLlantasParte2 as (llantas: Llanta[]) => void,
     observacionGeneralLlantas, 
     setObservacionGeneralLlantas,
     actualizarLlantasPorTipo
