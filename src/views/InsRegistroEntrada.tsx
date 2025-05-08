@@ -21,6 +21,36 @@ function RegistroInspeccionEntrada() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+    
+        // Validación básica del odómetro
+        if (!formData.odometro || isNaN(Number(formData.odometro))) {
+            alert("El odómetro debe ser un número válido");
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            await handleSubmit(
+              e, 
+              formData, 
+              setIsSubmitting, 
+              setFormData, 
+              navigate
+            );
+          } catch (error) {
+            // Manejo específico para error de odómetro
+            if (error.response?.data?.message?.includes('VALIDACION_ODOMETRO')) {
+              const errorMsg = error.response.data.message.split(':')[1].trim();
+              alert(`Error en odómetro: ${errorMsg}`);
+            } else {
+              alert('Error al registrar: ' + (error.response?.data?.message || error.message));
+            }
+          } finally {
+            setIsSubmitting(false);
+          }  
+    };
+
     const handleInputChange = (index: number, value: boolean) => {
         const newRevisiones = [...formData.revisiones];
         newRevisiones[index].opcion = value;
