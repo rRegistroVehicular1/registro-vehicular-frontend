@@ -22,35 +22,40 @@ function RegistroInspeccionEntrada() {
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+      e.preventDefault();
+      
+      if (!formData.odometro || isNaN(Number(formData.odometro))) {
+        alert("El odómetro debe ser un número válido");
+        return;
+      }
     
-        // Validación básica del odómetro
-        if (!formData.odometro || isNaN(Number(formData.odometro))) {
-            alert("El odómetro debe ser un número válido");
-            return;
-        }
-        setIsSubmitting(true);
-        try {
-            await handleSubmit(
-              e, 
-              formData, 
-              setIsSubmitting, 
-              setFormData, 
-              navigate
-            );
-          } catch (error) {
-            // Manejo específico para error de odómetro
-            if (error.response?.data?.message?.includes('VALIDACION_ODOMETRO')) {
-              const errorMsg = error.response.data.message.split(':')[1].trim();
-              alert(`Error en odómetro: ${errorMsg}`);
+      setIsSubmitting(true);
+      try {
+        await handleSubmit(
+          formData,
+          setIsSubmitting,
+          setFormData,
+          navigate
+        );
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message;
+          if (typeof errorMessage === 'string') {
+            if (errorMessage.includes('VALIDACION_ODOMETRO')) {
+              const errorMsg = errorMessage.split(':')[1].trim();
+              alert(`Error: ${errorMsg}`);
             } else {
-              alert('Error al registrar: ' + (error.response?.data?.message || error.message));
+              alert(errorMessage);
             }
-          } finally {
-            setIsSubmitting(false);
-          }  
+          }
+        } else if (error instanceof Error) {
+          alert(error.message);
+        } else {
+          alert('Error desconocido');
+        }
+      }
     };
-
+    
     const handleInputChange = (index: number, value: boolean) => {
         const newRevisiones = [...formData.revisiones];
         newRevisiones[index].opcion = value;
