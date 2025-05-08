@@ -1,4 +1,4 @@
-import axios from 'axios';
+/*import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { BASE_URL } from './url';
@@ -83,6 +83,54 @@ export const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,
         } else {
           alert('Error desconocido');
         }
+      } finally {
+        setIsSubmitting(false);
+      }
+};*/
+
+import axios from 'axios';
+import { BASE_URL } from './url';
+
+export const handleSubmit = async (
+      formData: {
+        revisiones: any[];
+        observacion: string;    
+        odometro: string;
+      },
+      setIsSubmitting: (value: boolean) => void,
+      setFormData: (data: any) => void,
+      navigate: (path: string) => void
+    ) => {
+      try {
+        const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
+        if (!lastPlacaInfo) throw new Error('No se encontró información de placa');
+    
+        const response = await axios.post(
+          `${BASE_URL}/ins-registro-entrada/register`,
+          {
+            revisiones: formData.revisiones,
+            observacion: formData.observacion,
+            lastPlacaInfo,
+            odometro: formData.odometro
+          },
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+    
+        if (response.data.message) {
+          alert(response.data.message);
+          setFormData({
+            revisiones: formData.revisiones.map(({ descripcion }) => ({
+              descripcion,
+              opcion: null,
+            })),
+            observacion: '',
+            odometro: "",
+          });
+          navigate('/');
+          localStorage.removeItem('lastPlacaInfo');
+        }
+      } catch (error) {
+        throw error;
       } finally {
         setIsSubmitting(false);
       }
