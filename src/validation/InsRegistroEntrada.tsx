@@ -2,14 +2,11 @@ import axios from 'axios';
 import { Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { BASE_URL } from './url';
 
-export const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
+export const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,
     formData: { revisiones: Revision[]; observacion: string; odometro: string; },
     setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
     setFormData: React.Dispatch<React.SetStateAction<{ revisiones: Revision[]; observacion: string; odometro: string; }>>,
-    navigate: (path: string) => void
-) => {
-    e.preventDefault();
+    navigate: (path: string) => void) => {e.preventDefault();
 
     const allFilled = formData.revisiones.every(item => item.opcion !== null);
     if (!allFilled) {
@@ -38,6 +35,13 @@ export const handleSubmit = async (
     };
 
     try {
+        await handleSubmit({
+          e,
+          formData,
+          setIsSubmitting,
+          setFormData,
+          navigate
+        });
         const response = await axios.post(
             `${BASE_URL}/ins-registro-entrada/register`,
             formDataToSend,
@@ -64,9 +68,21 @@ export const handleSubmit = async (
             localStorage.removeItem('lastPlacaInfo');
         }
     } catch (error) {
-        console.error(error);
-        alert('Error al registrar los datos');
-    } finally {
+        // Manejo seguro de errores TypeScript
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message;
+          if (typeof errorMessage === 'string' && errorMessage.includes('VALIDACION_ODOMETRO')) {
+            const errorMsg = errorMessage.split(':')[1].trim();
+            alert(`Error: ${errorMsg}`);
+          } else {
+            alert('Error al registrar: ' + (errorMessage || error.message));
+          }
+        } else if (error instanceof Error) {
+          alert('Error inesperado: ' + error.message);
+        } else {
+          alert('Error desconocido');
+        }
+      } finally {
         setIsSubmitting(false);
-    }
+      }
 };
