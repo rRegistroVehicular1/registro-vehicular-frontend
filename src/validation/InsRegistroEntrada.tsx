@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { BASE_URL } from './url';
 
