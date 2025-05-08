@@ -1,89 +1,72 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
 
 function RegistroInspeccionEntrada() {
+  const [formData, setFormData] = useState(() => ({
+    revisiones: getInitialFormData().revisiones.map((revision) => ({
+      ...revision,
+      opcion: null,
+    })),
+    observacion: '',
+    odometro: '',
+  }));
 
-    const [formData, setFormData] = useState<{
-        revisiones: Revision[];
-        observacion: string;
-        odometro: string;
-    }>(() => ({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+
+  const handleInputChange = (index: number, value: boolean) => {
+    const newRevisiones = [...formData.revisiones];
+    newRevisiones[index].opcion = value;
+    setFormData({
+      ...formData,
+      revisiones: newRevisiones,
+    });
+  };
+
+  const handleCancel = () => {
+    const confirmCancel = window.confirm('¿Está seguro de que desea cancelar? Los cambios se perderán.');
+    if (confirmCancel) {
+      setFormData({
         revisiones: getInitialFormData().revisiones.map((revision) => ({
-            ...revision,
-            opcion: null,
+          descripcion: revision.descripcion,
+          opcion: null,
         })),
         observacion: '',
-        odometro: '',
-    }));
+        odometro: "",
+      });
+      navigate("/");
+    }
+  };
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const navigate = useNavigate();
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      
-      if (!formData.odometro || isNaN(Number(formData.odometro))) {
-        alert("El odómetro debe ser un número válido");
-        return;
+    if (!formData.odometro || isNaN(Number(formData.odometro))) {
+      alert('El odómetro debe ser un número válido');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await handleSubmit({
+        e,
+        formData,
+        setIsSubmitting,
+        setFormData,
+        navigate
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
       }
-    
-      setIsSubmitting(true);
-      try {
-        await handleSubmit(
-            e,
-            formData,
-            setIsSubmitting,
-            setFormData,
-            navigate
-        );
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          const errorMessage = error.response?.data?.message;
-          if (typeof serverError === 'string' && serverError.includes('VALIDACION_ODOMETRO')) {
-            alert(serverError.split(':')[1].trim());
-          } else {
-            alert(serverError || 'Error en el servidor');
-          }
-        } else if (error instanceof Error) {
-          alert(error.message);
-        } else {
-          alert('Error desconocido');
-        }
-      } finally {
-        setIsSubmitting(false);
-        {
-    };
-    
-    const handleInputChange = (index: number, value: boolean) => {
-        const newRevisiones = [...formData.revisiones];
-        newRevisiones[index].opcion = value;
-        setFormData({
-            ...formData,
-            revisiones: newRevisiones,
-        });
-    };
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-    const handleCancel = () => {
-        const confirmCancel = window.confirm(
-            '¿Está seguro de que desea cancelar? Los cambios se perderán.'
-        );
-        if (confirmCancel) {
-            setFormData({
-                revisiones: getInitialFormData().revisiones.map((revision) => ({
-                    descripcion: revision.descripcion,
-                    opcion: null,
-                })),
-                observacion: '',
-                odometro:"",
-            });
-        }
-        navigate("/");
-    };
-
-    return (
+  return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
             <h1 className="text-2xl font-bold mb-4 text-center">
                 R06-PT-19 REVISIÓN DE VEHÍCULOS - INSPECCION ENTRADA
