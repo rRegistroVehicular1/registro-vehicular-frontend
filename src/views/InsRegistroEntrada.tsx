@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
@@ -32,28 +33,28 @@ function RegistroInspeccionEntrada() {
       setIsSubmitting(true);
       try {
         await handleSubmit(
-          formData,
-          setIsSubmitting,
-          setFormData,
-          navigate
+            e,
+            formData,
+            setIsSubmitting,
+            setFormData,
+            navigate
         );
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           const errorMessage = error.response?.data?.message;
-          if (typeof errorMessage === 'string') {
-            if (errorMessage.includes('VALIDACION_ODOMETRO')) {
-              const errorMsg = errorMessage.split(':')[1].trim();
-              alert(`Error: ${errorMsg}`);
-            } else {
-              alert(errorMessage);
-            }
+          if (typeof serverError === 'string' && serverError.includes('VALIDACION_ODOMETRO')) {
+            alert(serverError.split(':')[1].trim());
+          } else {
+            alert(serverError || 'Error en el servidor');
           }
         } else if (error instanceof Error) {
           alert(error.message);
         } else {
           alert('Error desconocido');
         }
-      }
+      } finally {
+        setIsSubmitting(false);
+        {
     };
     
     const handleInputChange = (index: number, value: boolean) => {
