@@ -50,7 +50,7 @@ function RegistroInspeccionEntrada() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
             <h1 className="text-2xl font-bold mb-4 text-center">
-                R06-PT-19 REVISIÓN DE VEHÍCULOS
+                R06-PT-19 REVISIÓN DE VEHÍCULOS - INSPECCION ENTRADA
             </h1>
             <p className="text-center text-lg font-semibold mb-4">Ingreso a la planta</p>
             <form
