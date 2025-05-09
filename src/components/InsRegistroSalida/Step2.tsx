@@ -20,7 +20,9 @@ type Step2Props = {
 }
 
 function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, onPrevious, onNext, datos, actualizarLlantasPorTipo}: Step2Props) {
-
+    
+    const [placasList, setPlacasList] = useState<string[]>([]);
+    
     console.log('Datos recibidos en Step2:', datos);
     
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
@@ -38,10 +40,27 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
     };
     
     useEffect(() => {
-      if (placa) {
-        fetchLastOdometro(placa);
-      }
-    }, [placa]);
+      const fetchPlacas = async () => {
+        try {
+          console.log("Iniciando carga de placas...");
+          const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+          console.log("Respuesta del servidor:", response.data);
+          
+          if (Array.isArray(response.data)) {
+            setPlacasList(response.data);
+            console.log("Placas cargadas:", response.data);
+          } else {
+            console.error("La respuesta no es un array:", response.data);
+            setPlacasList([]);
+          }
+        } catch (error) {
+          console.error("Error al obtener placas:", error);
+          setPlacasList([]);
+        }
+      };
+
+      fetchPlacas();
+    }, []);
     
     const validateStep2 = () => {
         if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
@@ -67,17 +86,17 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
             <label className="block mb-4">
                 Placa del Vehículo:
                 <select
-                    value={placa}
-                    onChange={(e) => setPlaca(e.target.value)}
-                    className="mt-1 p-2 border rounded w-full"
-                    required
+                  value={placa}
+                  onChange={(e) => setPlaca(e.target.value)}
+                  className="mt-1 p-2 border rounded w-full"
+                  required
                 >
                     <option value="">Seleccione una placa</option>
-                    {datos && datos.map((placa, index) => (
-                        <option key={index} value={placa}>
-                            {placa}
-                        </option>
-                    ))}
+                  {placasList.map((placaItem, index) => (
+                    <option key={index} value={placaItem}>
+                      {placaItem}
+                    </option>
+                  ))}
                 </select>
             </label>
 
