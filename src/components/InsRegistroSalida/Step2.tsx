@@ -74,8 +74,8 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
                 >
                     <option value="">Seleccione una placa</option>
                     {datos && datos.map((placa, index) => (
-                        <option key={index} value={placaItem}>
-                            {placaItem}
+                        <option key={index} value={placa}>
+                            {placa}
                         </option>
                     ))}
                 </select>
