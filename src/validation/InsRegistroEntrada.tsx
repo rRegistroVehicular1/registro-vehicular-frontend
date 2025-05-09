@@ -1,13 +1,15 @@
-/*import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { BASE_URL } from './url';
 
-export const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,
+export const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
     formData: { revisiones: Revision[]; observacion: string; odometro: string; },
     setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
     setFormData: React.Dispatch<React.SetStateAction<{ revisiones: Revision[]; observacion: string; odometro: string; }>>,
-    navigate: (path: string) => void) => {e.preventDefault();
+    navigate: (path: string) => void
+) => {
+    e.preventDefault();
 
     const allFilled = formData.revisiones.every(item => item.opcion !== null);
     if (!allFilled) {
@@ -36,13 +38,6 @@ export const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,
     };
 
     try {
-        await handleSubmit({
-          e,
-          formData,
-          setIsSubmitting,
-          setFormData,
-          navigate
-        });
         const response = await axios.post(
             `${BASE_URL}/ins-registro-entrada/register`,
             formDataToSend,
@@ -69,70 +64,10 @@ export const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,
             localStorage.removeItem('lastPlacaInfo');
         }
     } catch (error) {
-        // Manejo seguro de errores TypeScript
-        if (axios.isAxiosError(error)) {
-          const errorMessage = error.response?.data?.message;
-          if (typeof errorMessage === 'string' && errorMessage.includes('VALIDACION_ODOMETRO')) {
-            const errorMsg = errorMessage.split(':')[1].trim();
-            alert(`Error: ${errorMsg}`);
-          } else {
-            alert('Error al registrar: ' + (errorMessage || error.message));
-          }
-        } else if (error instanceof Error) {
-          alert('Error inesperado: ' + error.message);
-        } else {
-          alert('Error desconocido');
-        }
-      } finally {
+        console.error(error);
+        alert('Error al registrar los datos');
+    } finally {
         setIsSubmitting(false);
-      }
-};*/
-
-import axios from 'axios';
-import { BASE_URL } from './url';
-
-export const handleSubmit = async (
-      formData: {
-        revisiones: any[];
-        observacion: string;    
-        odometro: string;
-      },
-      setIsSubmitting: (value: boolean) => void,
-      setFormData: (data: any) => void,
-      navigate: (path: string) => void
-    ) => {
-      try {
-        const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
-        if (!lastPlacaInfo) throw new Error('No se encontró información de placa');
-    
-        const response = await axios.post(
-          `${BASE_URL}/ins-registro-entrada/register`,
-          {
-            revisiones: formData.revisiones,
-            observacion: formData.observacion,
-            lastPlacaInfo,
-            odometro: formData.odometro
-          },
-          { headers: { 'Content-Type': 'application/json' } }
-        );
-        return response.data;
-    
-        if (response.data.message) {
-          alert(response.data.message);
-          setFormData({
-            revisiones: formData.revisiones.map(({ descripcion }) => ({
-              descripcion,
-              opcion: null,
-            })),
-            observacion: '',
-            odometro: "",
-          });
-          navigate('/');
-          localStorage.removeItem('lastPlacaInfo');
-        }
-      } catch (error) {
-        throw error;
-      } finally {
-        setIsSubmitting(false);
-      }
+    }
 };
+
