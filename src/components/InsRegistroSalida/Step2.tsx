@@ -21,8 +21,10 @@ type Step2Props = {
 
 function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, onPrevious, onNext, datos, actualizarLlantasPorTipo}: Step2Props) {
 
+    console.log('Datos recibidos en Step2:', datos);
+    
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
-
+    
     const fetchLastOdometro = async (selectedPlaca: string) => {
       try {
         const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
@@ -71,9 +73,9 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
                     required
                 >
                     <option value="">Seleccione una placa</option>
-                    {datos.map((placa, index) => (
-                        <option key={index} value={placa}>
-                            {placa}
+                    {datos && datos.map((placa, index) => (
+                        <option key={index} value={placaItem}>
+                            {placaItem}
                         </option>
                     ))}
                 </select>
