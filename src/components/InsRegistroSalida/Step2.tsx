@@ -18,6 +18,7 @@ type Step2Props = {
 }
 
 function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, onPrevious, onNext, datos, actualizarLlantasPorTipo }: Step2Props) {
+    const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [placasList, setPlacasList] = useState<string[]>([]);
     const [loadingPlacas, setLoadingPlacas] = useState(true); // Nuevo estado para carga
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
@@ -168,6 +169,7 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
                     onClick={() => validateStep2() && onNext()}
                     disabled={loadingPlacas || loadingOdometro}
                 >
+                    {loadingOdometro ? 'Validando...' : 'Siguiente'}
                     Siguiente
                 </button>
             </div>
