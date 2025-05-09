@@ -1,3 +1,8 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { BASE_URL } from '@/validation/url';
+
+
 // components/InsRegistroSalida/Step2.tsx
 type Step2Props = {
     placa: string;
