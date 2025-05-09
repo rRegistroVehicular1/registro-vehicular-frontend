@@ -86,7 +86,7 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
         return false;
       }
     
-      if (lastOdometro !== null && odometroActual <= lastOdometro) {
+      if (lastOdometro !== null && odometroActual < lastOdometro) {
         alert(`El odómetro debe ser mayor al último registrado (${lastOdometro})`);
         return false;
       }
@@ -159,20 +159,18 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
                 Odómetro de Salida:
                 <input
                     type="number"
-                    min={lastOdometro !== null ? lastOdometro + 1 : 0}
+                    min={lastOdometro || 0}
                     value={odometroSalida}
                     onChange={(e) => setOdometroSalida(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                     disabled={loadingOdometro}
                 />
-                {loadingOdometro ? (
-                    <p className="text-sm text-gray-500 mt-1">Cargando último odómetro...</p>
-                ) : lastOdometro !== null ? (
-                    <p className="text-sm text-gray-500 mt-1">
-                        Último odómetro registrado: {lastOdometro}
-                    </p>
-                ) : null}
+                {lastOdometro !== null && (
+                <p className="text-sm text-gray-500 mt-1">
+                  Último odómetro registrado: {lastOdometro} (puedes ingresar este valor o mayor)
+                </p>
+                )}
             </label>
 
             <div className="col-span-1 md:col-span-2 flex justify-between">
