@@ -36,7 +36,12 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
             });
             setLastOdometro(response.data.lastOdometro || 0);
         } catch (error) {
-            console.error('Error al obtener último odómetro:', error);
+            if (axios.isAxiosError(error)) {
+              console.error('Error al obtener odómetro:', {
+                message: error.message,
+                response: error.response?.data
+              });
+            }
             setLastOdometro(null);
         } finally {
             setLoadingOdometro(false);
@@ -55,10 +60,16 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
           
           setPlacasList(placasValidas);
         } catch (error) {
-          console.error('Error fetching placas:', {
-            error: error.message,
-            response: error.response?.data
-          });
+          if (error instanceof Error) {
+            console.error('Error fetching placas:', error.message);
+          } else if (axios.isAxiosError(error)) {
+            console.error('Error de axios:', {
+              message: error.message,
+              response: error.response?.data
+            });
+          } else {
+            console.error('Error desconocido:', error);
+          }
           setPlacasList([]); // Fallback seguro
         } finally {
           setLoadingPlacas(false);
