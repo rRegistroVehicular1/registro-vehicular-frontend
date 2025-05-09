@@ -19,10 +19,8 @@ type Step2Props = {
 
 function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, onPrevious, onNext, datos, actualizarLlantasPorTipo }: Step2Props) {
     const [placasList, setPlacasList] = useState<string[]>([]);
-    const [loadingPlacas, setLoadingPlacas] = useState(false);
-    const [errorPlacas, setErrorPlacas] = useState<string | null>(null);
+    const [loadingPlacas, setLoadingPlacas] = useState(true); // Nuevo estado para carga
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
-    const [loadingOdometro, setLoadingOdometro] = useState(false);
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
         if (!selectedPlaca) {
@@ -46,24 +44,16 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
 
     useEffect(() => {
         const fetchPlacas = async () => {
-            setLoadingPlacas(true);
-            setErrorPlacas(null);
             try {
-                const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-                
-                if (Array.isArray(response.data)) {
-                    setPlacasList(response.data.filter(Boolean)); // Filtra valores nulos/vacíos
-                } else {
-                    throw new Error("Formato de datos inválido");
-                }
+              const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+              setPlacasList(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
-                console.error("Error al obtener placas:", error);
-                setErrorPlacas("Error al cargar las placas");
-                setPlacasList([]);
+              console.error("Error al cargar placas:", error);
+              setPlacasList([]);
             } finally {
-                setLoadingPlacas(false);
+              setLoadingPlacas(false);
             }
-        };
+          };
 
         fetchPlacas();
     }, []);
@@ -75,22 +65,22 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
     }, [placa]);
 
     const validateStep2 = () => {
-            if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
-        alert('Todos los campos de este paso son obligatorios.');
+      if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
+        alert("Todos los campos son obligatorios");
         return false;
       }
     
-      const odometroActual = parseFloat(odometroSalida);
-      if (isNaN(odometroActual) || odometroActual < 0) {
-        alert('El odómetro debe ser un número válido mayor o igual a 0');
+      const odometroValue = Number(odometroSalida);
+      if (isNaN(odometroValue) || odometroValue < 0) {
+        alert("Odómetro debe ser un número positivo");
         return false;
       }
     
-      if (lastOdometro !== null && odometroActual < lastOdometro) {
-        alert(`El odómetro debe ser mayor al último registrado (${lastOdometro})`);
+      if (lastOdometro !== null && odometroValue < lastOdometro) {
+        alert(`El odómetro no puede ser menor al último registro (${lastOdometro})`);
         return false;
       }
-      
+    
       return true;
     };
 
@@ -102,30 +92,26 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label className="block mb-4">
-                Placa del Vehículo:
-                <select
-                    value={placa}
-                    onChange={(e) => {
-                        setPlaca(e.target.value);
-                        fetchLastOdometro(e.target.value);
-                    }}
-                    className="mt-1 p-2 border rounded w-full"
-                    required
-                    disabled={loadingPlacas}
-                >
-                    <option value="">
-                        {loadingPlacas ? 'Cargando placas...' : 'Seleccione una placa'}
-                    </option>
-                    {errorPlacas ? (
-                        <option value="" disabled>{errorPlacas}</option>
-                    ) : (
-                        placasList.map((placaItem, index) => (
-                            <option key={index} value={placaItem}>
-                                {placaItem}
-                            </option>
-                        ))
-                    )}
-                </select>
+              Placa del Vehículo:
+              <select
+                value={placa}
+                onChange={(e) => {
+                  setPlaca(e.target.value);
+                  if (e.target.value) fetchLastOdometro(e.target.value);
+                }}
+                className="mt-1 p-2 border rounded w-full"
+                required
+                disabled={loadingPlacas}
+              >
+                <option value="">
+                  {loadingPlacas ? "Cargando..." : "Seleccione una placa"}
+                </option>
+                {placasList.map((placaItem, index) => (
+                  <option key={index} value={placaItem}>
+                    {placaItem}
+                  </option>
+                ))}
+              </select>
             </label>
 
             <label className="block mb-4">
@@ -156,23 +142,22 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
             </label>
 
             <label className="block mb-4">
-                Odómetro de Salida:
-                <input
-                    type="number"
-                    min={lastOdometro || 0}
-                    value={odometroSalida}
-                    onChange={(e) => setOdometroSalida(e.target.value)}
-                    className="mt-1 p-2 border rounded w-full"
-                    required
-                    disabled={loadingOdometro}
-                />
-                {lastOdometro !== null && (
+              Odómetro de Salida:
+              <input
+                type="number"
+                min={lastOdometro || 0}
+                value={odometroSalida}
+                onChange={(e) => setOdometroSalida(e.target.value)}
+                className="mt-1 p-2 border rounded w-full"
+                required
+              />
+              {lastOdometro !== null && (
                 <p className="text-sm text-gray-500 mt-1">
-                  Último odómetro registrado: {lastOdometro} (puedes ingresar este valor o mayor)
+                  Último registro: {lastOdometro} (Ingrese igual o mayor)
                 </p>
-                )}
+              )}
             </label>
-
+            
             <div className="col-span-1 md:col-span-2 flex justify-between">
                 <button type="button" className="bg-gray-500 text-white px-4 py-2 rounded" onClick={onPrevious}>
                     Atrás
