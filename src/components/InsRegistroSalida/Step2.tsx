@@ -44,19 +44,28 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
     };
 
     useEffect(() => {
-        const fetchPlacas = async () => {
-            try {
-              const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-              console.log("Datos recibidos:", response.data);
-              setPlacasList(Array.isArray(response.data) ? response.data : []);
-            } catch (error) {
-              console.error("Error al cargar placas:", error);
-              setPlacasList([]);
-            } finally {
-              setLoadingPlacas(false);
-            }
-        };
-        fetchPlacas();
+      const fetchPlacas = async () => {
+        try {
+          const { data } = await axios.get<string[]>(`${BASE_URL}/placas/get-data-placas`);
+          
+          // Validación exhaustiva de datos
+          const placasValidas = Array.isArray(data)
+            ? data.filter(placa => typeof placa === 'string')
+            : [];
+          
+          setPlacasList(placasValidas);
+        } catch (error) {
+          console.error('Error fetching placas:', {
+            error: error.message,
+            response: error.response?.data
+          });
+          setPlacasList([]); // Fallback seguro
+        } finally {
+          setLoadingPlacas(false);
+        }
+      };
+
+      fetchPlacas();
     }, []);
 
     useEffect(() => {
@@ -95,24 +104,30 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
             <label className="block mb-4">
               Placa del Vehículo:
               <select
-                value={placa}
-                onChange={(e) => {
-                  setPlaca(e.target.value);
-                  if (e.target.value) fetchLastOdometro(e.target.value);
-                }}
-                className="mt-1 p-2 border rounded w-full"
-                required
-                disabled={loadingPlacas}
-              >
-                <option value="">
-                  {loadingPlacas ? "Cargando..." : "Seleccione una placa"}
-                </option>
-                {placasList.map((placaItem, index) => (
-                  <option key={index} value={placaItem}>
-                    {placaItem}
-                  </option>
-                ))}
-              </select>
+                  value={placa}
+                  onChange={(e) => {
+                    setPlaca(e.target.value);
+                    fetchLastOdometro(e.target.value);
+                  }}
+                  className="mt-1 p-2 border rounded w-full"
+                  required
+                  disabled={loadingPlacas}
+                >
+                  {loadingPlacas ? (
+                    <option value="">Cargando placas...</option>
+                  ) : placasList.length === 0 ? (
+                    <option value="" disabled>No hay placas registradas</option>
+                  ) : (
+                    <>
+                      <option value="">Seleccione una placa</option>
+                      {placasList.map((placa, index) => (
+                        <option key={`${placa}-${index}`} value={placa}>
+                          {placa}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </select>
             </label>
 
             <label className="block mb-4">
