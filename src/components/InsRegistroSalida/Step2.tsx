@@ -75,23 +75,23 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
     }, [placa]);
 
     const validateStep2 = () => {
-        if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
-            alert('Todos los campos de este paso son obligatorios.');
-            return false;
-        }
-
-        const odometroNum = parseFloat(odometroSalida);
-        if (isNaN(odometroNum) || odometroNum < 0) {
-            alert('El odómetro debe ser un número válido mayor o igual a 0');
-            return false;
-        }
-
-        if (lastOdometro !== null && odometroNum <= lastOdometro) {
-            alert(`El odómetro debe ser mayor al último registrado (${lastOdometro})`);
-            return false;
-        }
-
-        return true;
+            if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
+        alert('Todos los campos de este paso son obligatorios.');
+        return false;
+      }
+    
+      const odometroActual = parseFloat(odometroSalida);
+      if (isNaN(odometroActual) || odometroActual < 0) {
+        alert('El odómetro debe ser un número válido mayor o igual a 0');
+        return false;
+      }
+    
+      if (lastOdometro !== null && odometroActual <= lastOdometro) {
+        alert(`El odómetro debe ser mayor al último registrado (${lastOdometro})`);
+        return false;
+      }
+      
+      return true;
     };
 
     const handleTipoVehiculoChange = (value: string) => {
