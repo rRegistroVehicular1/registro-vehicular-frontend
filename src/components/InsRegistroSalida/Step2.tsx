@@ -51,31 +51,40 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
     useEffect(() => {
       const fetchPlacas = async () => {
         try {
-          const { data } = await axios.get<string[]>(`${BASE_URL}/placas/get-data-placas`);
+          const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+          console.log("Respuesta completa del API:", response); // 👈 Debug clave
+
+          // Verifica la estructura real de los datos
+          console.log("Datos recibidos:", response.data);
           
-          // Validación exhaustiva de datos
-          const placasValidas = Array.isArray(data)
-            ? data.filter(placa => typeof placa === 'string')
-            : [];
-          
-          setPlacasList(placasValidas);
-        } catch (error) {
-          if (error instanceof Error) {
-            console.error('Error fetching placas:', error.message);
-          } else if (axios.isAxiosError(error)) {
-            console.error('Error de axios:', {
-              message: error.message,
-              response: error.response?.data
-            });
-          } else {
-            console.error('Error desconocido:', error);
+          let placas = [];
+          if (Array.isArray(response.data)) {
+            placas = response.data
+              .map(item => item?.toString().trim())
+              .filter(Boolean);
+          } else if (typeof response.data === 'object') {
+            // Si viene como objeto {data: [...]}
+            placas = Object.values(response.data)
+              .flat()
+              .map(item => item?.toString().trim())
+              .filter(Boolean);
           }
-          setPlacasList([]); // Fallback seguro
+    
+          console.log("Placas procesadas:", placas); // 👈 Ver esto
+          setPlacasList(placas);
+          
+        } catch (error) {
+          console.error("Error completo:", {
+            message: error.message,
+            response: error.response?.data,
+            config: error.config
+          });
+          setPlacasList([]);
         } finally {
           setLoadingPlacas(false);
         }
       };
-
+        
       fetchPlacas();
     }, []);
 
