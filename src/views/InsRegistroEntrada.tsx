@@ -1,75 +1,58 @@
+InsRegistroEntrada.tsx :
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
 
 function RegistroInspeccionEntrada() {
-  const [formData, setFormData] = useState(() => ({
-    revisiones: getInitialFormData().revisiones.map((revision) => ({
-      ...revision,
-      opcion: null,
-    })),
-    observacion: '',
-    odometro: '',
-  }));
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
-
-  const handleInputChange = (index: number, value: boolean) => {
-    const newRevisiones = [...formData.revisiones];
-    newRevisiones[index].opcion = value;
-    setFormData({
-      ...formData,
-      revisiones: newRevisiones,
-    });
-  };
-
-  const handleCancel = () => {
-    const confirmCancel = window.confirm('¿Está seguro de que desea cancelar? Los cambios se perderán.');
-    if (confirmCancel) {
-      setFormData({
+    const [formData, setFormData] = useState<{
+        revisiones: Revision[];
+        observacion: string;
+        odometro: string;
+    }>(() => ({
         revisiones: getInitialFormData().revisiones.map((revision) => ({
-          descripcion: revision.descripcion,
-          opcion: null,
+            ...revision,
+            opcion: null,
         })),
         observacion: '',
-        odometro: "",
-      });
-      navigate("/");
-    }
-  };
+        odometro: '',
+    }));
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
 
-    if (!formData.odometro || isNaN(Number(formData.odometro))) {
-      alert('El odómetro debe ser un número válido');
-      return;
-    }
+    const handleInputChange = (index: number, value: boolean) => {
+        const newRevisiones = [...formData.revisiones];
+        newRevisiones[index].opcion = value;
+        setFormData({
+            ...formData,
+            revisiones: newRevisiones,
+        });
+    };
 
-    setIsSubmitting(true);
-    try {
-      await handleSubmit({
-        e,
-        formData,
-        setIsSubmitting,
-        setFormData,
-        navigate
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    const handleCancel = () => {
+        const confirmCancel = window.confirm(
+            '¿Está seguro de que desea cancelar? Los cambios se perderán.'
+        );
+        if (confirmCancel) {
+            setFormData({
+                revisiones: getInitialFormData().revisiones.map((revision) => ({
+                    descripcion: revision.descripcion,
+                    opcion: null,
+                })),
+                observacion: '',
+                odometro:"",
+            });
+        }
+        navigate("/");
+    };
 
-  return (
+    return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
             <h1 className="text-2xl font-bold mb-4 text-center">
-                R06-PT-19 REVISIÓN DE VEHÍCULOS - INSPECCION ENTRADA
+                R06-PT-19 REVISIÓN DE VEHÍCULOS
             </h1>
             <p className="text-center text-lg font-semibold mb-4">Ingreso a la planta</p>
             <form
