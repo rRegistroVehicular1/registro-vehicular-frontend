@@ -15,12 +15,37 @@ type Step2Props = {
 }
 
 function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, onPrevious, onNext, datos, actualizarLlantasPorTipo}: Step2Props) {
+
+    const [lastOdometro, setLastOdometro] = useState<number | null>(null);
+
+    const fetchLastOdometro = async (selectedPlaca: string) => {
+      try {
+        const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+          params: { placa: selectedPlaca }
+        });
+        setLastOdometro(response.data.lastOdometro);
+      } catch (error) {
+        console.error('Error al obtener último odómetro:', error);
+        setLastOdometro(null);
+      }
+    };
+    
+    useEffect(() => {
+      if (placa) {
+        fetchLastOdometro(placa);
+      }
+    }, [placa]);
     
     const validateStep2 = () => {
         if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
             alert('Todos los campos de este paso son obligatorios.');
             return false;
         }
+        if (lastOdometro !== null && parseFloat(odometroSalida) <= lastOdometro) {
+            alert(`El odómetro debe ser mayor al último registrado (${lastOdometro})`);
+            return false;
+        }
+        
         return true;
     };
 
@@ -79,12 +104,18 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
             <label className="block mb-4">
                 Odómetro de Salida:
                 <input
-                    type="text"
+                    type="number"
+                    min={lastOdometro ? lastOdometro + 1 : 0}
                     value={odometroSalida}
                     onChange={(e) => setOdometroSalida(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 />
+                {lastOdometro !== null && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      Último odómetro registrado: {lastOdometro}
+                    </p>
+                )}
             </label>
 
             <div className="col-span-1 md:col-span-2 flex justify-between">
