@@ -47,6 +47,7 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
         const fetchPlacas = async () => {
             try {
               const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+              console.log("Datos recibidos:", response.data);
               setPlacasList(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
               console.error("Error al cargar placas:", error);
@@ -54,8 +55,7 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
             } finally {
               setLoadingPlacas(false);
             }
-          };
-
+        };
         fetchPlacas();
     }, []);
 
