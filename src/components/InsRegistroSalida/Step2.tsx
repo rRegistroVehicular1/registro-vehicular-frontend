@@ -170,7 +170,6 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
                     disabled={loadingPlacas || loadingOdometro}
                 >
                     {loadingOdometro ? 'Validando...' : 'Siguiente'}
-                    Siguiente
                 </button>
             </div>
         </div>
