@@ -1,5 +1,3 @@
-InsRegistroEntrada.tsx :
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
