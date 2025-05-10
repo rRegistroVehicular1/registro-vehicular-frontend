@@ -63,7 +63,7 @@ function StepDos({
 
     useEffect(() => {
         const fetchPlacas = async () => {
-            etLoadingPlacas(true);
+            setLoadingPlacas(true);
             try {
                 const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
                 console.log("Respuesta completa del API:", response.data);
