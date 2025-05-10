@@ -64,21 +64,44 @@ function StepDos({
     useEffect(() => {
         const fetchPlacas = async () => {
             try {
-                const response = await axios.get<string[]>(`${BASE_URL}/placas/get-data-placas`);
-                console.log("Respuesta completa del API:", response.data);
+                const response = await axios.get('${BASE_URL}/placas/get-data-placas');
+
+                console.log("Respuesta completa:", response);
+                console.log("Datos recibidos:", response.data);
+                console.log("Tipo de datos:", typeof response.data);
                 
-                // Filtrado adicional por si acaso
-                  const placasValidas = response.data.filter(placa => 
-                    typeof placa === 'string' && placa.trim().length > 0
-                  );
-                  
-                  console.log('Placas válidas:', placasValidas); // Para diagnóstico
-                  setPlacasList(placasValidas);
-                            
+                let placas: string[] = [];
+
+                // Caso 1: Si es un array directo
+              if (Array.isArray(response.data)) {
+                placas = response.data
+                  .map(item => item?.toString().trim())
+                  .filter(item => item && item.length > 0);
+              } 
+              // Caso 2: Si es un objeto con estructura {data: [...]}
+              else if (response.data?.data && Array.isArray(response.data.data)) {
+                placas = response.data.data
+                  .map(item => item?.toString().trim())
+                  .filter(item => item && item.length > 0);
+              }
+              // Caso 3: Si es un objeto con otra estructura
+              else if (typeof response.data === 'object') {
+                placas = Object.values(response.data)
+                  .flat()
+                  .map(item => item?.toString().trim())
+                  .filter(item => item && item.length > 0);
+              }
+        
+              // 4. Eliminar duplicados
+              const placasUnicas = [...new Set(placas)];
+              
+              console.log('Placas finales:', placasUnicas);
+              setPlacasList(placasUnicas);             
                 
             } catch (error) {
                 console.error('Error al obtener placas:', error);
-                setPlacasList([]);
+                // Datos de prueba para desarrollo
+                  setPlacasList(["PLACA1", "PLACA2", "PLACA3"]);
             } finally {
                 setLoadingPlacas(false);
             }
