@@ -63,6 +63,7 @@ function StepDos({
 
     useEffect(() => {
         const fetchPlacas = async () => {
+            setLoadingPlacas(true);
             try {
                 const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
                 console.log("Respuesta completa del API:", response);
@@ -71,12 +72,12 @@ function StepDos({
                 if (Array.isArray(response.data)) {
                     placas = response.data
                         .map(item => item?.toString().trim())
-                        .filter(Boolean);
-                } else if (typeof response.data === 'object') {
+                        .filter((item): item is string => item !== undefined && item !== '');
+                } else if (response.data && typeof response.data === 'object') {
                     placas = Object.values(response.data)
                         .flat()
                         .map(item => item?.toString().trim())
-                        .filter(Boolean);
+                        .filter(item): item is string => item !== undefined && item !== '');
                 }
 
                 console.log("Placas procesadas:", placas);
