@@ -63,27 +63,35 @@ function StepDos({
 
     useEffect(() => {
         const fetchPlacas = async () => {
-            setLoadingPlacas(true);
             try {
                 const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-                console.log("Respuesta completa del API:", response.data);
+                console.log("Respuesta completa del API:", response);
 
                 console.log("Datos recibidos:", response.data);
                 
-                let placas: string[] = [];
+                const placas: string[] = [];
+                
                 if (Array.isArray(response.data)) {
-                    placas = response.data
-                        .map(item => item?.toString().trim())
-                        .filter(Boolean);
+                   response.data.forEach(item => {
+                    if (item) {
+                      const placa = item.toString().trim();
+                      if (placa) placas.push(placa);
+                    }
+                  });
                 } else if (response.data && typeof response.data === 'object') {
-                    placas = Object.values(response.data)
-                        .flat()
-                        .map(item => item?.toString().trim())
-                        .filter(Boolean);
+                    Object.values(response.data).flat().forEach(item => {
+                    if (item) {
+                      const placa = item.toString().trim();
+                      if (placa) placas.push(placa);
+                    }
+                  });
                 }
 
-                console.log("Placas procesadas:", placas);
-                setPlacasList(placas);
+                // Eliminar duplicados
+                const placasUnicas = [...new Set(placas)];
+                
+                console.log("Placas procesadas:", placasUnicas);
+                setPlacasList(placasUnicas);
             } catch (error) {
                 console.error('Error al obtener placas:', error);
                 setPlacasList([]);
