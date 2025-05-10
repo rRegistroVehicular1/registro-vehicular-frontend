@@ -68,7 +68,6 @@ function StepDos({
                 console.log("Respuesta completa del API:", response.data);
                 
                 // Filtrado adicional por si acaso
-                // Filtrado adicional por si acaso
                   const placasValidas = response.data.filter(placa => 
                     typeof placa === 'string' && placa.trim().length > 0
                   );
