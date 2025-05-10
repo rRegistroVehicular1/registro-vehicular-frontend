@@ -62,29 +62,26 @@ function StepDos({ placa, setPlaca, conductor, setConductor, tipoVehiculo, setTi
             placas = response.data
               .map(item => item?.toString().trim())
               .filter(Boolean);
-          } else if (typeof response.data === 'object') {
-            // Si viene como objeto {data: [...]}
+              .filter((item, index, self) => self.indexOf(item) === index);
+          } else if (response.data && typeof response.data === 'object') {
+            // Si la respuesta es un objeto, extraer los valores    
             placas = Object.values(response.data)
               .flat()
               .map(item => item?.toString().trim())
               .filter(Boolean);
+              .filter((item, index, self) => self.indexOf(item) === index);
           }
     
-          console.log("Placas procesadas:", placas); // 👈 Ver esto
+          console.log("Placas disponibles:", placas); // 👈 Ver esto
           setPlacasList(placas);
           
         } catch (error) {
-          console.error("Error completo:", {
-            message: error.message,
-            response: error.response?.data,
-            config: error.config
-          });
+          console.error("Error al obtener placas:", error);
           setPlacasList([]);
         } finally {
           setLoadingPlacas(false);
         }
       };
-        
       fetchPlacas();
     }, []);
 
