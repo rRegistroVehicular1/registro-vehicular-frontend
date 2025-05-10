@@ -63,29 +63,31 @@ function StepDos({
 
     useEffect(() => {
         const fetchPlacas = async () => {
-            setLoadingPlacas(true);
             try {
                 const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
                 console.log("Respuesta completa del API:", response);
 
+                console.log("Datos recibidos:", response.data);
+                
                 let placas: string[] = [];
                 if (Array.isArray(response.data)) {
                     placas = response.data
                         .map(item => item?.toString().trim())
-                        .filter((item): item is string => item !== undefined && item !== '');
-                } else if (response.data && typeof response.data === 'object') {
+                        .filter(Boolean) as string[];
+                } else if (typeof response.data === 'object') {
                     placas = Object.values(response.data)
                         .flat()
                         .map(item => item?.toString().trim())
-                        .filter(item): item is string => item !== undefined && item !== '');
+                        .filter(Boolean) as string[];
                 }
 
                 console.log("Placas procesadas:", placas);
                 setPlacasList(placas);
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Error al obtener placas:", {
-                    message: error instanceof Error ? error.message : 'Error desconocido',
-                    response: axios.isAxiosError(error) ? error.response?.data : null
+                    message: error.message,
+                    response: error.response?.data,
+                    config: error.config
                 });
                 setPlacasList([]);
             } finally {
