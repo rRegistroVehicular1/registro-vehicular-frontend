@@ -68,34 +68,35 @@ function StepDos({
     useEffect(() => {
         const fetchPlacas = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+                const response = await axios.get<string[]>(`${BASE_URL}/placas/get-data-placas`);
 
                 console.log("Respuesta completa:", response);
                 console.log("Datos recibidos:", response.data);
                 console.log("Tipo de datos:", typeof response.data);
                 
-                let placas = [];
+                let placas: string[] = [];
 
                 // Caso 1: Si es un array directo
               if (Array.isArray(response.data)) {
                 placas = response.data
-                  .map(item => item?.toString().trim())
-                  .filter(item => item && item.length > 0);
+                  .map((item: string) => item?.toString().trim())
+                  .filter((item: string) => item && item.length > 0) as string[];
               } 
               // Caso 2: Si es un objeto con estructura {data: [...]}
-              else if (response.data && Array.isArray(response.data.data)) {
+              else if (response.data?.data && Array.isArray(response.data.data)) {
                 placas = response.data.data
-                  .map(item => item?.toString().trim())
-                  .filter(item => item && item.length > 0);
+                  .map((item: string) => item?.toString().trim())
+                  .filter((item: string) => item && item.length > 0) as string[];
               }
-              else {
-                console.error('Formato de respuesta inesperado:', response.data);
-                placas = ["PLACA1", "PLACA2", "PLACA3"]; // Datos de prueba
+              else if (typeof response.data === 'object') {
+                placas = Object.values(response.data)  
+                .flat()
+                .map((item: string) => item?.toString().trim())
+                .filter((item: string) => item && item.length > 0) as string[];
               }
         
               // 4. Eliminar duplicados
               const placasUnicas = [...new Set(placas)];
-              
               console.log('Placas finales:', placasUnicas);
               setPlacasList(placasUnicas);             
                 
