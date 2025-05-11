@@ -31,9 +31,10 @@ function StepDos({
     datos, 
     actualizarLlantasPorTipo 
 }: Step2Props) {
-    const [loadingOdometro, setLoadingOdometro] = useState(false);
+    
     const [placasList, setPlacasList] = useState<string[]>([]);
     const [loadingPlacas, setLoadingPlacas] = useState(true);
+    const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
@@ -64,39 +65,22 @@ function StepDos({
     const fetchPlacas = async () => {
           try {
             console.log("Iniciando obtención de placas...");
-            const response = await axios.get<string[] | {data: string[]}>(`${BASE_URL}/placas/get-data-placas`);
-            console.log("Respuesta del servidor:", response);
-        
-            // Verifica la estructura de la respuesta
-            if (!response.data) {
-              throw new Error("La respuesta no contiene datos");
-            }
-        
-            // Extrae las placas según la estructura esperada
-            let placas: string[] = [];
+            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
             
-            // Intenta diferentes estructuras de respuesta
-            if (Array.isArray(response.data)) {
-              placas = response.data;
-            } else if (response.data?.data && Array.isArray(response.data.data)) {
-              placas = response.data.data;
-            } else if (typeof response.data === 'object') {
-              placas = Object.values(response.data).flat();
-            }
-        
-           const placasValidas = placas
-                .map(item => item?.toString().trim())
-                .filter((item): item is string => !!item && item.length > 0);
-
-            setPlacasList([...new Set(placasValidas)]);
+            // Versión simple que funcionaba antes
+            const placas = Array.isArray(response.data) 
+                ? response.data 
+                : response.data?.data || [];
+            
+            setPlacasList(placas.filter(Boolean).map(p => p.toString().trim()));
               
-          } catch (error: unknown) {
+          } catch (error) {
             console.error("Error al obtener placas:", error instanceof Error ? error.message : error);
-            setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de prueba
+            setPlacasList([]); // Datos de prueba
           } finally {
             setLoadingPlacas(false);
           }
-        };
+    };
     
     useEffect(() => {
         fetchPlacas();
