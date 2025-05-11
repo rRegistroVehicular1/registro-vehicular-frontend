@@ -45,17 +45,12 @@ function StepDos({
 
         setLoadingOdometro(true);
         try {
-            const response = await axios.get<{lastOdometro: number}>(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+            const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
                 params: { placa: selectedPlaca }
             });
             setLastOdometro(response.data.lastOdometro || 0);
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error('Error al obtener odómetro:', {
-                    message: error.message,
-                    response: error.response?.data
-                });
-            }
+            console.error('Error al obtener odómetro:', error);
             setLastOdometro(null);
         } finally {
             setLoadingOdometro(false);
@@ -65,25 +60,20 @@ function StepDos({
     const fetchPlacas = async () => {
           try {
             console.log("Iniciando obtención de placas...");
-            const response = await axios.get<string[] | {data: string[]}>(`${BASE_URL}/placas/get-data-placas`);
+            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
 
             let placas: string[] = [];
               
             if (Array.isArray(response.data)) {
-                placas = response.data;
+                placas = response.data.map((p: string) => p?.toString().trim());
             } else if (response.data?.data && Array.isArray(response.data.data)) {
-                placas = response.data.data;
+                placas = response.data.data.map((p: string) => p?.toString().trim());
             }
-
-            // Limpiar y validar las placas
-            const placasValidas = placas
-                .map(item => item?.toString().trim())
-                .filter((item): item is string => !!item && item.length > 0);
-
-            setPlacasList([...new Set(placasValidas)]);
               
-          } catch (error: unknown) {
-            console.error('Error al obtener placas:', error instanceof Error ? error.message : error);
+            setPlacasList([...new Set(placas.filter(p => p))]);
+              
+          } catch (error) {
+            console.error('Error al obtener placas:', error);
             setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de prueba
           } finally {
             setLoadingPlacas(false);
