@@ -35,10 +35,12 @@ function StepDos({
     const [placasList, setPlacasList] = useState<string[]>([]);
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
+    const [minOdometro, setMinOdometro] = useState(0);
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
         if (!selectedPlaca) {
             setLastOdometro(null);
+            setMinOdometro(0);
             return;
         }
 
@@ -47,18 +49,20 @@ function StepDos({
             const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
                 params: { placa: selectedPlaca }
             });
-            setLastOdometro(response.data.lastOdometro || 0);
+            const lastOdometroValue = response.data.lastOdometro || 0;
+            setLastOdometro(lastOdometroValue);
+            setMinOdometro(lastOdometroValue);
+
+            if (odometroSalida && parseFloat(odometroSalida) < lastOdometroValue) {
+              setOdometroSalida('');
+            }   
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error('Error al obtener odómetro:', {
-                    message: error.message,
-                    response: error.response?.data
-                });
-            }
+            console.error('Error al obtener odómetro:', error);
             setLastOdometro(null);
-        } finally {
+            setMinOdometro(0);
+          } finally {
             setLoadingOdometro(false);
-        }
+          }
     };
 
     useEffect(() => {
@@ -203,9 +207,14 @@ function StepDos({
                 Odómetro de Salida:
                 <input
                     type="number"
-                    min={lastOdometro || 0}
+                    min={minOdometro}
                     value={odometroSalida}
-                    onChange={(e) => setOdometroSalida(e.target.value)}
+                    onChange={(e) => 
+                        const value = e.target.value;
+                        if (!value || parseFloat(value) >= minOdometro) {
+                            setOdometroSalida(value);
+                        }
+                    }}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 />
