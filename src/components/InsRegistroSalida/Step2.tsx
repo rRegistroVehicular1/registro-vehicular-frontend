@@ -153,8 +153,67 @@ function StepDos({
                 </select>
             </label>
 
-            {/* Resto de tu JSX permanece igual */}
-            {/* ... */}
+            <label className="block mb-4">
+                Nombre del Conductor:
+                <input
+                    type="text"
+                    value={conductor}
+                    onChange={(e) => setConductor(e.target.value)}
+                    className="mt-1 p-2 border rounded w-full"
+                    required
+                />
+            </label>
+
+            <label className="block mb-4">
+                Tipo de Vehículo:
+                <select
+                    value={tipoVehiculo}
+                    onChange={(e) => handleTipoVehiculoChange(e.target.value)}
+                    className="mt-1 p-2 border rounded w-full"
+                    required
+                >
+                    <option value="">Seleccione un tipo</option>
+                    <option value="sedan">Sedán</option>
+                    <option value="pickup">Pickup</option>
+                    <option value="panel">Panel</option>
+                    <option value="camion">Camión</option>
+                </select>
+            </label>
+
+            <label className="block mb-4">
+                Odómetro de Salida:
+                <input
+                    type="number"
+                    min={lastOdometro || 0}
+                    value={odometroSalida}
+                    onChange={(e) => setOdometroSalida(e.target.value)}
+                    className="mt-1 p-2 border rounded w-full"
+                    required
+                />
+                {lastOdometro !== null && (
+                    <p className="text-sm text-gray-500 mt-1">
+                        Último registro: {lastOdometro} (Ingrese igual o mayor)
+                    </p>
+                )}
+            </label>
+            
+            <div className="col-span-1 md:col-span-2 flex justify-between">
+                <button 
+                    type="button" 
+                    className="bg-gray-500 text-white px-4 py-2 rounded" 
+                    onClick={onPrevious}
+                >
+                    Atrás
+                </button>
+                <button 
+                    type="button" 
+                    className="bg-blue-500 text-white px-4 py-2 rounded" 
+                    onClick={() => validateStep2() && onNext()}
+                    disabled={loadingPlacas || loadingOdometro}
+                >
+                    {loadingOdometro ? 'Validando...' : 'Siguiente'}
+                </button>
+            </div>
         </div>
     );
 }
