@@ -81,7 +81,7 @@ function StepDos({
             
         } catch (error) {
             console.error('Error al obtener placas:', error);
-            setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de fallback
+            setPlacasList(["AG4934", "PLACA2", "PLACA3"]); // Datos de fallback
         } finally {
             setLoadingPlacas(false);
         }
