@@ -48,7 +48,13 @@ function StepDos({
             const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
                 params: { placa: selectedPlaca }
             });
-            setLastOdometro(response.data.lastOdometro || 0);
+            console.log('Respuesta del servidor:', response.data);
+            if (response.data.success) {
+                setLastOdometro(response.data.lastOdometro || 0);
+            } else {
+                console.error('Error en la respuesta:', response.data);
+                setLastOdometro(0);
+            }
         } catch (error) {
             console.error('Error al obtener odómetro:', error);
             setLastOdometro(null);
