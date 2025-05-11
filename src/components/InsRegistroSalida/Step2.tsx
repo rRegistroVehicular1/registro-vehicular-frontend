@@ -96,6 +96,8 @@ function StepDos({
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
+        } else {
+        setLastOdometro(null);
         }
     }, [placa]);
 
@@ -106,13 +108,13 @@ function StepDos({
         }
 
         const odometroValue = Number(odometroSalida);
-        if (isNaN(odometroValue) || odometroValue < 0) {
-            alert("Odómetro debe ser un número positivo");
+        if (isNaN(odometroValue)){
+            alert("Odómetro debe ser un número valido");
             return false;
         }
 
         if (lastOdometro !== null && odometroValue < lastOdometro) {
-            alert(`El odómetro no puede ser menor al último registro (${lastOdometro})`);
+            alert(`El odómetro de salida (${odometroValue})no puede ser menor al último registro de entrada (${lastOdometro})`);
             return false;
         }
 
