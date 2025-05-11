@@ -206,11 +206,12 @@ function StepDos({
                     type="number"
                     min={minOdometro}
                     value={odometroSalida}
-                    onChange={(e) => const value = e.target.value;
+                    onChange={(e) => {
+                        const value = e.target.value;
                         if (!value || parseFloat(value) >= minOdometro) {
                             setOdometroSalida(value);
                         }
-                    }
+                    }}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 />
