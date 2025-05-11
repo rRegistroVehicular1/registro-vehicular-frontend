@@ -58,6 +58,7 @@ function StepDos({
     };
 
     const fetchPlacas = async () => {
+        setLoadingPlacas(true);
           try {
             console.log("Iniciando obtención de placas...");
             const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
@@ -65,16 +66,24 @@ function StepDos({
             let placas: string[] = [];
               
             if (Array.isArray(response.data)) {
-                placas = response.data.map((p: string) => p?.toString().trim());
+                placas = response.data;
             } else if (response.data?.data && Array.isArray(response.data.data)) {
-                placas = response.data.data.map((p: string) => p?.toString().trim());
+                placas = response.data.data;
             }
               
-            setPlacasList([...new Set(placas.filter(p => p))]);
+            // Limpiar y normalizar las placas
+            placas = placas
+              .map(p => p?.toString().trim())
+              .filter(p => p); // Eliminar valores vacíos
+              
+            // Eliminar duplicados y ordenar
+            placas = [...new Set(placas)].sort();
+            
+            setPlacasList(placas);
               
           } catch (error) {
             console.error('Error al obtener placas:', error);
-            setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de prueba
+            setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de prueba por si falla la conexión
           } finally {
             setLoadingPlacas(false);
           }
