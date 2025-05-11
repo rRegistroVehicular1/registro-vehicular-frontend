@@ -49,7 +49,12 @@ function StepDos({
             });
             setLastOdometro(response.data.lastOdometro || 0);
         } catch (error) {
-            console.error('Error al obtener odómetro:', error);
+            if (axios.isAxiosError(error)) {
+                console.error('Error al obtener odómetro:', {
+                    message: error.message,
+                    response: error.response?.data
+                });
+            }
             setLastOdometro(null);
         } finally {
             setLoadingOdometro(false);
@@ -57,10 +62,9 @@ function StepDos({
     };
 
     const fetchPlacas = async () => {
-          setLoadingPlacas(true);
           try {
             console.log("Iniciando obtención de placas...");
-            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+            const response = await axios.get<string[] | {data: string[]}>(`${BASE_URL}/placas/get-data-placas`);
             console.log("Respuesta del servidor:", response);
         
             // Verifica la estructura de la respuesta
@@ -74,32 +78,20 @@ function StepDos({
             // Intenta diferentes estructuras de respuesta
             if (Array.isArray(response.data)) {
               placas = response.data;
-            } else if (Array.isArray(response.data.data)) {
+            } else if (response.data?.data && Array.isArray(response.data.data)) {
               placas = response.data.data;
             } else if (typeof response.data === 'object') {
               placas = Object.values(response.data).flat();
             }
         
-            // Filtra y limpia los datos
-            const placasLimpias = placas
-              .filter(placa => placa !== null && placa !== undefined)
-              .map(placa => placa.toString().trim())
-              .filter(placa => placa.length > 0);
-        
-            console.log("Placas obtenidas:", placasLimpias);
-            
-            if (placasLimpias.length === 0) {
-              console.warn("La lista de placas está vacía");
-              setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de prueba
-            } else {
-              setPlacasList(placasLimpias);
-            }
-          } catch (error) {
-            console.error("Error al obtener placas:", {
-              error: error.message,
-              response: error.response?.data,
-              config: error.config
-            });
+           const placasValidas = placas
+                .map(item => item?.toString().trim())
+                .filter((item): item is string => !!item && item.length > 0);
+
+            setPlacasList([...new Set(placasValidas)]);
+              
+          } catch (error: unknown) {
+            console.error("Error al obtener placas:", error instanceof Error ? error.message : error);
             setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de prueba
           } finally {
             setLoadingPlacas(false);
