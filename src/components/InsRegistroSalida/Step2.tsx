@@ -57,36 +57,55 @@ function StepDos({
     };
 
     const fetchPlacas = async () => {
-        try {
-            const response = await axios.get<string[]>(`${BASE_URL}/placas/get-data-placas`);
-            
-            // Procesamiento seguro de la respuesta
+          setLoadingPlacas(true);
+          try {
+            console.log("Iniciando obtención de placas...");
+            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+            console.log("Respuesta del servidor:", response);
+        
+            // Verifica la estructura de la respuesta
+            if (!response.data) {
+              throw new Error("La respuesta no contiene datos");
+            }
+        
+            // Extrae las placas según la estructura esperada
             let placas: string[] = [];
             
+            // Intenta diferentes estructuras de respuesta
             if (Array.isArray(response.data)) {
-                placas = response.data;
-            } else if (response.data && typeof response.data === 'object') {
-                // Si viene como objeto, extraer los valores
-                placas = Object.values(response.data).flat() as string[];
+              placas = response.data;
+            } else if (Array.isArray(response.data.data)) {
+              placas = response.data.data;
+            } else if (typeof response.data === 'object') {
+              placas = Object.values(response.data).flat();
             }
-            
-            // Limpieza y filtrado
+        
+            // Filtra y limpia los datos
             const placasLimpias = placas
-                .map(item => item?.toString().trim())
-                .filter(item => item && item.length > 0);
+              .filter(placa => placa !== null && placa !== undefined)
+              .map(placa => placa.toString().trim())
+              .filter(placa => placa.length > 0);
+        
+            console.log("Placas obtenidas:", placasLimpias);
             
-            // Eliminar duplicados
-            const placasUnicas = [...new Set(placasLimpias)];
-            setPlacasList(placasUnicas);
-            
-        } catch (error) {
-            console.error('Error al obtener placas:', error);
-            setPlacasList(["AG4934", "PLACA2", "PLACA3"]); // Datos de fallback
-        } finally {
+            if (placasLimpias.length === 0) {
+              console.warn("La lista de placas está vacía");
+              setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de prueba
+            } else {
+              setPlacasList(placasLimpias);
+            }
+          } catch (error) {
+            console.error("Error al obtener placas:", {
+              error: error.message,
+              response: error.response?.data,
+              config: error.config
+            });
+            setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de prueba
+          } finally {
             setLoadingPlacas(false);
-        }
-    };
-
+          }
+        };
+    
     useEffect(() => {
         fetchPlacas();
     }, []);
