@@ -41,6 +41,7 @@ function Home() {
             type="text"
             value={placa}
             onChange={(e) => setPlaca(e.target.value)}
+            oninput="this.value = this.value.toUpperCase()"
             className={`mt-1 p-2 border rounded w-full text-sm sm:text-base ${error ? "border-red-500" : "border-gray-300"
               }`}
             placeholder="Ingrese su placa"
