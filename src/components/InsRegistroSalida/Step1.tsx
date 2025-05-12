@@ -11,6 +11,7 @@ function StepUno({ sucursal, setSucursal, onNext }: Step1Props) {
             alert('Debe seleccionar una sucursal.');
             return false;
         }
+        console.log(`Sucursal seleccionada: ${sucursal}`);
         return true;
     };
 
