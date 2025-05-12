@@ -50,7 +50,7 @@ function StepSeis({
             alert('Debe ingresar una observación general si marca "NO" en algún parámetro.');
             return false;
         }
-        console.log(`parametro.si: ${parametro.si} - parametro.no: ${parametro.no} - observacionGeneralVisuales: ${observacionGeneralVisuales} - requiresObservation: ${requiresObservation} `)
+        //console.log(`parametro.si: ${parametro.si} - parametro.no: ${parametro.no} - observacionGeneralVisuales: ${observacionGeneralVisuales} - requiresObservation: ${requiresObservation} `)
         return true;
     };
 
