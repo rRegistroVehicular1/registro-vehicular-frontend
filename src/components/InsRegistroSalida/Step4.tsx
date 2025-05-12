@@ -35,8 +35,8 @@ function StepCuatro({ llantasParte2, setLlantasParte2, observacionGeneralLlantas
 
     const validateStep4 = () => {
         // Validar que cada llanta tenga al menos una selección
-        const isInvalid = llantasParte2.some((llanta) => {
-            const noOptionSelected = !llanta.fp && !llanta.pe && !llanta.pa && !llanta.desgaste;
+        const isInvalid = llantasParte2.some((llantaItem) => {
+            const noOptionSelected = !llantaItem.fp && !llantaItem.pe && !llantaItem.pa && !llantaItem.desgaste;
             return noOptionSelected;
         });
 
@@ -46,7 +46,7 @@ function StepCuatro({ llantasParte2, setLlantasParte2, observacionGeneralLlantas
         }
 
         // Validar que si FP o PE están marcados, se ingrese una observación
-        const requiresObservation = llantasParte2.some((llanta) => llanta.fp || llanta.pe);
+        const requiresObservation = llantasParte2.some((llantaItem) => llantaItem.fp || llantaItem.pe);
 
         if (requiresObservation && !observacionGeneralLlantas.trim()) {
             alert('Debe ingresar una observación general si marca FP o PE en alguna llanta.');
