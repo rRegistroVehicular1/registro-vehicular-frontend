@@ -21,7 +21,7 @@ function StepNueve({ documentacion, setDocumentacion, handlePreviousStep, handle
             alert('Debe seleccionar al menos una opción ("Disponible (SI)" o "Disponible (NO)") para cada documento.');
             return false;
         }
-        console.log(`doc: ${doc} - isInvalid: ${isInvalid} `);
+        //console.log(`doc: ${doc} - isInvalid: ${isInvalid} `);
         return true;
     };
 
