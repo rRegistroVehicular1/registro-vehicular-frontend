@@ -117,6 +117,8 @@ function StepDos({
             return false;
         }
 
+        console.log(`placa: ${placa} - conductor: ${conductor} - tipoVehiculo: ${tipoVehiculo} - odometroSalida: ${odometroSalida}`)
+
         return true;
     };
 
