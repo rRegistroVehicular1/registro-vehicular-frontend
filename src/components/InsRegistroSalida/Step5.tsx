@@ -44,7 +44,7 @@ function StepCinco({ fluidos, setFluidos, observacionGeneral, setObservacionGene
             alert('Debe ingresar una observación general si marca "Requiere" en algún fluido.');
             return false;
         }
-        console.log(`fluidos.requiere: ${fluidos.requiere} - fluidos.lleno: ${fluidos.lleno} - observacionGeneral: ${observacionGeneral} - isInvalid: ${isInvalid} `)
+        //console.log(`fluidos.requiere: ${fluidos.requiere} - fluidos.lleno: ${fluidos.lleno} - observacionGeneral: ${observacionGeneral} - isInvalid: ${isInvalid} `)
         return true;
     };
 
