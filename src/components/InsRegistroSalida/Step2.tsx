@@ -37,55 +37,55 @@ function StepDos({
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
 
-    const fetchLastOdometro = async (selectedPlaca: string) => {
-        if (!selectedPlaca) {
-            setLastOdometro(null);
-            return;
-          }
+    const fetchPlacas = async () => {
+      setLoadingPlacas(true);
+      try {
+        const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
         
-          setLoadingOdometro(true);
-          try {
-            const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-              params: { placa: selectedPlaca }
-            });
-            
-            // Validar respuesta
-            const odometro = Number(response.data?.lastOdometro) || 0;
-            if (isNaN(odometro)) {
-              throw new Error('Odómetro inválido');
-            }
-            
-            setLastOdometro(odometro);
-          } catch (error) {
-            console.error('Error al obtener odómetro:', error);
-            setLastOdometro(null);
-            alert('No se pudo obtener el último odómetro');
-          } finally {
-            setLoadingOdometro(false);
-          }
+        if (!response.data || !Array.isArray(response.data)) {
+          throw new Error('Formato de respuesta inválido');
+        }
+    
+        const placas = response.data
+          .map(p => p?.toString().trim())
+          .filter(p => p);
+        
+        setPlacasList([...new Set(placas)].sort());
+      } catch (error) {
+        console.error('Error al obtener placas:', error);
+        setPlacasList([]);
+        alert('Error al cargar las placas disponibles');
+      } finally {
+        setLoadingPlacas(false);
+      }
     };
 
-    const fetchPlacas = async () => {
-        setLoadingPlacas(true);
-          try {
-            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-            
-            if (!response.data || !Array.isArray(response.data)) {
-              throw new Error('Formato de respuesta inválido');
-            }
+    const fetchLastOdometro = async (selectedPlaca: string) => {
+      if (!selectedPlaca) {
+        setLastOdometro(null);
+        return;
+      }
+    
+      setLoadingOdometro(true);
+      try {
+        const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+          params: { placa: selectedPlaca }
+        });
         
-            const placas = response.data
-              .map(p => p?.toString().trim())
-              .filter(p => p);
-            
-            setPlacasList([...new Set(placas)].sort());
-          } catch (error) {
-            console.error('Error al obtener placas:', error);
-            setPlacasList([]);
-            alert('Error al cargar las placas disponibles');
-          } finally {
-            setLoadingPlacas(false);
-          }
+        // Validar respuesta
+        const odometro = Number(response.data?.lastOdometro) || 0;
+        if (isNaN(odometro)) {
+          throw new Error('Odómetro inválido');
+        }
+        
+        setLastOdometro(odometro);
+      } catch (error) {
+        console.error('Error al obtener odómetro:', error);
+        setLastOdometro(null);
+        alert('No se pudo obtener el último odómetro');
+      } finally {
+        setLoadingOdometro(false);
+      }
     };
     
     useEffect(() => {
