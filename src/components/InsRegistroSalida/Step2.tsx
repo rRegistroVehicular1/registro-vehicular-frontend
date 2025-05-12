@@ -48,13 +48,7 @@ function StepDos({
             const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
                 params: { placa: selectedPlaca }
             });
-            console.log('Respuesta del servidor:', response.data);
-            if (response.data.success) {
-                setLastOdometro(response.data.lastOdometro || 0);
-            } else {
-                console.error('Error en la respuesta:', response.data);
-                setLastOdometro(0);
-            }
+            setLastOdometro(response.data.lastOdometro || 0);
         } catch (error) {
             console.error('Error al obtener odómetro:', error);
             setLastOdometro(null);
@@ -114,13 +108,13 @@ function StepDos({
         }
 
         const odometroValue = Number(odometroSalida);
-        if (isNaN(odometroValue)){
+        if (isNaN(odometroValue) || odometroValue < 0){
             alert("Odómetro debe ser un número valido");
             return false;
         }
 
         if (lastOdometro !== null && odometroValue < lastOdometro) {
-            alert(`El odómetro de salida (${odometroValue})no puede ser menor al último registro de entrada (${lastOdometro})`);
+            alert(`El odómetro no puede ser menor al último registro (${lastOdometro})`);
             return false;
         }
 
