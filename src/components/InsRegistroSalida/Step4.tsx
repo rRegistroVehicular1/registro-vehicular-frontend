@@ -52,7 +52,7 @@ function StepCuatro({ llantasParte2, setLlantasParte2, observacionGeneralLlantas
             alert('Debe ingresar una observación general si marca FP o PE en alguna llanta.');
             return false;
         }
-        console.log(`llanta.fp: ${llanta.fp} - llanta.pe: ${llanta.pe} - llanta.pa: ${llanta.pa} - llanta.desgaste: ${llanta.desgaste} - observacionGeneralLlantas ${observacionGeneralLlantas}`)
+        //console.log(`llanta.fp: ${llanta.fp} - llanta.pe: ${llanta.pe} - llanta.pa: ${llanta.pa} - llanta.desgaste: ${llanta.desgaste} - observacionGeneralLlantas ${observacionGeneralLlantas}`)
         return true;
     };
 
