@@ -29,15 +29,15 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
 
     const validateStep3 = () => {
         const isInvalid = llantasParte1.some((llantaItem) => {
-            const noOptionSelected = !llantaItem.fp && !llantaItem.pe && !llantaItem.pa && !llantaItem.desgaste;
-            return !llantaItem.fp && !llantaItem.pe && !llantaItem.pa;
+            const noOptionSelected = !llanta.fp && !llanta.pe && !llanta.pa && !llanta.desgaste;
+            return !llanta.fp && !llanta.pe && !llanta.pa;
         });
 
         if (isInvalid) {
             alert('Debe seleccionar al menos una opción (FP, PE, PA o desgaste) para cada llanta.');
             return false;
         }
-        console.log(`llantaItem.fp: ${llantaItem.fp} - llantaItem.pe: ${llantaItem.pe} - llantaItam.pa: ${llantaItem.pa} - llantaItem.desgaste: ${llantaItem.desgaste}`)
+        console.log(`llantaItem.fp: ${llanta.fp} - llantaItem.pe: ${llanta.pe} - llantaItam.pa: ${llanta.pa} - llanta.desgaste: ${llanta.desgaste}`)
         return true;
     };
 
