@@ -21,7 +21,7 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
             alert('Debe seleccionar al menos una opción ("Disponible (SI)" o "Disponible (NO)") para cada insumo.');
             return false;
         }
-
+        console.log(`insumo: ${insumo} - isInvalid: ${isInvalid} `);
         return true;
     };
 
