@@ -14,8 +14,8 @@ function Variables2() {
   ];
 
   // 2. Inicializar estados usando llantasBase
-  const [llantasParte1, setLlantasParte1] = useState<Llanta[]>(llantasBase.slice(0, 2));
-  const [llantasParte2, setLlantasParte2] = useState<Llanta[]>(llantasBase.slice(4, 10));
+  const [llantasParte1, setLlantasParte1] = useState<Llanta[]>(llantasBase.slice(0, 5));
+  const [llantasParte2, setLlantasParte2] = useState<Llanta[]>(llantasBase.slice(5, 10));
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
   // 3. Definir la función una sola vez con tipos explícitos
