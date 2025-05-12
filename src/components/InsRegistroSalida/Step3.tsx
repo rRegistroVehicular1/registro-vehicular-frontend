@@ -37,7 +37,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
             alert('Debe seleccionar al menos una opción (FP, PE, PA o desgaste) para cada llanta.');
             return false;
         }
-
+        console.log(`llanta.fp: ${llanta.fp} - llanta.pe: ${llanta.pe} - llanta.pa: ${llanta.pa} - llanta.desgaste: ${llanta.desgaste}`)
         return true;
     };
 
