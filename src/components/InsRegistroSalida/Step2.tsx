@@ -41,49 +41,48 @@ function StepDos({
         if (!selectedPlaca) {
             setLastOdometro(null);
             return;
-        }
-
-        setLoadingOdometro(true);
-        try {
+          }
+        
+          setLoadingOdometro(true);
+          try {
             const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-                params: { placa: selectedPlaca }
+              params: { placa: selectedPlaca }
             });
-            setLastOdometro(response.data.lastOdometro || 0);
-        } catch (error) {
+            
+            // Validar respuesta
+            const odometro = Number(response.data?.lastOdometro) || 0;
+            if (isNaN(odometro)) {
+              throw new Error('Odómetro inválido');
+            }
+            
+            setLastOdometro(odometro);
+          } catch (error) {
             console.error('Error al obtener odómetro:', error);
             setLastOdometro(null);
-        } finally {
+            alert('No se pudo obtener el último odómetro');
+          } finally {
             setLoadingOdometro(false);
-        }
+          }
     };
 
     const fetchPlacas = async () => {
         setLoadingPlacas(true);
           try {
-            console.log("Iniciando obtención de placas...");
             const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-
-            let placas: string[] = [];
-              
-            if (Array.isArray(response.data)) {
-                placas = response.data;
-            } else if (response.data?.data && Array.isArray(response.data.data)) {
-                placas = response.data.data;
-            }
-              
-            // Limpiar y normalizar las placas
-            placas = placas
-              .map(p => p?.toString().trim())
-              .filter(p => p); // Eliminar valores vacíos
-              
-            // Eliminar duplicados y ordenar
-            placas = [...new Set(placas)].sort();
             
-            setPlacasList(placas);
-              
+            if (!response.data || !Array.isArray(response.data)) {
+              throw new Error('Formato de respuesta inválido');
+            }
+        
+            const placas = response.data
+              .map(p => p?.toString().trim())
+              .filter(p => p);
+            
+            setPlacasList([...new Set(placas)].sort());
           } catch (error) {
             console.error('Error al obtener placas:', error);
-            setPlacasList(["PLACA1", "PLACA2", "PLACA3"]); // Datos de prueba por si falla la conexión
+            setPlacasList([]);
+            alert('Error al cargar las placas disponibles');
           } finally {
             setLoadingPlacas(false);
           }
