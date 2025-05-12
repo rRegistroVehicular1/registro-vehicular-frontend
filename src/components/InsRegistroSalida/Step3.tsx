@@ -28,7 +28,7 @@ function StepTres({ llantasParte1, setLlantasParte1, handlePreviousStep, handleN
     };
 
     const validateStep3 = () => {
-        const isInvalid = llantasParte1.some((llantaItem) => {
+        const isInvalid = llantasParte1.some((llanta) => {
             const noOptionSelected = !llanta.fp && !llanta.pe && !llanta.pa && !llanta.desgaste;
             return !llanta.fp && !llanta.pe && !llanta.pa;
         });
