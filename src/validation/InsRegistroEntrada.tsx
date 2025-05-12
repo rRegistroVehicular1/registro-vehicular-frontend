@@ -17,6 +17,11 @@ export const handleSubmit = async (
         return;
     }
 
+    const odometroNum = Number(formData.odometro);
+    if (isNaN(odometroNum) || odometroNum < 0) {
+      throw new Error("El odómetro debe ser un número válido");
+    }
+    
     setIsSubmitting(true);
 
     const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
