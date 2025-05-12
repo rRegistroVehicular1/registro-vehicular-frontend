@@ -23,7 +23,7 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
             alert('Debe seleccionar al menos una opción ("Funciona (SI)" o "Funciona (NO)") para cada luz.');
             return false;
         }
-
+        console.log(`luz.funcionaSi: ${luz.funcionaSi} - luz.funcionaNo: ${luz.funcionaNo} - isInvalid: ${isInvalid} `);
         return true;
     };
 
