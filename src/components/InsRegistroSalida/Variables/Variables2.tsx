@@ -26,8 +26,8 @@ function Variables2() {
       setLlantasParte1(llantasBase.filter(llanta => [1, 2, 5, 6].includes(llanta.id)));
       setLlantasParte2(llantasBase.filter(llanta => [7, 8].includes(llanta.id)));
     } else {
-      setLlantasParte1(llantasBase.filter(llanta => [1, 2, 3, 4, 5].includes(llanta.id)));
-      setLlantasParte2(llantasBase.filter(llanta => [6, 7, 8].includes(llanta.id)));
+      setLlantasParte1(llantasBase.filter(llanta => [1, 2, 5].includes(llanta.id)));
+      setLlantasParte2(llantasBase.filter(llanta => [7].includes(llanta.id)));
     }
   };
 
