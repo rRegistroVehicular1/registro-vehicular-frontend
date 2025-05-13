@@ -1,7 +1,8 @@
 import StepUno from '../components/InsRegistroSalida/Step1';
 import StepDos from '../components/InsRegistroSalida/Step2';
-import StepTres from '../components/InsRegistroSalida/Step3';
-import StepCuatro from '../components/InsRegistroSalida/Step4';
+import { LlantasStep } from '@/components/LlantasStep/LlantasStep';
+//import StepTres from '../components/InsRegistroSalida/Step3';
+//import StepCuatro from '../components/InsRegistroSalida/Step4';
 import StepCinco from '../components/InsRegistroSalida/Step5';
 import StepSeis from '../components/InsRegistroSalida/Step6';
 import StepSiete from '../components/InsRegistroSalida/Step7';
@@ -91,7 +92,7 @@ function RegistroInspeccionSalida() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">R06-PT-19 REVICION DE VEHICULOS </h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">R06-PT-19 REVICION DE VEHICULOS - SALIDA </h1>
 
       <div className="w-full max-w-3xl bg-gray-300 rounded-full h-4 mb-4">
         <div
@@ -126,22 +127,25 @@ function RegistroInspeccionSalida() {
         )}
 
         {step === 3 && (
-          <StepTres
-            llantasParte1={llantasParte1}
-            setLlantasParte1={setLlantasParte1}
+          <LlantasStep
+            llantas={llantasParte1}
+            setLlantas={setLlantasParte1}
+            titulo="Revisión de Llantas (Parte 1)"
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
           />
         )}
-
+        
         {step === 4 && (
-          <StepCuatro
-            llantasParte2={llantasParte2}
-            setLlantasParte2={setLlantasParte2}
-            observacionGeneralLlantas={observacionGeneralLlantas}
-            setObservacionGeneralLlantas={setObservacionGeneralLlantas}
+          <LlantasStep
+            llantas={llantasParte2}
+            setLlantas={setLlantasParte2}
+            titulo="Revisión de Llantas (Parte 2)"
+            observacionGeneral={observacionGeneralLlantas}
+            setObservacionGeneral={setObservacionGeneralLlantas}
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
+            esUltimoPaso={false} // O true si es el último paso de llantas
           />
         )}
 
