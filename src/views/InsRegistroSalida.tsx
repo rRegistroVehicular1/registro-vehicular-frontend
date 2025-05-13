@@ -1,6 +1,6 @@
 import StepUno from '../components/InsRegistroSalida/Step1';
 import StepDos from '../components/InsRegistroSalida/Step2';
-import LlantasStep from '@components/InsRegistroSalida/LlantasStep';
+import { LlantasStep } from '@components/InsRegistroSalida/LlantasStep';
 //import StepTres from '../components/InsRegistroSalida/Step3';
 //import StepCuatro from '../components/InsRegistroSalida/Step4';
 import StepCinco from '../components/InsRegistroSalida/Step5';
