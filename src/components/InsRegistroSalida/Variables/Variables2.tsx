@@ -1,57 +1,43 @@
-// components/InsRegistroSalida/Variables/Variables2.tsx
 import { useState } from 'react';
 import { Llanta } from '@/types/llantas';
 
-// 1. Definir llantasBase como constante primero
-const llantasBase = {
-    camion: [
-        { id: 1, nombre: 'Delantera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
-        { id: 2, nombre: 'Delantera Derecha', fp: false, pe: false, pa: false, desgaste: false },
-        { id: 5, nombre: 'Trasera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
-        { id: 6, nombre: 'Extra Trasera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
-        { id: 7, nombre: 'Trasera Derecha', fp: false, pe: false, pa: false, desgaste: false },
-        { id: 8, nombre: 'Extra Trasera Derecha', fp: false, pe: false, pa: false, desgaste: false }
-    ],
-    otros: [
-        { id: 1, nombre: 'Delantera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
-        { id: 2, nombre: 'Delantera Derecha', fp: false, pe: false, pa: false, desgaste: false },
-        { id: 5, nombre: 'Trasera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
-        { id: 7, nombre: 'Trasera Derecha', fp: false, pe: false, pa: false, desgaste: false }
-    ]
-};
-
 function Variables2() {
+  // 1. Definir llantasBase como constante primero
+  const llantasBase: Llanta[] = [
+    { id: 1, nombre: 'Llanta Delantera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 2, nombre: 'Llanta Delantera Derecha', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 3, nombre: 'Llanta Trasera Derecha 1 (10 ruedas)', fp: false, pe: false, pa: false, desgaste: false },//vs
+    { id: 4, nombre: 'Llanta Trasera Derecha 2 (10 ruedas)', fp: false, pe: false, pa: false, desgaste: false },//vs
+    { id: 5, nombre: 'Llanta Trasera Izquierda', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 6, nombre: 'Llanta Extra Trasera Izquierda (Solo Camión)', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 7, nombre: 'Llanta Trasera Derecha', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 8, nombre: 'Llanta Extra Trasera Derecha (Solo Camión)', fp: false, pe: false, pa: false, desgaste: false }
+  ];
+
   // 2. Inicializar estados usando llantasBase
-  const [tipoVehiculo, setTipoVehiculo] = useState<string>('');
-  const [llantasParte1, setLlantasParte1] = useState<Llanta[]>([]);
-  const [llantasParte2, setLlantasParte2] = useState<Llanta[]>([]);
+  const [llantasParte1, setLlantasParte1] = useState<Llanta[]>(llantasBase.slice(1, 2));
+  const [llantasParte2, setLlantasParte2] = useState<Llanta[]>(llantasBase.slice(2, 4));
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
   // 3. Definir la función una sola vez con tipos explícitos
-  const actualizarLlantasPorTipo = (tipo: string) => {
-        setTipoVehiculo(tipo);
-        const config = tipo === 'camion' ? llantasBase.camion : llantasBase.otros;
-        
-        // Para camión: parte1 = 4 llantas, parte2 = 2 llantas
-        if (tipo === 'camion') {
-            setLlantasParte1(config.slice(0, 4)); // Llantas 1,2,5,6
-            setLlantasParte2(config.slice(4));    // Llantas 7,8
-        } else {
-            // Para otros: parte1 = 2 llantas, parte2 = 2 llantas
-            setLlantasParte1(config.slice(0, 2)); // Llantas 1,2
-            setLlantasParte2(config.slice(2));    // Llantas 5,7
-        }
-    };
+  const actualizarLlantasPorTipo = (tipoVehiculo: string): void => {
+    if (tipoVehiculo === 'camion') {
+      setLlantasParte1(llantasBase.filter(llanta => [1, 2, 5, 6].includes(llanta.id)));
+      setLlantasParte2(llantasBase.filter(llanta => [7, 8].includes(llanta.id)));
+    } else {
+      setLlantasParte1(llantasBase.filter(llanta => [1, 2, 5].includes(llanta.id)));
+      setLlantasParte2(llantasBase.filter(llanta => [7].includes(llanta.id)));
+    }
+  };
 
   return {
-      llantasParte1,
-      setLlantasParte1,
-      llantasParte2,
-      setLlantasParte2,
-      observacionGeneralLlantas,
-      setObservacionGeneralLlantas,
-      actualizarLlantasPorTipo,
-      tipoVehiculo
+    llantasParte1,
+    setLlantasParte1,
+    llantasParte2,
+    setLlantasParte2,
+    observacionGeneralLlantas,
+    setObservacionGeneralLlantas,
+    actualizarLlantasPorTipo
   };
 }
 
