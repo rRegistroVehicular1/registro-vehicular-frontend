@@ -14,12 +14,31 @@ function Variables2() {
     { id: 8, nombre: 'Llanta Extra Trasera Derecha (Solo Camión)', fp: false, pe: false, pa: false, desgaste: false }
   ];
 
+  // Función mejorada para actualizar llantas
+  const actualizarLlantasPorTipo = (tipoVehiculo: string): void => {
+    const configuraciones = {
+      camion: {
+        parte1: [1, 2, 5, 6],
+        parte2: [7, 8]
+      },
+      default: {
+        parte1: [1, 2],
+        parte2: [5, 7]
+      }
+    };
+
+    const config = tipoVehiculo === 'camion' ? configuraciones.camion : configuraciones.default;
+  
+    setLlantasParte1(llantasBase.filter(llanta => config.parte1.includes(llanta.id)));
+    setLlantasParte2(llantasBase.filter(llanta => config.parte2.includes(llanta.id)));
+  };
+
   // 2. Inicializar estados usando llantasBase
   const [llantasParte1, setLlantasParte1] = useState<Llanta[]>(llantasBase.slice(1, 2));
   const [llantasParte2, setLlantasParte2] = useState<Llanta[]>(llantasBase.slice(2, 4));
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
-  // 3. Definir la función una sola vez con tipos explícitos
+  /*// 3. Definir la función una sola vez con tipos explícitos
   const actualizarLlantasPorTipo = (tipoVehiculo: string): void => {
     if (tipoVehiculo === 'camion') {
       setLlantasParte1(llantasBase.filter(llanta => [1, 2, 5, 6].includes(llanta.id)));
@@ -28,7 +47,7 @@ function Variables2() {
       setLlantasParte1(llantasBase.filter(llanta => [1, 2, 5].includes(llanta.id)));
       setLlantasParte2(llantasBase.filter(llanta => [7].includes(llanta.id)));
     }
-  };
+  };*/
 
   return {
     llantasParte1,
