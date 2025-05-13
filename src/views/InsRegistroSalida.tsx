@@ -127,28 +127,28 @@ function RegistroInspeccionSalida() {
         )}
 
         {step === 3 && (
-          <LlantasStep
-            llantas={llantasParte1}
-            setLlantas={setLlantasParte1}
-            titulo="Revisión de Llantas (Parte 1)"
+          <StepTres
+            llantasParte1={llantasParte1}
+            setLlantasParte1={setLlantasParte1}
+
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
-          />
-        )}
-        
-        {step === 4 && (
-          <LlantasStep
-            llantas={llantasParte2}
-            setLlantas={setLlantasParte2}
-            titulo="Revisión de Llantas (Parte 2)"
-            observacionGeneral={observacionGeneralLlantas}
-            setObservacionGeneral={setObservacionGeneralLlantas}
-            handlePreviousStep={handlePreviousStep}
-            handleNextStep={handleNextStep}
-            esUltimoPaso={false} // O true si es el último paso de llantas
           />
         )}
 
+        {step === 4 && (
+          <StepCuatro
+            llantasParte2={llantasParte2}
+            setLlantasParte2={setLlantasParte2}
+            observacionGeneralLlantas={observacionGeneralLlantas}
+            setObservacionGeneralLlantas={setObservacionGeneralLlantas}
+
+            handlePreviousStep={handlePreviousStep}
+            handleNextStep={handleNextStep}
+
+          />
+        )}
+        
         {step === 5 && (
           <StepCinco
             fluidos={fluidos}
