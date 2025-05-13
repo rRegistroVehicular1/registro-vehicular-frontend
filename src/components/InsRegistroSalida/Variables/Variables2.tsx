@@ -16,23 +16,15 @@ function Variables2() {
 
   // Función mejorada para actualizar llantas
   const actualizarLlantasPorTipo = (tipoVehiculo: string): void => {
-    const configuraciones = {
-      camion: {
-        parte1: [1, 2, 5, 6],
-        parte2: [7, 8]
-      },
-      default: {
-        parte1: [1, 2],
-        parte2: [5, 7]
-      }
-    };
-
-    const config = tipoVehiculo === 'camion' ? configuraciones.camion : configuraciones.default;
-  
-    setLlantasParte1(llantasBase.filter(llanta => config.parte1.includes(llanta.id)));
-    setLlantasParte2(llantasBase.filter(llanta => config.parte2.includes(llanta.id)));
+    if (tipoVehiculo === 'camion') {
+      setLlantasParte1(llantasBase.filter(llanta => [1, 2, 5, 6].includes(llanta.id)));
+      setLlantasParte2(llantasBase.filter(llanta => [7, 8].includes(llanta.id)));
+    } else {
+      setLlantasParte1(llantasBase.filter(llanta => [1, 2].includes(llanta.id)));
+      setLlantasParte2(llantasBase.filter(llanta => [5, 7].includes(llanta.id)));
+    }
   };
-
+  
   // 2. Inicializar estados usando llantasBase
   const [llantasParte1, setLlantasParte1] = useState<Llanta[]>(llantasBase.slice(1, 2));
   const [llantasParte2, setLlantasParte2] = useState<Llanta[]>(llantasBase.slice(2, 4));
