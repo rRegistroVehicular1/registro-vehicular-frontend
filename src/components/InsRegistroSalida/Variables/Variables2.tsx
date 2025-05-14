@@ -1,4 +1,3 @@
-@@ -2,43 +2,56 @@
 import { useState } from 'react';
 import { Llanta } from '@/types/llantas';
 
@@ -15,16 +14,9 @@ function Variables2() {
     { id: 8, nombre: 'Llanta Extra Trasera Derecha (Solo Camión)', fp: false, pe: false, pa: false, desgaste: false }
   ];
 
-
-
-
-
-
-
   // 2. Inicializar estados usando llantasBase
   const [llantasParte1, setLlantasParte1] = useState<Llanta[]>(llantasBase.slice(1, 2));
   const [llantasParte2, setLlantasParte2] = useState<Llanta[]>(llantasBase.slice(2, 4));
-
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
   // 3. Definir la función una sola vez con tipos explícitos
@@ -38,11 +30,6 @@ function Variables2() {
     }
   };
 
-
-
-
-
-
   return {
     llantasParte1,
     setLlantasParte1,
@@ -51,7 +38,6 @@ function Variables2() {
     observacionGeneralLlantas,
     setObservacionGeneralLlantas,
     actualizarLlantasPorTipo
-
   };
 }
 
