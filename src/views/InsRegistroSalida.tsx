@@ -63,7 +63,7 @@ function RegistroInspeccionSalida() {
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log("Datos a enviar - Llantas:", llantas); // ← Verificacion de envio de data
     setIsSubmitting(true);
     try {
       await handleSubmit({
