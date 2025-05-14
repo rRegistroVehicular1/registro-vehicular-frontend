@@ -2,7 +2,7 @@ import StepUno from '../components/InsRegistroSalida/Step1';
 import StepDos from '../components/InsRegistroSalida/Step2';
 //import { LlantasStep } from '@/components/InsRegistroSalida/LlantasStep';
 import StepTres from '../components/InsRegistroSalida/Step3';
-import StepCuatro from '../components/InsRegistroSalida/Step4';
+//import StepCuatro from '../components/InsRegistroSalida/Step4';
 import StepCinco from '../components/InsRegistroSalida/Step5';
 import StepSeis from '../components/InsRegistroSalida/Step6';
 import StepSiete from '../components/InsRegistroSalida/Step7';
@@ -139,7 +139,7 @@ function RegistroInspeccionSalida() {
         )}
 
         /*{step === 4 && (
-          <StepCuatro
+          /*<StepCuatro
             llantasParte2={llantasParte2}
             setLlantasParte2={setLlantasParte2}
             observacionGeneralLlantas={observacionGeneralLlantas}
@@ -148,7 +148,7 @@ function RegistroInspeccionSalida() {
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
 
-          />
+          />*/
         )}*/
         
         {step === 5 && (
