@@ -2,8 +2,8 @@ import axios from 'axios';
 import { BASE_URL } from './url';
 
 const handleSubmit = async (data: any) => {
-  const {  placa, conductor, sucursal, tipoVehiculo, odometroSalida,
-    llantasParte1, llantasParte2, observacionGeneralLlantas,  fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales,  luces,
+  const {  placa, conductor, sucursal, tipoVehiculo, odometroSalida, llantas,
+    /*llantasParte1, llantasParte2,*/ observacionGeneralLlantas,  fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales,  luces,
     insumos, documentacion, danosCarroceria
   } = data;
 
@@ -13,8 +13,9 @@ const handleSubmit = async (data: any) => {
   formData.append('sucursal', sucursal);
   formData.append('tipoVehiculo', tipoVehiculo);
   formData.append('odometroSalida', odometroSalida);
-  formData.append('llantasParte1', JSON.stringify(llantasParte1));
-  formData.append('llantasParte2', JSON.stringify(llantasParte2));
+  formData.append('llantas', JSON.stringify(llantas));
+  //formData.append('llantasParte1', JSON.stringify(llantasParte1));
+  //formData.append('llantasParte2', JSON.stringify(llantasParte2));
   formData.append('observacionGeneralLlantas', JSON.stringify(observacionGeneralLlantas));
   formData.append('fluidos', JSON.stringify(fluidos));
   formData.append('observacionGeneralFluido', JSON.stringify(observacionGeneralFluido));
