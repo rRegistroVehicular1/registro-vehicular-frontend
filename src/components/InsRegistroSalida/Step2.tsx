@@ -36,8 +36,8 @@ function StepDos({ sucursal, setSucursal, onNext }: Step2Props) {
                         "(SU04) Chorrera Planta",
                         "(SU05) Colón",
                         "(SU06) Juan Díaz",
-                        "(SU07) Aguadulce",
-                        "(SU08) Los Santos"
+                        "(SU08) Aguadulce",
+                        "(SU09) Los Santos"
                     ].map((nombre, index) => (
                         <label key={index} className="inline-flex items-center">
                             <input
