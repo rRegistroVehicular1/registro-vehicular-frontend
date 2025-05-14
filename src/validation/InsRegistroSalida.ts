@@ -13,7 +13,7 @@ const handleSubmit = async (data: any) => {
   formData.append('sucursal', sucursal);
   formData.append('tipoVehiculo', tipoVehiculo);
   formData.append('odometroSalida', odometroSalida);
-  formData.append('llantas', JSON.stringify(llantas));
+  formData.append('llantas', JSON.stringify(data.llantas));
   //formData.append('llantasParte1', JSON.stringify(llantasParte1));
   //formData.append('llantasParte2', JSON.stringify(llantasParte2));
   formData.append('observacionGeneralLlantas', JSON.stringify(observacionGeneralLlantas));
