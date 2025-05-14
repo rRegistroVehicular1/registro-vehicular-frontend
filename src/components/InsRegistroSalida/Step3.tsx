@@ -1,7 +1,7 @@
 // components/StepLlantas.tsx
 import { Llanta } from '@/types/llantas';
 
-interface StepTresProps {
+interface StepCuatroProps {
     llantas: Llanta[];
     setLlantas: (llantas: Llanta[]) => void;
     observacionGeneralLlantas: string;
@@ -11,7 +11,7 @@ interface StepTresProps {
     titulo: string;
 }
 
-function StepTres({ 
+function StepCuatro({ 
     llantas, 
     setLlantas,
     observacionGeneralLlantas,
@@ -19,7 +19,7 @@ function StepTres({
     handlePreviousStep, 
     handleNextStep,
     titulo
-}: StepTresProps) {
+}: StepCuatroProps) {
     const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
         const updatedLlantas = llantas.map((llanta, i) => {
             if (i === index) {
@@ -39,7 +39,7 @@ function StepTres({
         setLlantas(updatedLlantas);
     };
 
-    const validateStep3 = () => {
+    const validateStep4 = () => {
         // Validar que cada llanta tenga al menos una selección
         const isInvalid = llantas.some(llanta => 
             !llanta.fp && !llanta.pe && !llanta.pa && !llanta.desgaste
@@ -151,7 +151,7 @@ function StepTres({
                 <button
                     type="button"
                     className="bg-blue-500 text-white px-6 py-3 rounded"
-                    onClick={() => validateStep3() && handleNextStep()}
+                    onClick={() => validateStep4() && handleNextStep()}
                 >
                     Siguiente
                 </button>
@@ -160,4 +160,4 @@ function StepTres({
     );
 }
 
-export default StepTres;
+export default StepCuatro;
