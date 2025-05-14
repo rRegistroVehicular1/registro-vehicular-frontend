@@ -1,12 +1,12 @@
 
-type Step1Props = {
+type Step2Props = {
     sucursal: string;
     setSucursal: (value: string) => void;
     onNext: () => void;
 };
 
-function StepUno({ sucursal, setSucursal, onNext }: Step1Props) {
-    const validateStep1 = () => {
+function StepDos({ sucursal, setSucursal, onNext }: Step2Props) {
+    const validateStep2 = () => {
         if (!sucursal) {
             alert('Debe seleccionar una sucursal.');
             return false;
@@ -58,7 +58,7 @@ function StepUno({ sucursal, setSucursal, onNext }: Step1Props) {
                     type="button"
                     className="bg-blue-500 text-white px-4 py-2 rounded"
                     onClick={() => {
-                        if (validateStep1()) {
+                        if (validateStep2()) {
                             onNext();
                         }
                     }}
@@ -70,7 +70,7 @@ function StepUno({ sucursal, setSucursal, onNext }: Step1Props) {
     );
 }
 
-export default StepUno;
+export default StepDos;
 
 
 // Tengo este archivo de excel que aparece en la imagen, lo hice con el objetivo de almacenar numeros consecutivos 0,1, 2, 3 de forma independiento de la sucursal, entonces en esta funcion quiero que almacenes esos numeros consecutivos depediendo la sucursar recuerda que debe empesar desde cero y antes de ingresar por favor verifique si existe ese numero consecutivo de esta sucursal espesifico 
