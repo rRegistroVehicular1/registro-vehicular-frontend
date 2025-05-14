@@ -130,8 +130,8 @@ function RegistroInspeccionSalida() {
           <StepTres
             llantas={llantas}
             setLlantas={setLlantas}
-            observacionGeneral={observacionGeneralLlantas}
-            setObservacionGeneral={setObservacionGeneralLlantas}
+            observacionGeneralLlantas={observacionGeneralLlantas}
+            setObservacionGeneralLlantas={setObservacionGeneralLlantas}
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
             titulo="Revisión de Llantas"
