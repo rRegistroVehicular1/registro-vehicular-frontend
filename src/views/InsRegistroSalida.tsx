@@ -29,7 +29,7 @@ function RegistroInspeccionSalida() {
   } = Variables1();
 
   const {
-    llantasParte1, setLlantasParte1, llantasParte2, setLlantasParte2, observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
+    llantas, setLlantas, /*llantasParte2, setLlantasParte2,*/ observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
   } = Variables2();
 
   const {
@@ -64,8 +64,8 @@ function RegistroInspeccionSalida() {
     setIsSubmitting(true);
     try {
       await handleSubmit({
-        placa, conductor, sucursal, tipoVehiculo, odometroSalida,
-        llantasParte1, llantasParte2, observacionGeneralLlantas, fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales, luces,
+        placa, conductor, sucursal, tipoVehiculo, odometroSalida, llantas,
+        /*llantasParte1, llantasParte2,*/ observacionGeneralLlantas, fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales, luces,
         insumos, documentacion, danosCarroceria
       });
       navigate('/');
@@ -128,15 +128,17 @@ function RegistroInspeccionSalida() {
 
         {step === 3 && (
           <StepTres
-            llantasParte1={llantasParte1}
-            setLlantasParte1={setLlantasParte1}
-
+            llantas={llantas}
+            setLlantas={setLlantas}
+            observacionGeneral={observacionGeneralLlantas}
+            setObservacionGeneral={setObservacionGeneralLlantas}
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
+            titulo="Revisión de Llantas"
           />
         )}
 
-        {step === 4 && (
+        /*{step === 4 && (
           <StepCuatro
             llantasParte2={llantasParte2}
             setLlantasParte2={setLlantasParte2}
@@ -147,7 +149,7 @@ function RegistroInspeccionSalida() {
             handleNextStep={handleNextStep}
 
           />
-        )}
+        )}*/
         
         {step === 5 && (
           <StepCinco
