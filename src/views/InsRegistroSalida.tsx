@@ -1,8 +1,7 @@
-import StepUno from '../components/InsRegistroSalida/Step1';
+//import StepUno from '../components/InsRegistroSalida/Step1';
 import StepDos from '../components/InsRegistroSalida/Step2';
-//import { LlantasStep } from '@/components/InsRegistroSalida/LlantasStep';
 import StepTres from '../components/InsRegistroSalida/Step3';
-//import StepCuatro from '../components/InsRegistroSalida/Step4';
+import StepCuatro from '../components/InsRegistroSalida/Step4';
 import StepCinco from '../components/InsRegistroSalida/Step5';
 import StepSeis from '../components/InsRegistroSalida/Step6';
 import StepSiete from '../components/InsRegistroSalida/Step7';
@@ -25,7 +24,7 @@ function RegistroInspeccionSalida() {
 
   const {
     placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
-    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, step, setStep, datos, setDatos
+    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, step = 1, setStep, datos, setDatos
   } = Variables1();
 
   const {
@@ -46,7 +45,7 @@ function RegistroInspeccionSalida() {
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  
   const handleNextStep = () => {
     setStep(step + 1);
   };
@@ -107,16 +106,16 @@ function RegistroInspeccionSalida() {
 
       <div className="w-full max-w-3xl bg-white p-6 rounded shadow-md">
 
-        {step === 1 && (
-          <StepUno
+        {step === 2 && (
+          <StepDos
             sucursal={sucursal}
             setSucursal={setSucursal}
             onNext={handleNextStep}
           />
         )}
 
-        {step === 2 && (
-          <StepDos
+        {step === 3 && (
+          <StepTres
             placa={placa} setPlaca={setPlaca}
             conductor={conductor} setConductor={setConductor}
             tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
@@ -126,8 +125,8 @@ function RegistroInspeccionSalida() {
           />
         )}
 
-        {step === 3 && (
-          <StepTres
+        {step === 4 && (
+          <StepCuatro
             llantas={llantas}
             setLlantas={setLlantas}
             observacionGeneralLlantas={observacionGeneralLlantas}
