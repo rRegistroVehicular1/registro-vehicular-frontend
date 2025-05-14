@@ -213,7 +213,7 @@ function StepTres({
                 <button 
                     type="button" 
                     className="bg-blue-500 text-white px-4 py-2 rounded" 
-                    onClick={() => validateStep2() && onNext()}
+                    onClick={() => validateStep3() && onNext()}
                     disabled={loadingPlacas || loadingOdometro}
                 >
                     {loadingOdometro ? 'Validando...' : 'Siguiente'}
