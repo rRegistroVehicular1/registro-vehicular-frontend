@@ -14,8 +14,8 @@ function Variables2() {
 
   // Estado unificado para todas las llantas
   const [llantas, setLlantas] = useState<Llanta[]>([]);
-  const [observacionGeneral, setObservacionGeneral] = useState('');
-  //const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
+  //const [observacionGeneral, setObservacionGeneral] = useState('');
+  const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
   // Función para actualizar llantas según tipo de vehículo
   const actualizarLlantasPorTipo = (tipoVehiculo: string) => {
@@ -33,8 +33,8 @@ function Variables2() {
   return {
     llantas,
     setLlantas,
-    observacionGeneral,
-    setObservacionGeneral,
+    observacionGeneralLlantas,
+    setObservacionGeneralLlantas,
     actualizarLlantasPorTipo
   };
 }
