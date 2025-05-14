@@ -24,7 +24,7 @@ function RegistroInspeccionSalida() {
 
   const {
     placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
-    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, step = 1, setStep, datos, setDatos
+    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, step, setStep, datos, setDatos
   } = Variables1();
 
   const {
@@ -45,6 +45,8 @@ function RegistroInspeccionSalida() {
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  step = 1;
   
   const handleNextStep = () => {
     setStep(step + 1);
