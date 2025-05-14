@@ -16,18 +16,22 @@ function Variables2() {
 
   // Función mejorada para actualizar llantas
   const actualizarLlantasPorTipo = (tipoVehiculo: string): void => {
-    if (tipoVehiculo === 'camion') {
-      setLlantasParte1(llantasBase.filter(llanta => [1, 2, 5, 6].includes(llanta.id)));
-      setLlantasParte2(llantasBase.filter(llanta => [7, 8].includes(llanta.id)));
-    } else {
-      setLlantasParte1(llantasBase.filter(llanta => [1, 2].includes(llanta.id)));
-      setLlantasParte2(llantasBase.filter(llanta => [5, 7].includes(llanta.id)));
-    }
+    setLlantasParte1(
+      esCamion 
+        ? llantasBase.filter(llanta => [1, 2, 5, 6].includes(llanta.id))
+        : llantasBase.filter(llanta => [1, 2].includes(llanta.id))
+    );
+  
+  setLlantasParte2(
+      esCamion
+        ? llantasBase.filter(llanta => [7, 8].includes(llanta.id))
+        : llantasBase.filter(llanta => [5, 7].includes(llanta.id))
+    );
   };
   
   // 2. Inicializar estados usando llantasBase
-  const [llantasParte1, setLlantasParte1] = useState<Llanta[]>(llantasBase.slice(1, 2));
-  const [llantasParte2, setLlantasParte2] = useState<Llanta[]>(llantasBase.slice(2, 4));
+  //const [llantasParte1, setLlantasParte1] = useState<Llanta[]>(llantasBase.slice(1, 2));
+  //const [llantasParte2, setLlantasParte2] = useState<Llanta[]>(llantasBase.slice(2, 4));
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
   /*// 3. Definir la función una sola vez con tipos explícitos
