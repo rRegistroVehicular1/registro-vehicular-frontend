@@ -28,7 +28,7 @@ function RegistroInspeccionSalida() {
   } = Variables1();
 
   useEffect(() => {
-    setStep(1); // Inicializa step en 1 al cargar el componente
+    setStep(2); // Inicializa step en 2 al cargar el componente
   }, []);
 
   const {
@@ -58,7 +58,7 @@ function RegistroInspeccionSalida() {
     setStep(step - 1);
   };
 
-  const totalSteps = 10;
+  const totalSteps = 9;
   const navigate = useNavigate();
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
