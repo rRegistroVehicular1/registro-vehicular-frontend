@@ -137,19 +137,6 @@ function RegistroInspeccionSalida() {
             titulo="Revisión de Llantas"
           />
         )}
-
-        /*{step === 4 && (
-          /*<StepCuatro
-            llantasParte2={llantasParte2}
-            setLlantasParte2={setLlantasParte2}
-            observacionGeneralLlantas={observacionGeneralLlantas}
-            setObservacionGeneralLlantas={setObservacionGeneralLlantas}
-
-            handlePreviousStep={handlePreviousStep}
-            handleNextStep={handleNextStep}
-
-          />*/
-        )}*/
         
         {step === 5 && (
           <StepCinco
