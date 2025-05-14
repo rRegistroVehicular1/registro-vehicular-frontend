@@ -4,8 +4,8 @@ import { Llanta } from '@/types/llantas';
 interface StepTresProps {
     llantas: Llanta[];
     setLlantas: (llantas: Llanta[]) => void;
-    observacionGeneral: string;
-    setObservacionGeneral: (observacion: string) => void;
+    observacionGeneralLlantas: string;
+    setObservacionGeneralLlantas: (observacion: string) => void;
     handlePreviousStep: () => void;
     handleNextStep: () => void;
     titulo: string;
@@ -14,8 +14,8 @@ interface StepTresProps {
 function StepTres({ 
     llantas, 
     setLlantas,
-    observacionGeneral,
-    setObservacionGeneral,
+    observacionGeneralLlantas,
+    setObservacionGeneralLlantas,
     handlePreviousStep, 
     handleNextStep,
     titulo
@@ -52,7 +52,7 @@ function StepTres({
 
         // Validar observación si hay FP o PE
         const requiresObservation = llantas.some(llanta => llanta.fp || llanta.pe);
-        if (requiresObservation && !observacionGeneral.trim()) {
+        if (requiresObservation && !observacionGeneralLlantas.trim()) {
             alert('Debe ingresar una observación general si marca FP o PE en alguna llanta.');
             return false;
         }
@@ -131,8 +131,8 @@ function StepTres({
             <div className="mt-4">
                 <label className="block font-bold mb-2">Observación General:</label>
                 <textarea
-                    value={observacionGeneral}
-                    onChange={(e) => setObservacionGeneral(e.target.value)}
+                    value={observacionGeneralLlantas}
+                    onChange={(e) => setObservacionGeneralLlantas(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     placeholder="Ingrese observaciones sobre las llantas"
                     rows={3}
