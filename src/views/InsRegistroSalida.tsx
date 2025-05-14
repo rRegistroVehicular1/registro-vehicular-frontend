@@ -27,6 +27,10 @@ function RegistroInspeccionSalida() {
     tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, step, setStep, datos, setDatos
   } = Variables1();
 
+  useEffect(() => {
+    setStep(1); // Inicializa step en 1 al cargar el componente
+  }, []);
+
   const {
     llantas, setLlantas, /*llantasParte2, setLlantasParte2,*/ observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
   } = Variables2();
