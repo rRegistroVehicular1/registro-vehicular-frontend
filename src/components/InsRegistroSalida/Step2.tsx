@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '@/validation/url';
 
-type Step2Props = {
+type Step3Props = {
     placa: string;
     setPlaca: (value: string) => void;
     conductor: string;
@@ -17,7 +17,7 @@ type Step2Props = {
     actualizarLlantasPorTipo: (tipo: string) => void;
 }
 
-function StepDos({ 
+function StepTres({ 
     placa, 
     setPlaca, 
     conductor, 
@@ -30,7 +30,7 @@ function StepDos({
     onNext, 
     datos, 
     actualizarLlantasPorTipo 
-}: Step2Props) {
+}: Step3Props) {
     
     const [placasList, setPlacasList] = useState<string[]>([]);
     const [loadingPlacas, setLoadingPlacas] = useState(true);
@@ -100,7 +100,7 @@ function StepDos({
         }
     }, [placa]);
 
-    const validateStep2 = () => {
+    const validateStep3 = () => {
         if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
             alert("Todos los campos son obligatorios");
             return false;
@@ -223,4 +223,4 @@ function StepDos({
     );
 }
 
-export default StepDos;
+export default StepTres;
