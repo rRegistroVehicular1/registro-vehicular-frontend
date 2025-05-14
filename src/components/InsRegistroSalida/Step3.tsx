@@ -81,7 +81,7 @@ function StepTres({
                             <div key={llanta.id} className="mb-4 p-2 border rounded">
                                 <h3 className="font-bold">{llanta.nombre}</h3>
                                 <div className="flex flex-wrap gap-3 mt-2">
-                                    <label className="inline-flex items-center">
+                                    <label className="inline-flex items-center mr-4">
                                         <input
                                             type="radio"
                                             name={`llanta-${llanta.id}-presion`}
@@ -89,9 +89,9 @@ function StepTres({
                                             onChange={() => handleOptionChange(index, 'fp')}
                                             className="mr-1"
                                         />
-                                        FP
+                                        Falta de Presión (FP)
                                     </label>
-                                    <label className="inline-flex items-center">
+                                    <label className="inline-flex items-center mr-4">
                                         <input
                                             type="radio"
                                             name={`llanta-${llanta.id}-presion`}
@@ -99,9 +99,9 @@ function StepTres({
                                             onChange={() => handleOptionChange(index, 'pe')}
                                             className="mr-1"
                                         />
-                                        PE
+                                        Presión Excesiva (PE)
                                     </label>
-                                    <label className="inline-flex items-center">
+                                    <label className="inline-flex items-center mr-4">
                                         <input
                                             type="radio"
                                             name={`llanta-${llanta.id}-presion`}
@@ -109,7 +109,7 @@ function StepTres({
                                             onChange={() => handleOptionChange(index, 'pa')}
                                             className="mr-1"
                                         />
-                                        PA
+                                        Presión Adecuada (PA)
                                     </label>
                                     <label className="inline-flex items-center">
                                         <input
@@ -118,7 +118,7 @@ function StepTres({
                                             onChange={() => handleOptionChange(index, 'desgaste')}
                                             className="mr-1"
                                         />
-                                        Desgaste
+                                        Indicador de Desgaste
                                     </label>
                                 </div>
                             </div>
