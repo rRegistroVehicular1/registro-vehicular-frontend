@@ -46,7 +46,7 @@ function RegistroInspeccionSalida() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  step = 1;
+  const step = 1;
   
   const handleNextStep = () => {
     setStep(step + 1);
