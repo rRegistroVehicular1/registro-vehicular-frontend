@@ -12,7 +12,7 @@ function StepDos({ sucursal, setSucursal, onNext }: Step2Props) {
             return false;
         }
         console.log(`Sucursal seleccionada: ${sucursal}`);
-        localStorage.setItem('selectedSucursal', sucursal); // Guardar en localStorage
+        
         return true;
     };
 
