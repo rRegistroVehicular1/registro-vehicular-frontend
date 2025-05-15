@@ -52,8 +52,8 @@ function Falla() {
                             <option value="(SU04) Chorrera Planta">Chorrera Planta</option>
                             <option value="(SU05) Colón">Colón</option>
                             <option value="(SU06) Juan Díaz">Juan Díaz</option>
-                            <option value="(SU07) Aguadulce">Aguadulce</option>
-                            <option value="(SU08) Los Santos">Los Santos</option>
+                            <option value="(SU08) Aguadulce">Aguadulce</option>
+                            <option value="(SU09) Los Santos">Los Santos</option>
                         </select>
                     </div>
                     <div className="w-full md:w-1/2">
