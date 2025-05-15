@@ -37,8 +37,7 @@ export const handleSubmit = async (
                 revisiones: formData.revisiones,
                 observacion: formData.observacion,
                 odometro: formData.odometro,
-                lastPlacaInfo: lastPlacaInfo,
-                sucursal: localStorage.getItem('selectedSucursal')
+                lastPlacaInfo: lastPlacaInfo
             },
             {
                 headers: {
