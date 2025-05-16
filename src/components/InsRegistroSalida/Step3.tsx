@@ -165,9 +165,9 @@ function StepTres({
                     ) : (
                         <>
                             <option value="">Seleccione una placa</option>
-                            {placasList.map((placaItem, index) => (
-                                <option key={`${placaItem}-${index}`} value={placaItem}>
-                                    {placaItem}
+                            {placasList.map((item, index) => (
+                                <option key={`${item.placa}-${index}`} value={item.placa}>
+                                    {item.placa}
                                 </option>
                             ))}
                         </>
