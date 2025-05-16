@@ -45,17 +45,18 @@ function StepTres({
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
       try {
-        const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+        const response = await axios.get<PlacaTipo[]>(`${BASE_URL}/placas/get-data-placas`);
         
         if (!response.data || !Array.isArray(response.data)) {
           throw new Error('Formato de respuesta inválido');
         }
     
-        const placas = response.data
-          .map(p => p?.toString().trim())
-          .filter(p => p);
+        const datosValidados = response.data.map(item => ({
+          placa: item.placa?.toString() || '',
+          tipo: item.tipo?.toString() || ''
+        })).filter(item => item.placa);
         
-        setPlacasList([...new Set(placas)].sort());
+        setPlacasList(datosValidados);
       } catch (error) {
         console.error('Error al obtener placas:', error);
         setPlacasList([]);
@@ -73,7 +74,7 @@ function StepTres({
     
       setLoadingOdometro(true);
       try {
-        const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+        const response = await axios.get<{lastOdometro?: number}>(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
           params: { placa: selectedPlaca }
         });
         
