@@ -17,6 +17,11 @@ type Step3Props = {
     actualizarLlantasPorTipo: (tipo: string) => void;
 }
 
+type PlacaTipo = {
+    placa: string;
+    tipo: string;
+};
+
 function StepTres({ 
     placa, 
     setPlaca, 
@@ -100,6 +105,21 @@ function StepTres({
         }
     }, [placa]);
 
+    const handlePlacaChange = (selectedPlaca: string) => {
+        setPlaca(selectedPlaca);
+        
+        // Buscar el tipo de vehículo correspondiente a la placa seleccionada
+        const placaInfo = placasList.find(item => item.placa === selectedPlaca);
+        if (placaInfo) {
+            setTipoVehiculo(placaInfo.tipo);
+            actualizarLlantasPorTipo(placaInfo.tipo);
+        } else {
+            setTipoVehiculo('');
+        }
+        
+        fetchLastOdometro(selectedPlaca);
+    };
+
     const validateStep3 = () => {
         if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
             alert("Todos los campos son obligatorios");
@@ -133,10 +153,7 @@ function StepTres({
                 Placa del Vehículo:
                 <select
                     value={placa}
-                    onChange={(e) => {
-                        setPlaca(e.target.value);
-                        fetchLastOdometro(e.target.value);
-                    }}
+                    onChange={(e) => handlePlacaChange(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                     disabled={loadingPlacas}
