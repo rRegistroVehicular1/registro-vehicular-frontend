@@ -17,11 +17,6 @@ type Step3Props = {
     actualizarLlantasPorTipo: (tipo: string) => void;
 }
 
-type PlacaTipo = {
-    placa: string;
-    tipo: string;
-};
-
 function StepTres({ 
     placa, 
     setPlaca, 
@@ -45,18 +40,17 @@ function StepTres({
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
       try {
-        const response = await axios.get<PlacaTipo[]>(`${BASE_URL}/placas/get-data-placas`);
+        const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
         
         if (!response.data || !Array.isArray(response.data)) {
           throw new Error('Formato de respuesta inválido');
         }
     
-        const datosValidados = response.data.map(item => ({
-          placa: item.placa?.toString() || '',
-          tipo: item.tipo?.toString() || ''
-        })).filter(item => item.placa);
+        const placas = response.data
+          .map(p => p?.toString().trim())
+          .filter(p => p);
         
-        setPlacasList(datosValidados);
+        setPlacasList([...new Set(placas)].sort());
       } catch (error) {
         console.error('Error al obtener placas:', error);
         setPlacasList([]);
@@ -74,7 +68,7 @@ function StepTres({
     
       setLoadingOdometro(true);
       try {
-        const response = await axios.get<{lastOdometro?: number}>(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+        const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
           params: { placa: selectedPlaca }
         });
         
@@ -105,21 +99,6 @@ function StepTres({
         setLastOdometro(null);
         }
     }, [placa]);
-
-    const handlePlacaChange = (selectedPlaca: string) => {
-        setPlaca(selectedPlaca);
-        
-        // Buscar el tipo de vehículo correspondiente a la placa seleccionada
-        const placaInfo = placasList.find(item => item.placa === selectedPlaca);
-        if (placaInfo) {
-            setTipoVehiculo(placaInfo.tipo);
-            actualizarLlantasPorTipo(placaInfo.tipo);
-        } else {
-            setTipoVehiculo('');
-        }
-        
-        fetchLastOdometro(selectedPlaca);
-    };
 
     const validateStep3 = () => {
         if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
@@ -154,7 +133,10 @@ function StepTres({
                 Placa del Vehículo:
                 <select
                     value={placa}
-                    onChange={(e) => handlePlacaChange(e.target.value)}
+                    onChange={(e) => {
+                        setPlaca(e.target.value);
+                        fetchLastOdometro(e.target.value);
+                    }}
                     className="mt-1 p-2 border rounded w-full"
                     required
                     disabled={loadingPlacas}
@@ -166,9 +148,9 @@ function StepTres({
                     ) : (
                         <>
                             <option value="">Seleccione una placa</option>
-                            {placasList.map((item, index) => (
-                                <option key={`${item.placa}-${index}`} value={item.placa}>
-                                    {item.placa}
+                            {placasList.map((placaItem, index) => (
+                                <option key={`${placaItem}-${index}`} value={placaItem}>
+                                    {placaItem}
                                 </option>
                             ))}
                         </>
