@@ -52,7 +52,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
                         <label className="inline-flex items-center mr-4">
                             <input
                                 type="radio"
-                                disabled={true}
+                                //disabled={true}
                                 name={`danos-${index}`}
                                 checked={danos.rayones}
                                 onChange={() => handleRadioChange(index, 'rayones')}
@@ -63,7 +63,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
                         <label className="inline-flex items-center mr-4">
                             <input
                                 type="radio"
-                                disabled={true} 
+                                //disabled={true} 
                                 name={`danos-${index}`}
                                 checked={danos.golpes}
                                 onChange={() => handleRadioChange(index, 'golpes')}
@@ -74,7 +74,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
                         <label className="inline-flex items-center mr-4">
                             <input
                                 type="radio"
-                                disabled={true} 
+                                //disabled={true} 
                                 name={`danos-${index}`}
                                 checked={danos.quebrado}
                                 onChange={() => handleRadioChange(index, 'quebrado')}
@@ -85,7 +85,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
                         <label className="inline-flex items-center">
                             <input
                                 type="radio"
-                                disabled={true} 
+                                //disabled={true} 
                                 name={`danos-${index}`}
                                 checked={danos.faltante}
                                 onChange={() => handleRadioChange(index, 'faltante')}
