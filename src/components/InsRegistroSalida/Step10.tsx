@@ -68,7 +68,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
                                 //disabled={true}
                                 name={`danos-${index}`}
                                 checked={danos.rayones}
-                                onChange={() => handleRadioChange(index, 'rayones')}
+                                onChange={() => handleCheckboxChange(index, 'rayones')}
                             />
                             Rayones (X)
                         </label>
@@ -79,7 +79,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
                                 //disabled={true} 
                                 name={`danos-${index}`}
                                 checked={danos.golpes}
-                                onChange={() => handleRadioChange(index, 'golpes')}
+                                onChange={() => handleCheckboxChange(index, 'golpes')}
                             />
                             Golpe (/)
                         </label>
@@ -90,7 +90,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
                                 //disabled={true} 
                                 name={`danos-${index}`}
                                 checked={danos.quebrado}
-                                onChange={() => handleRadioChange(index, 'quebrado')}
+                                onChange={() => handleCheckboxChange(index, 'quebrado')}
                             />
                             Quebrado (O)
                         </label>
@@ -101,7 +101,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
                                 //disabled={true} 
                                 name={`danos-${index}`}
                                 checked={danos.faltante}
-                                onChange={() => handleRadioChange(index, 'faltante')}
+                                onChange={() => handleCheckboxChange(index, 'faltante')}
                             />
                             Faltante (*)
                         </label>
