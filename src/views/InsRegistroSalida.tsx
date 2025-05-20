@@ -58,7 +58,7 @@ function RegistroInspeccionSalida() {
     setStep(step - 1);
   };
 
-  const totalSteps = 9;
+  const totalSteps = 10;
   const navigate = useNavigate();
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
