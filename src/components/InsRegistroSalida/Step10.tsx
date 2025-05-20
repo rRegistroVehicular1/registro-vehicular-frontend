@@ -25,7 +25,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
     isSubmitting
 }) => {
 
-    const handleRadioChange = (index: number, option: string) => {
+    /*const handleRadioChange = (index: number, option: string) => {
         const updatedDanos = danosCarroceria.map((danos, i) => {
             if (i === index) {
                 return {
@@ -39,7 +39,20 @@ const StepDiez: React.FC<StepDiezProps> = ({
             return danos;
         });
         setDanosCarroceria(updatedDanos);
-    };
+    };*/
+
+    const handleCheckboxChange = (index: number, field: keyof DanosCarroceria) => {
+        const updatedDanos = danosCarroceria.map((danos, i) => {
+          if (i === index) {
+            return {
+              ...danos,
+              [field]: !danos[field] // Toggle the boolean value
+            };
+          }
+          return danos;
+        });
+        setDanosCarroceria(updatedDanos);
+      };
 
     return (
         <form onSubmit={handleSubmit}>
