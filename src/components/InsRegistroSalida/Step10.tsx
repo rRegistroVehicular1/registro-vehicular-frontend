@@ -51,7 +51,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
 
                         <label className="inline-flex items-center mr-4">
                             <input
-                                type="radio"
+                                type="checkbox"
                                 //disabled={true}
                                 name={`danos-${index}`}
                                 checked={danos.rayones}
@@ -62,7 +62,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
 
                         <label className="inline-flex items-center mr-4">
                             <input
-                                type="radio"
+                                type="checkbox"
                                 //disabled={true} 
                                 name={`danos-${index}`}
                                 checked={danos.golpes}
@@ -73,7 +73,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
 
                         <label className="inline-flex items-center mr-4">
                             <input
-                                type="radio"
+                                type="checkbox"
                                 //disabled={true} 
                                 name={`danos-${index}`}
                                 checked={danos.quebrado}
@@ -84,7 +84,7 @@ const StepDiez: React.FC<StepDiezProps> = ({
 
                         <label className="inline-flex items-center">
                             <input
-                                type="radio"
+                                type="checkbox"
                                 //disabled={true} 
                                 name={`danos-${index}`}
                                 checked={danos.faltante}
