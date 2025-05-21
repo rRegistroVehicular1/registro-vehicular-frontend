@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { BASE_URL } from '@/validation/url';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
+import { Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
 
 function RegistroInspeccionEntrada() {
@@ -21,49 +24,6 @@ function RegistroInspeccionEntrada() {
     // Nuevo estado para el último odómetro
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
     const [placa, setPlaca] = useState(''); // Para almacenar la placa del localStorage
-
-    useEffect(() => {
-        // Obtener la placa del localStorage
-        const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
-        if (lastPlacaInfo) {
-          try {
-            const placaData = JSON.parse(lastPlacaInfo);
-            setPlaca(placaData.placa || '');
-            
-            // Fetch del último odómetro
-            const fetchLastOdometro = async () => {
-              try {
-                const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-                  params: { placa: placaData.placa }
-                });
-                setLastOdometro(Number(response.data?.lastOdometro) || 0);
-              } catch (error) {
-                console.error('Error fetching last odometer:', error);
-              }
-            };
-            
-            fetchLastOdometro();
-          } catch (e) {
-            console.error('Error parsing lastPlacaInfo:', e);
-          }
-        }
-      }, []);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-    
-        // Validación del odómetro
-        const odometroNum = Number(formData.odometro);
-        if (isNaN(odometroNum) || odometroNum < 0) {
-          alert("El odómetro debe ser un número válido");
-          return;
-        }
-    
-        if (lastOdometro !== null && odometroNum <= lastOdometro) {
-          alert(`Error: El odómetro de entrada (${odometroNum}) debe ser mayor al último registro (${lastOdometro})`);
-          return;
-        }
-
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
@@ -89,9 +49,55 @@ function RegistroInspeccionEntrada() {
                 observacion: '',
                 odometro:"",
             });
-        }
-        navigate("/");
+            navigate("/");
+        } 
     };
+
+
+    useEffect(() => {
+        // Obtener la placa del localStorage
+        const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
+        if (lastPlacaInfo) {
+          try {
+            const placaData = JSON.parse(lastPlacaInfo);
+            setPlaca(placaData.placa || '');
+            
+            // Fetch del último odómetro
+            const fetchLastOdometro = async () => {
+              try {
+                const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+                  params: { placa: placaData.placa }
+                });
+                setLastOdometro(Number(response.data?.lastOdometro) || 0);
+              } catch (error) {
+                console.error('Error al obtener el último odometro:', error);
+              }
+            };
+            
+            fetchLastOdometro();
+          } catch (e) {
+            console.error('Error al analizar Informacion de la ultima placa ingresada:', e);
+          }
+        }
+      }, []);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+    
+        // Validación del odómetro
+        const odometroNum = Number(formData.odometro);
+        if (isNaN(odometroNum) || odometroNum < 0) {
+          alert("El odómetro debe ser un número válido");
+          return;
+        }
+    
+        if (lastOdometro !== null && odometroNum <= lastOdometro) {
+          alert(`Error: El odómetro de entrada (${odometroNum}) debe ser mayor al último registro (${lastOdometro})`);
+          return;
+        }
+
+    //const [isSubmitting, setIsSubmitting] = useState(false);
+    //const navigate = useNavigate();
 
         try {
           const allFilled = formData.revisiones.every(item => item.opcion !== null);
@@ -115,8 +121,19 @@ function RegistroInspeccionEntrada() {
               lastPlacaInfo: lastPlacaInfo
             }
           );
-    
-          // Resto del manejo de respuesta...
+            if (response.data.message) {
+                alert(response.data.message);
+                setFormData({
+                  revisiones: formData.revisiones.map(item => ({
+                    ...item,
+                    opcion: null
+                  })),
+                  observacion: '',
+                  odometro: ''
+                });
+                localStorage.removeItem('lastPlacaInfo');
+                navigate('/');
+              }
         } catch (error) {
           alert(error.message || 'Error al registrar los datos');
         } finally {
@@ -132,9 +149,9 @@ function RegistroInspeccionEntrada() {
             </h1>
             <p className="text-center text-lg font-semibold mb-4">Ingreso a la planta</p>
             <form className="w-full max-w-3xl bg-white p-6 rounded shadow-md">
-                /*onSubmit={(e) =>
+                {/*onSubmit={(e) =>
                     handleSubmit(e, formData, setIsSubmitting, setFormData, navigate)
-                }*/
+                }*/}
                 {lastOdometro !== null && (
                   <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                     <p className="text-sm font-medium text-blue-800">
