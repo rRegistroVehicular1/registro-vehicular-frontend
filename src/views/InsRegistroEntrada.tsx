@@ -22,6 +22,7 @@ function RegistroInspeccionEntrada() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
+    const [placa, setPlaca] = useState<string>('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,11 +31,12 @@ function RegistroInspeccionEntrada() {
             if (lastPlacaInfo) {
                 try {
                     const placaInfo = JSON.parse(lastPlacaInfo);
-                    const placa = placaInfo.placa || '';
+                    const currentPlaca = placaInfo.placa || '';
+                    setPlaca(currentPlaca);
                     
-                    if (placa) {
+                    if (currentPlaca) {
                         const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-                            params: { placa }
+                            params: { placa: currentPlaca }
                         });
                         setLastOdometro(response.data.lastOdometro || 0);
                     }
