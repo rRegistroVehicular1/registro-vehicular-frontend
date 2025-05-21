@@ -15,10 +15,10 @@ function Home() {
   const handleCheckPlaca = async () => {
     const result = await handleSubmit(placa, setError);
 
-    if (result.success && result.data) {
+    if (result.data?.placa) {
       // Guardamos en localStorage solo en el frontend
         localStorage.setItem('lastPlacaInfo', JSON.stringify({
-            placa: result.data.placa || placa,
+            placa: result.data.placa,
             rowIndex: result.data.rowIndex,
             estado: result.data.estado
         }));
