@@ -15,12 +15,19 @@ function Home() {
   const handleCheckPlaca = async () => {
     const result = await handleSubmit(placa, setError);
 
-    if (result.data?.rowIndex > 0) {
-      localStorage.setItem("lastPlacaInfo", JSON.stringify(result.data.rowIndex));
-      navigate("/registro-inspeccion-entrada");
-    } else if (typeof result.data?.rowIndex === "undefined" || result.data?.rowIndex === null) {
-      alert("Esta placa no esta registrada");
-      navigate("/registro-inspeccion-salida");
+    if (result.success && result.data) {
+      // Guardamos en localStorage solo en el frontend
+        localStorage.setItem('lastPlacaInfo', JSON.stringify({
+            placa: result.data.placa || placa,
+            rowIndex: result.data.rowIndex,
+            estado: result.data.estado
+        }));
+      if (result.data.rowIndex) {
+            navigate("/registro-inspeccion-entrada");
+      } else {
+          alert("Esta placa no esta registrada");
+          navigate("/registro-inspeccion-salida");
+      }
     } else {
       alert("Error: No se pudo determinar el estado de la placa.");
     }
