@@ -22,31 +22,29 @@ function RegistroInspeccionEntrada() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
-    const [placa, setPlaca] = useState<string>('');
+    const [placa, setPlaca] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchLastOdometro = async () => {
-            const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
-            if (lastPlacaInfo) {
-                try {
-                    const placaInfo = JSON.parse(lastPlacaInfo);
-                    const currentPlaca = placaInfo.placa || '';
-                    setPlaca(currentPlaca);
-                    
-                    if (currentPlaca) {
-                        const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-                            params: { placa: currentPlaca }
-                        });
-                        setLastOdometro(response.data.lastOdometro || 0);
-                    }
-                } catch (error) {
-                    console.error('Error fetching last odometer:', error);
+        const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
+        if (lastPlacaInfo) {
+            try {
+                const { placa: storedPlaca } = JSON.parse(lastPlacaInfo);
+                setPlaca(storedPlaca);
+                
+                if (storedPlaca) {
+                    axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+                        params: { placa: storedPlaca }
+                    }).then(response => {
+                        setLastOdometro(response.data.lastOdometro);
+                    }).catch(error => {
+                        console.error('Error obteniendo odómetro:', error);
+                    });
                 }
+            } catch (error) {
+                console.error('Error parseando placa:', error);
             }
-        };
-
-        fetchLastOdometro();
+        }
     }, []);
 
     const handleInputChange = (index: number, value: boolean) => {
