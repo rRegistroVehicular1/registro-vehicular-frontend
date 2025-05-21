@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
@@ -17,6 +17,52 @@ function RegistroInspeccionEntrada() {
         observacion: '',
         odometro: '',
     }));
+
+    // Nuevo estado para el último odómetro
+    const [lastOdometro, setLastOdometro] = useState<number | null>(null);
+    const [placa, setPlaca] = useState(''); // Para almacenar la placa del localStorage
+
+    useEffect(() => {
+        // Obtener la placa del localStorage
+        const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
+        if (lastPlacaInfo) {
+          try {
+            const placaData = JSON.parse(lastPlacaInfo);
+            setPlaca(placaData.placa || '');
+            
+            // Fetch del último odómetro
+            const fetchLastOdometro = async () => {
+              try {
+                const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+                  params: { placa: placaData.placa }
+                });
+                setLastOdometro(Number(response.data?.lastOdometro) || 0);
+              } catch (error) {
+                console.error('Error fetching last odometer:', error);
+              }
+            };
+            
+            fetchLastOdometro();
+          } catch (e) {
+            console.error('Error parsing lastPlacaInfo:', e);
+          }
+        }
+      }, []);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+    
+        // Validación del odómetro
+        const odometroNum = Number(formData.odometro);
+        if (isNaN(odometroNum) || odometroNum < 0) {
+          alert("El odómetro debe ser un número válido");
+          return;
+        }
+    
+        if (lastOdometro !== null && odometroNum <= lastOdometro) {
+          alert(`Error: El odómetro de entrada (${odometroNum}) debe ser mayor al último registro (${lastOdometro})`);
+          return;
+        }
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
@@ -47,25 +93,67 @@ function RegistroInspeccionEntrada() {
         navigate("/");
     };
 
+        try {
+          const allFilled = formData.revisiones.every(item => item.opcion !== null);
+          if (!allFilled) {
+            throw new Error("Por favor, selecciona una opción en todas las revisiones");
+          }
+    
+          setIsSubmitting(true);
+          
+          const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
+          if (!lastPlacaInfo) {
+            throw new Error('No se encontró información del vehículo');
+          }
+    
+          const response = await axios.post(
+            `${BASE_URL}/ins-registro-entrada/register`,
+            {
+              revisiones: formData.revisiones,
+              observacion: formData.observacion,
+              odometro: formData.odometro,
+              lastPlacaInfo: lastPlacaInfo
+            }
+          );
+    
+          // Resto del manejo de respuesta...
+        } catch (error) {
+          alert(error.message || 'Error al registrar los datos');
+        } finally {
+          setIsSubmitting(false);
+        }
+      };
+    
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
             <h1 className="text-2xl font-bold mb-4 text-center">
                 R06-PT-19 REVISIÓN DE VEHÍCULOS -ENTRADA
             </h1>
             <p className="text-center text-lg font-semibold mb-4">Ingreso a la planta</p>
-            <form
-                className="w-full max-w-3xl bg-white p-6 rounded shadow-md"
-                onSubmit={(e) =>
+            <form className="w-full max-w-3xl bg-white p-6 rounded shadow-md">
+                /*onSubmit={(e) =>
                     handleSubmit(e, formData, setIsSubmitting, setFormData, navigate)
-                }
-            >
+                }*/
+                {lastOdometro !== null && (
+                  <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-sm font-medium text-blue-800">
+                      <span className="font-bold">Último odómetro registrado:</span> {lastOdometro}
+                    </p>
+                    <p className="text-xs text-blue-600 mt-1">
+                      El odómetro de entrada debe ser mayor a este valor
+                    </p>
+                  </div>
+                )}
+        
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="md:col-span-2">
                         <label className="block text-gray-700 font-semibold mb-2">
                             Odómetro de entrada
                         </label>
                         <input
-                            type="text"
+                            type="number"
+                            min={lastOdometro ? lastOdometro + 1 : 0}
                             name="odometro"
                             id="odometro"
                             value={formData.odometro}
@@ -73,8 +161,14 @@ function RegistroInspeccionEntrada() {
                                 setFormData({ ...formData, odometro: e.target.value })
                             }
                             className="w-full p-2 border rounded mt-1"
-                            placeholder="Odómetro de entrada"
+                            placeholder="Ingrese el Odómetro de Entrada"
+                            required
                         />
+                        {lastOdometro !== null && (
+                            <p className="text-sm text-gray-500 mt-1">
+                              Valor mínimo permitido: {lastOdometro + 1}
+                            </p>
+                          )}
                     </div>
                     {formData.revisiones.map((item, index) => (
                         <div key={index} className="p-4 bg-gray-50 border rounded">
