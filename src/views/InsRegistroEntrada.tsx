@@ -26,25 +26,18 @@ function RegistroInspeccionEntrada() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
-        if (lastPlacaInfo) {
-            try {
-                const { placa: storedPlaca } = JSON.parse(lastPlacaInfo);
-                setPlaca(storedPlaca);
-                
-                if (storedPlaca) {
-                    axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-                        params: { placa: storedPlaca }
-                    }).then(response => {
-                        setLastOdometro(response.data.lastOdometro);
-                    }).catch(error => {
-                        console.error('Error obteniendo odómetro:', error);
-                    });
-                }
-            } catch (error) {
-                console.error('Error parseando placa:', error);
-            }
-        }
+        const storedPlacaInfo = localStorage.getItem('lastPlacaInfo');
+        if (storedPlacaInfo) {
+            const { placa: storedPlaca } = JSON.parse(storedPlacaInfo);
+            setPlaca(storedPlaca);
+            
+            // Solo el frontend usa localStorage
+            axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+                params: { placa: storedPlaca } // Envía la placa como parámetro
+            }).then((response) => {
+                setLastOdometro(response.data.lastOdometro);
+            });
+        } 
     }, []);
 
     const handleInputChange = (index: number, value: boolean) => {
