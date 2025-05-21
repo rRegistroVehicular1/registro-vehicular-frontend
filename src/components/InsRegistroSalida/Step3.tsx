@@ -113,7 +113,7 @@ function StepTres({
         }
 
         if (lastOdometro !== null && odometroValue < lastOdometro) {
-            alert(`El odómetro no puede ser menor al último registro (${lastOdometro})`);
+            alert(`El odómetro de salida (${odometroValue}) debe ser mayor al último registro (${lastOdometro})`);
             return false;
         }
 
