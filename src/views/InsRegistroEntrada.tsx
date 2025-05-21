@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '@/validation/url';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
-import { Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
+import type { Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
 
 function RegistroInspeccionEntrada() {
@@ -62,7 +62,7 @@ function RegistroInspeccionEntrada() {
             const placaData = JSON.parse(lastPlacaInfo);
             setPlaca(placaData.placa || '');
             
-            // Fetch del último odómetro
+            // Obtener último odómetro
             const fetchLastOdometro = async () => {
               try {
                 const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
@@ -134,8 +134,12 @@ function RegistroInspeccionEntrada() {
                 localStorage.removeItem('lastPlacaInfo');
                 navigate('/');
               }
-        } catch (error) {
-          alert(error.message || 'Error al registrar los datos');
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            alert(error.message);
+          } else {
+            alert('Ocurrió un error desconocido');
+          }
         } finally {
           setIsSubmitting(false);
         }
