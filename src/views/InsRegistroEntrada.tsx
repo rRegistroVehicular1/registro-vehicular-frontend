@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
@@ -19,7 +19,31 @@ function RegistroInspeccionEntrada() {
     }));
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [lastOdometro, setLastOdometro] = useState<number | null>(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchLastOdometro = async () => {
+            const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
+            if (lastPlacaInfo) {
+                try {
+                    const placaInfo = JSON.parse(lastPlacaInfo);
+                    const placa = placaInfo.placa || '';
+                    
+                    if (placa) {
+                        const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+                            params: { placa }
+                        });
+                        setLastOdometro(response.data.lastOdometro || 0);
+                    }
+                } catch (error) {
+                    console.error('Error fetching last odometer:', error);
+                }
+            }
+        };
+
+        fetchLastOdometro();
+    }, []);
 
     const handleInputChange = (index: number, value: boolean) => {
         const newRevisiones = [...formData.revisiones];
@@ -65,7 +89,7 @@ function RegistroInspeccionEntrada() {
                             Odómetro de entrada
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             name="odometro"
                             id="odometro"
                             value={formData.odometro}
@@ -74,7 +98,13 @@ function RegistroInspeccionEntrada() {
                             }
                             className="w-full p-2 border rounded mt-1"
                             placeholder="Odómetro de entrada"
+                            min={lastOdometro || 0}
                         />
+                        {lastOdometro !== null && (
+                            <p className="text-sm text-gray-500 mt-1">
+                                Último registro: {lastOdometro} (Ingrese un valor mayor)
+                            </p>
+                        )}
                     </div>
                     {formData.revisiones.map((item, index) => (
                         <div key={index} className="p-4 bg-gray-50 border rounded">
