@@ -63,7 +63,7 @@ function StepTres({
     const fetchLastOdometro = async (selectedPlaca: string) => {
       if (!selectedPlaca || typeof selectedPlaca !== 'string' || selectedPlaca.trim() === '') {
         console.error('Placa inválida:', selectedPlaca);
-        setLastOdometroEntrada(null);
+        setLastOdometro(null);
         return;
       }
     
