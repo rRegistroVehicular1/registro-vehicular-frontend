@@ -41,12 +41,19 @@ function StepTres({
       setLoadingPlacas(true);
       try {
         const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-        
-        if (!response.data || !Array.isArray(response.data)) {
+
+        let data = response.data;
+
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+          // Si es un objeto, intenta extraer un array de alguna propiedad
+          data = Object.values(data).flat();
+        }
+          
+        if (data || !Array.isArray(data)) {
           throw new Error('Formato de respuesta inválido');
         }
     
-        const placas = response.data
+        const placas = data
           .map(p => p?.toString().trim())
           .filter(p => p);
         
