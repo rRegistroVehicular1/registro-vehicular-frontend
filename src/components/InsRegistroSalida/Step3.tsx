@@ -73,7 +73,7 @@ function StepTres({
         });
         
         // Validar respuesta
-        const odometro = Number(response.data?.lastOdometroEntrada) || 0;
+        const odometro = Number(response.data?.lastOdometro) || 0;
         if (isNaN(odometro)) {
           throw new Error('Odómetro inválido');
         }
