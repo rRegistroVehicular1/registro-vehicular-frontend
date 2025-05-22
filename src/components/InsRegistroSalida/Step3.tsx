@@ -62,7 +62,7 @@ function StepTres({
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
       if (!selectedPlaca) {
-        setLastOdometro(null);
+        setLastOdometroEntrada(null);
         return;
       }
     
@@ -73,15 +73,15 @@ function StepTres({
         });
         
         // Validar respuesta
-        const odometro = Number(response.data?.lastOdometro) || 0;
+        const odometro = Number(response.data?.lastOdometroEntrada) || 0;
         if (isNaN(odometro)) {
           throw new Error('Odómetro inválido');
         }
         
-        setLastOdometro(odometro);
+        setLastOdometroEntrada(odometro);
       } catch (error) {
         console.error('Error al obtener odómetro:', error);
-        setLastOdometro(null);
+        setLastOdometroEntrada(null);
         alert('No se pudo obtener el último odómetro');
       } finally {
         setLoadingOdometro(false);
@@ -112,8 +112,8 @@ function StepTres({
             return false;
         }
 
-        if (lastOdometro !== null && odometroValue < lastOdometro) {
-            alert(`El odómetro de salida (${odometroValue}) debe ser mayor al último registro (${lastOdometro})`);
+        if (lastOdometroEntrada !== null && odometroValue < lastOdometroEntrada) {
+            alert(`El odómetro de salida (${odometroValue}) debe ser mayor al último registro (${lastOdometroEntrada})`);
             return false;
         }
 
@@ -189,15 +189,15 @@ function StepTres({
                 Odómetro de Salida:
                 <input
                     type="number"
-                    min={lastOdometro || 0}
+                    min={lastOdometroEntrada || 0}
                     value={odometroSalida}
                     onChange={(e) => setOdometroSalida(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 />
-                {lastOdometro !== null && (
+                {lastOdometroEntrada !== null && (
                     <p className="text-sm text-gray-500 mt-1">
-                        Último registro: {lastOdometro} (Ingrese igual o mayor)
+                        Último registro: {lastOdometroEntrada} (Ingrese igual o mayor)
                     </p>
                 )}
             </label>
