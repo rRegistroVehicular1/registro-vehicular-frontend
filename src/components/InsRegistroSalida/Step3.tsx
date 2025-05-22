@@ -70,8 +70,8 @@ function StepTres({
       setLoadingOdometro(true);
       try {
         const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-          params: { placa: selectedPlaca }
-        paramsSerializer: {indexes: null  } // Asegura que los parámetros se serialicen correctamente
+          params: { placa: selectedPlaca },
+          paramsSerializer: {indexes: null  } // Asegura que los parámetros se serialicen correctamente
         });
 
         console.log('Respuesta completa:', response); // Debug completo
