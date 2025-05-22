@@ -62,7 +62,7 @@ function StepTres({
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
       if (!selectedPlaca) {
-        setLastOdometroEntrada(null);
+        setLastOdometro(null);
         return;
       }
     
@@ -78,10 +78,10 @@ function StepTres({
           throw new Error('Odómetro inválido');
         }
         
-        setLastOdometroEntrada(odometro);
+        setLastOdometro(odometro);
       } catch (error) {
         console.error('Error al obtener odómetro:', error);
-        setLastOdometroEntrada(null);
+        setLastOdometro(null);
         alert('No se pudo obtener el último odómetro');
       } finally {
         setLoadingOdometro(false);
@@ -112,8 +112,8 @@ function StepTres({
             return false;
         }
 
-        if (lastOdometroEntrada !== null && odometroValue < lastOdometroEntrada) {
-            alert(`El odómetro de salida (${odometroValue}) debe ser mayor al último registro (${lastOdometroEntrada})`);
+        if (lastOdometro !== null && odometroValue < lastOdometro) {
+            alert(`El odómetro de salida (${odometroValue}) debe ser mayor al último registro (${lastOdometro})`);
             return false;
         }
 
@@ -189,15 +189,15 @@ function StepTres({
                 Odómetro de Salida:
                 <input
                     type="number"
-                    min={lastOdometroEntrada || 0}
+                    min={lastOdometro || 0}
                     value={odometroSalida}
                     onChange={(e) => setOdometroSalida(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 />
-                {lastOdometroEntrada !== null && (
+                {lastOdometro !== null && (
                     <p className="text-sm text-gray-500 mt-1">
-                        Último registro: {lastOdometroEntrada} (Ingrese igual o mayor)
+                        Último registro: {lastOdometro} (Ingrese igual o mayor)
                     </p>
                 )}
             </label>
