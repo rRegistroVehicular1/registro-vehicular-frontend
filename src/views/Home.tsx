@@ -15,19 +15,12 @@ function Home() {
   const handleCheckPlaca = async () => {
     const result = await handleSubmit(placa, setError);
 
-    if (result.data?.placa) {
-      // Guardamos en localStorage solo en el frontend
-        localStorage.setItem('lastPlacaInfo', JSON.stringify({
-            placa: result.data.placa,
-            rowIndex: result.data.rowIndex,
-            estado: result.data.estado
-        }));
-      if (result.data.rowIndex) {
-            navigate("/registro-inspeccion-entrada");
-      } else {
-          alert("Esta placa no esta registrada");
-          navigate("/registro-inspeccion-salida");
-      }
+    if (result.data?.rowIndex > 0) {
+      localStorage.setItem("lastPlacaInfo", JSON.stringify(result.data.rowIndex));
+      navigate("/registro-inspeccion-entrada");
+    } else if (typeof result.data?.rowIndex === "undefined" || result.data?.rowIndex === null) {
+      alert("Esta placa no esta registrada");
+      navigate("/registro-inspeccion-salida");
     } else {
       alert("Error: No se pudo determinar el estado de la placa.");
     }
@@ -48,7 +41,6 @@ function Home() {
             type="text"
             value={placa}
             onChange={(e) => setPlaca(e.target.value)}
-            //oninput="this.value = this.value.toUpperCase()"
             className={`mt-1 p-2 border rounded w-full text-sm sm:text-base ${error ? "border-red-500" : "border-gray-300"
               }`}
             placeholder="Ingrese su placa"
