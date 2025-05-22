@@ -31,6 +31,22 @@ export const handleSubmit = async (
             throw new Error('No se encontró información del vehículo');
         }
 
+        // Obtiene la matricula del vehiculo
+        const placaInfo = JSON.parse(lastPlacaInfo);
+        const placa = placaInfo.placa || '';
+
+        //Obtiene el ultimo registro de odometro registrado
+        const lastOdometroResponse = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+            params: { placa }
+        });
+
+        const lastOdometro = Number(lastOdometroResponse.data.lastOdometro) || 0;
+        
+        // Valida que el odometro actual sea mayor
+        if (odometroNum <= lastOdometro) {
+            throw new Error(`El odómetro de entrada (${odometroNum}) debe ser mayor al último registro (${lastOdometro})`);
+        }
+
         const response = await axios.post(
             `${BASE_URL}/ins-registro-entrada/register`,
             {
