@@ -35,6 +35,7 @@ export const handleSubmit = async (
         const placaInfo = JSON.parse(lastPlacaInfo);
         const placa = placaInfo.placa || '';
 
+        console.log('La placa es:', placa);
         //Obtiene el ultimo registro de odometro registrado
         const lastOdometroResponse = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
             params: { placa }
