@@ -68,6 +68,7 @@ function StepTres({
     
       setLoadingOdometro(true);
       try {
+        console.log('Fetching odometer for placa:', selectedPlaca);
         const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
             params: { placa: selectedPlaca }
         });
