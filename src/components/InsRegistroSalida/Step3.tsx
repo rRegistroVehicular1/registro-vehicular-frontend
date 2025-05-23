@@ -61,6 +61,7 @@ function StepTres({
     };
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
+        console.log('Placa seleccionada:', selectedPlaca);
       if (!selectedPlaca) {
         setLastOdometro(null);
         return;
@@ -69,9 +70,7 @@ function StepTres({
       setLoadingOdometro(true);
       try {
         console.log('Fetching odometer for placa:', selectedPlaca);
-        const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-            params: { placa: selectedPlaca }
-        });
+        const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro?placa=${encodeURIComponent(selectedPlaca)}`);
         
         // Validar respuesta
         const odometro = Number(response.data?.lastOdometro) || 0;
@@ -135,6 +134,7 @@ function StepTres({
                 <select
                     value={placa}
                     onChange={(e) => {
+                        console.log("Placa seleccionada en onChange:", e.target.value); // Debug
                         setPlaca(e.target.value);
                         fetchLastOdometro(e.target.value);
                     }}
