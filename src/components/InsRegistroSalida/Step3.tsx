@@ -75,7 +75,13 @@ function StepTres({
         });
         
         // Validar respuesta
-        const odometro = Number(response.data?.lastOdometro) ?? 0;
+        let odometro = 0;
+        if (typeof response.data === 'number') {
+          odometro = response.data;
+        } else if (response.data?.lastOdometro !== undefined) {
+          odometro = Number(response.data.lastOdometro) || 0;
+        }
+        
         if (isNaN(odometro)) {
           throw new Error('Formato de Odómetro inválido');
         }
