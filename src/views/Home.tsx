@@ -16,7 +16,9 @@ function Home() {
     const result = await handleSubmit(placa, setError);
 
     if (result.data?.rowIndex > 0) {
-      localStorage.setItem("lastPlacaInfo", JSON.stringify(result.data.rowIndex));
+      //localStorage.setItem("lastPlacaInfo", JSON.stringify(result.data.rowIndex));
+      localStorage.setItem("lastPlacaInfo", JSON.stringify({ rowIndex: result.data.rowIndex, placa: placa}) // Guarda la placa junto al índice    
+    );
       navigate("/registro-inspeccion-entrada");
     } else if (typeof result.data?.rowIndex === "undefined" || result.data?.rowIndex === null) {
       alert("Esta placa no esta registrada");
