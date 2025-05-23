@@ -88,15 +88,15 @@ function StepTres({
         }
       } catch (error) {
         console.error('Error al obtener odómetro:', error);
-            setLastOdometro(null);
-            alert('No se pudo obtener el último odómetro');
-            // Mostrar mensaje más amigable
-            if (error.response?.status === 404) {
-              // No hay registros previos para esta placa
-              setLastOdometro(0);
-            } else {
-              alert('No se encontraron registros previos para esta placa. Puede ingresar cualquier valor válido.');
-            }    
+        setLastOdometro(null);
+        alert('No se pudo obtener el último odómetro');
+        // Mostrar mensaje más amigable
+        if (error.response?.status === 404) {
+            // No hay registros previos para esta placa
+            setLastOdometro(0);
+        } else {
+            alert('No se encontraron registros previos para esta placa. Puede ingresar cualquier valor válido.');
+        }        
       } finally {
         setLoadingOdometro(false);
       }
