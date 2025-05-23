@@ -69,15 +69,15 @@ function StepTres({
     
       setLoadingOdometro(true);
       try {
-        console.log('Fetching odometer for placa:', selectedPlaca);
+        console.log('Buscando odometro para la placa:', selectedPlaca);
         const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
             params: { placa: selectedPlaca }
         });
         
         // Validar respuesta
-        const odometro = Number(response.data?.lastOdometro) || 0;
+        const odometro = Number(response.data?.lastOdometro) ?? 0;
         if (isNaN(odometro)) {
-          throw new Error('Odómetro inválido');
+          throw new Error('Formato de Odómetro inválido');
         }
         
         setLastOdometro(odometro);
@@ -85,6 +85,9 @@ function StepTres({
         console.error('Error al obtener odómetro:', error);
         setLastOdometro(null);
         alert('No se pudo obtener el último odómetro');
+          if (error.response?.status !== 404) {
+                alert('No se pudo obtener el último odómetro. Verifica la placa o intenta nuevamente.');
+            }
       } finally {
         setLoadingOdometro(false);
       }
@@ -110,7 +113,7 @@ function StepTres({
 
         const odometroValue = Number(odometroSalida);
         if (isNaN(odometroValue) || odometroValue < 0){
-            alert("Odómetro debe ser un número valido");
+            alert("Odómetro debe ser un número valido y positivo");
             return false;
         }
 
@@ -195,12 +198,17 @@ function StepTres({
                     min={lastOdometro || 0}
                     value={odometroSalida}
                     onChange={(e) => setOdometroSalida(e.target.value)}
-                    className="mt-1 p-2 border rounded w-full"
+                    className="mt-1 p-2 border rounded w-full"${
+                        lastOdometro !== null && Number(odometroSalida) < lastOdometro 
+                            ? 'border-red-500 bg-red-50' 
+                            : ''
+                    }`}
                     required
                 />
                 {lastOdometro !== null && (
                     <p className="text-sm text-gray-500 mt-1">
                         Último registro: {lastOdometro} (Ingrese igual o mayor)
+                        <span className="block text-red-500">Ingrese un valor igual o mayor.</span>
                     </p>
                 )}
             </label>
