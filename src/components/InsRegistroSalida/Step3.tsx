@@ -198,11 +198,11 @@ function StepTres({
                     min={lastOdometro || 0}
                     value={odometroSalida}
                     onChange={(e) => setOdometroSalida(e.target.value)}
-                    className="mt-1 p-2 border rounded w-full"${
+                    className={`mt-1 p-2 border rounded w-full${
                         lastOdometro !== null && Number(odometroSalida) < lastOdometro 
                             ? 'border-red-500 bg-red-50' 
                             : ''
-                    }`}
+                        }`}
                     required
                 />
                 {lastOdometro !== null && (
