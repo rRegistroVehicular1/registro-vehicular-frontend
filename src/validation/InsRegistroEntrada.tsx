@@ -30,11 +30,11 @@ export const handleSubmit = async (
         if (!lastPlacaInfo) {
             throw new Error('No se encontró información del vehículo');
         }
-
+        console.log('La ultima placa es:', lastPlacaInfo);
         // Obtiene la matricula del vehiculo
         const placaInfo = JSON.parse(lastPlacaInfo);
         const placa = placaInfo.placa || '';
-
+        
         console.log('La placa es:', placa);
         //Obtiene el ultimo registro de odometro registrado
         const lastOdometroResponse = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
