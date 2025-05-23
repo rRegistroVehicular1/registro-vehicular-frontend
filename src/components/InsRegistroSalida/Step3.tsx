@@ -105,6 +105,16 @@ function StepTres({
         }
     }, [placa]);
 
+    useEffect(() => {
+        if (odometroSalida && lastOdometro !== null) {
+            const currentValue = Number(odometroSalida);
+            if (!isNaN(currentValue) && currentValue < lastOdometro) {
+                // El campo ya se marca en rojo por la clase CSS
+                console.log(`Advertencia: Odómetro actual (${currentValue}) es menor que el último registro (${lastOdometro})`);
+            }
+        }
+    }, [odometroSalida, lastOdometro]);
+
     const validateStep3 = () => {
         if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
             alert("Todos los campos son obligatorios");
@@ -197,13 +207,19 @@ function StepTres({
                     type="number"
                     min={lastOdometro || 0}
                     value={odometroSalida}
-                    onChange={(e) => setOdometroSalida(e.target.value)}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || /^[0-9]*$/.test(value)) {
+                            setOdometroSalida(value);
+                        }
+                    }}
                     className={`mt-1 p-2 border rounded w-full${
                         lastOdometro !== null && Number(odometroSalida) < lastOdometro 
                             ? 'border-red-500 bg-red-50' 
                             : ''
                         }`}
                     required
+                    disabled={loadingOdometro}
                 />
                 {lastOdometro !== null && (
                     <p className="text-sm text-gray-500 mt-1">
