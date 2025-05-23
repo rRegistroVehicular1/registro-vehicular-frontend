@@ -88,9 +88,9 @@ function StepTres({
         
         setLastOdometro(odometro);
 
-        // Sugerir automáticamente el último odómetro + 1 como valor inicial
+        // Sugerir automáticamente el último odómetro como valor inicial
         if (odometro > 0 && (!odometroSalida || Number(odometroSalida) < odometro)) {
-          setOdometroSalida(String(odometro + 1));
+          setOdometroSalida(String(odometro));
         }
       } catch (error) {
         console.error('Error al obtener odómetro:', error);
