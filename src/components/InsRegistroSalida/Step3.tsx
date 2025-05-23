@@ -81,13 +81,22 @@ function StepTres({
         }
         
         setLastOdometro(odometro);
+
+        // Sugerir automáticamente el último odómetro + 1 como valor inicial
+        if (odometro > 0 && (!odometroSalida || Number(odometroSalida) < odometro)) {
+          setOdometroSalida(String(odometro + 1));
+        }
       } catch (error) {
-            console.error('Error al obtener odómetro:', error);
+        console.error('Error al obtener odómetro:', error);
             setLastOdometro(null);
             alert('No se pudo obtener el último odómetro');
-          {/*if (error.response?.status !== 404) {
-                alert('No se pudo obtener el último odómetro. Verifica la placa o intenta nuevamente.');
-            }*/}
+            // Mostrar mensaje más amigable
+            if (error.response?.status === 404) {
+              // No hay registros previos para esta placa
+              setLastOdometro(0);
+            } else {
+              alert('No se encontraron registros previos para esta placa. Puede ingresar cualquier valor válido.');
+            }    
       } finally {
         setLoadingOdometro(false);
       }
@@ -127,7 +136,7 @@ function StepTres({
             return false;
         }
 
-        if (lastOdometro !== null && odometroValue < lastOdometro) {
+        if (lastOdometro !== null && lastOdometro > 0 && odometroValue < lastOdometro) {
             alert(`El odómetro de salida (${odometroValue}) debe ser mayor al último registro (${lastOdometro})`);
             return false;
         }
