@@ -85,9 +85,9 @@ function StepTres({
             console.error('Error al obtener odómetro:', error);
             setLastOdometro(null);
             alert('No se pudo obtener el último odómetro');
-            if (error.response?.status !== 404) {
+          {/*if (error.response?.status !== 404) {
                 alert('No se pudo obtener el último odómetro. Verifica la placa o intenta nuevamente.');
-            }
+            }*/}
       } finally {
         setLoadingOdometro(false);
       }
