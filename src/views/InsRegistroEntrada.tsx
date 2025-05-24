@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
-import axios from 'axios';
-import { BASE_URL } from '../validation/url';
 
 function RegistroInspeccionEntrada() {
 
@@ -21,52 +19,7 @@ function RegistroInspeccionEntrada() {
     }));
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [lastOdometroSalida, setLastOdometroSalida] = useState<number | null>(null);
-    const [loadingOdometro, setLoadingOdometro] = useState(false);
     const navigate = useNavigate();
-
-    // Obtener el último odómetro cuando se carga el componente
-    useEffect(() => {
-        const fetchOdometros = async () => {
-            const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
-            if (!lastPlacaInfo) return;
-            
-            try {
-                const placaInfo = JSON.parse(lastPlacaInfo);
-                const placa = placaInfo.placa;
-                
-                if (!placa) return;
-                
-                setLoadingOdometro(true);
-
-                // Obtener ambos odómetros en paralelo
-                const [salidaRes, entradaRes] = await Promise.all([
-                    axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro-salida`, { params: { placa } }),
-                    axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, { params: { placa } })
-                ]);
-                
-                const odometroSalida = salidaRes.data.lastOdometro || 0;
-                const odometroEntrada = entradaRes.data.lastOdometro || 0;
-                
-                setLastOdometroSalida(odometroSalida);
-                setLastOdometroEntrada(odometroEntrada); // Estado existente
-                
-                // Sugerir valor inicial para entrada (última salida + 1)
-                if (odometroSalida > 0) {
-                    setFormData(prev => ({
-                        ...prev,
-                        odometro: String(Number(odometroSalida) + 1)
-                    }));
-                }
-            } catch (error) {
-                console.error('Error al obtener odómetro:', error);
-            } finally {
-                setLoadingOdometro(false);
-            }
-        };
-        
-        fetchOdometros();
-    }, []);
 
     const handleInputChange = (index: number, value: boolean) => {
         const newRevisiones = [...formData.revisiones];
@@ -94,16 +47,6 @@ function RegistroInspeccionEntrada() {
         navigate("/");
     };
 
-    // Validación en el formulario
-    const validateOdometro = (value: string) => {
-        const numValue = Number(value);
-        if (isNaN(numValue)) return "Debe ser un número válido";
-        if (lastOdometroSalida !== null && numValue <= lastOdometroSalida) {
-            return `Debe ser mayor que el último odómetro de salida (${lastOdometroSalida})`;
-        }
-        return null;
-    };
-
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
             <h1 className="text-2xl font-bold mb-4 text-center">
@@ -122,37 +65,16 @@ function RegistroInspeccionEntrada() {
                             Odómetro de entrada
                         </label>
                         <input
-                            type="number"
+                            type="text"
                             name="odometro"
                             id="odometro"
-                            min={lastOdometro || 0}
                             value={formData.odometro}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                if (value === '' || /^[0-9]*$/.test(value)) {
-                                    setFormData({ ...formData, odometro: value });
-                                }
-                            }}
-                            className={`mt-1 p-2 border rounded w-full ${
-                                lastOdometro !== null && Number(formData.odometro) < lastOdometro 
-                                    ? 'border-red-500 bg-red-50' 
-                                    : ''
-                            }`}
+                            onChange={(e) =>
+                                setFormData({ ...formData, odometro: e.target.value })
+                            }
+                            className="w-full p-2 border rounded mt-1"
                             placeholder="Odómetro de entrada"
-                            required
-                            disabled={loadingOdometro}
                         />
-                        {lastOdometro !== null && (
-                            <p className="text-sm text-gray-500 mt-1">
-                                Último registro: {lastOdometro} (Ingrese igual o mayor)
-                                {Number(formData.odometro) < lastOdometro && (
-                                    <span className="block text-red-500">Ingrese un valor igual o mayor.</span>
-                                )}
-                            </p>
-                        )}
-                        {loadingOdometro && (
-                            <p className="text-sm text-gray-500">Cargando último odómetro...</p>
-                        )}
                     </div>
                     {formData.revisiones.map((item, index) => (
                         <div key={index} className="p-4 bg-gray-50 border rounded">
