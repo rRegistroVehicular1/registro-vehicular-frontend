@@ -38,7 +38,7 @@ function RegistroInspeccionEntrada() {
             setLoadingOdometro(true);
             try {
                 const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-                    params: { placa }
+                    params: { placa, tipo: 'salida' }
                 });
                 
                 const odometro = response.data?.lastOdometro || 0;
