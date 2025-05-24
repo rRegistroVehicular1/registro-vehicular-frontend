@@ -7,7 +7,8 @@ export const handleSubmit = async (
     formData: { revisiones: any[]; observacion: string; odometro: string },
     setIsSubmitting: (value: boolean) => void,
     setFormData: (data: { revisiones: any[]; observacion: string; odometro: string }) => void,
-    navigate: (path: string) => void
+    navigate: (path: string) => void,
+    lastOdometroSalida?: number
 ) => {
     e.preventDefault();
 
@@ -22,6 +23,10 @@ export const handleSubmit = async (
         const odometroNum = Number(formData.odometro);
         if (isNaN(odometroNum) || odometroNum < 0) {
             throw new Error("El odómetro debe ser un número válido");
+        }
+
+        if (lastOdometroSalida !== undefined && odometroNum <= lastOdometroSalida) {
+            throw new Error(`El odómetro de entrada (${odometroNum}) debe ser mayor al último registro de salida (${lastOdometroSalida})`);
         }
 
         setIsSubmitting(true);
