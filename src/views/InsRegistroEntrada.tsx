@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
@@ -20,6 +20,32 @@ function RegistroInspeccionEntrada() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
+
+    const fetchLastOdometroSalida = async () => {
+        const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
+        if (!lastPlacaInfo) return;
+    
+        try {
+            setLoadingOdometro(true);
+            const placaInfo = JSON.parse(lastPlacaInfo);
+            const placa = placaInfo.placa;
+            
+            const response = await fetch(`${BASE_URL}/ins-registro-entrada/last-odometro-salida?placa=${placa}`);
+            const data = await response.json();
+            
+            if (data.lastOdometroSalida !== undefined) {
+                setLastOdometroSalida(Number(data.lastOdometroSalida));
+            }
+        } catch (error) {
+            console.error('Error al obtener último odómetro de salida:', error);
+        } finally {
+            setLoadingOdometro(false);
+        }
+    };
+    
+    useEffect(() => {
+        fetchLastOdometroSalida();
+    }, []);
 
     const handleInputChange = (index: number, value: boolean) => {
         const newRevisiones = [...formData.revisiones];
@@ -65,16 +91,35 @@ function RegistroInspeccionEntrada() {
                             Odómetro de entrada
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             name="odometro"
                             id="odometro"
                             value={formData.odometro}
                             onChange={(e) =>
                                 setFormData({ ...formData, odometro: e.target.value })
                             }
-                            className="w-full p-2 border rounded mt-1"
+                            className={`w-full p-2 border rounded mt-1 ${
+                                lastOdometroSalida !== null && Number(formData.odometro) <= lastOdometroSalida 
+                                    ? 'border-red-500 bg-red-50' 
+                                    : ''
+                            }`}
                             placeholder="Odómetro de entrada"
+                            min={lastOdometroSalida ? lastOdometroSalida + 1 : 0}
+                            disabled={loadingOdometro}
+                            required
                         />
+                        // Mensaje de validación
+                        {lastOdometroSalida !== null && (
+                            <p className="text-sm text-gray-500 mt-1">
+                                Último odómetro de SALIDA registrado: {lastOdometroSalida} 
+                                (El odómetro de ENTRADA debe ser mayor)
+                                {Number(formData.odometro) <= lastOdometroSalida && (
+                                    <span className="block text-red-500">
+                                        El odómetro de entrada debe ser mayor al último odómetro de salida
+                                    </span>
+                                )}
+                            </p>
+                        )}
                     </div>
                     {formData.revisiones.map((item, index) => (
                         <div key={index} className="p-4 bg-gray-50 border rounded">
