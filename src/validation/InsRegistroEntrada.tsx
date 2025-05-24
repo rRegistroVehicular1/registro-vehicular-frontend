@@ -49,16 +49,16 @@ export const handleSubmit = async (
             throw new Error('No se encontró la placa en lastPlacaInfo');
         }
         
-        //Obtiene el ultimo registro de odometro registrado
+        //Obtiene el ultimo registro de SALIDA odometro registrado
         const lastOdometroResponse = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
             params: { placa }
         });
 
-        const lastOdometro = Number(lastOdometroResponse.data.lastOdometro) || 0;
+        const lastOdometroSalida = Number(lastOdometroResponse.data.lastOdometro) || 0;
         
-        // Valida que el odometro actual sea mayor
-        if (odometroNum <= lastOdometro) {
-            throw new Error(`El odómetro de entrada (${odometroNum}) debe ser mayor al último registro (${lastOdometro})`);
+        // Validación de entrada vs salida
+        if (odometroNum <= lastOdometroSalida) {
+            throw new Error(`El odómetro de entrada (${odometroNum}) debe ser mayor al último registro (${lastOdometroSalida})`);
         }
 
         const response = await axios.post(
