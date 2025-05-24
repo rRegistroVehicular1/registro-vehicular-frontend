@@ -7,8 +7,7 @@ export const handleSubmit = async (
     formData: { revisiones: any[]; observacion: string; odometro: string },
     setIsSubmitting: (value: boolean) => void,
     setFormData: (data: { revisiones: any[]; observacion: string; odometro: string }) => void,
-    navigate: (path: string) => void,
-    //lastOdometroSalida?: number
+    navigate: (path: string) => void
 ) => {
     e.preventDefault();
 
@@ -21,13 +20,9 @@ export const handleSubmit = async (
 
         // Validación de odómetro
         const odometroNum = Number(formData.odometro);
-        if (isNaN(odometroNum)) {
+        if (isNaN(odometroNum) || odometroNum < 0) {
             throw new Error("El odómetro debe ser un número válido");
         }
-
-        {/*if (lastOdometroSalida !== undefined && odometroNum <= lastOdometroSalida) {
-            throw new Error(`El odómetro de entrada (${odometroNum}) debe ser mayor al último registro de salida (${lastOdometroSalida})`);
-        }*/}
 
         setIsSubmitting(true);
         
@@ -36,7 +31,6 @@ export const handleSubmit = async (
             throw new Error('No se encontró información del vehículo');
         }
         console.log('La ultima placa es:', lastPlacaInfo);
-        
         // Obtiene la matricula del vehiculo
         const placaInfo = JSON.parse(lastPlacaInfo);
         const placa = placaInfo.placa; // Extrae la placa
@@ -49,16 +43,16 @@ export const handleSubmit = async (
             throw new Error('No se encontró la placa en lastPlacaInfo');
         }
         
-        //Obtiene el ultimo registro de SALIDA odometro registrado
+        //Obtiene el ultimo registro de odometro registrado
         const lastOdometroResponse = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
             params: { placa }
         });
 
-        const lastOdometroSalida = Number(lastOdometroResponse.data.lastOdometro) || 0;
+        const lastOdometro = Number(lastOdometroResponse.data.lastOdometro) || 0;
         
-        // Validación de entrada vs salida
-        if (odometroNum <= lastOdometroSalida) {
-            throw new Error(`El odómetro de entrada (${odometroNum}) debe ser mayor al último registro (${lastOdometroSalida})`);
+        // Valida que el odometro actual sea mayor
+        if (odometroNum <= lastOdometro) {
+            throw new Error(`El odómetro de entrada (${odometroNum}) debe ser mayor al último registro (${lastOdometro})`);
         }
 
         const response = await axios.post(
