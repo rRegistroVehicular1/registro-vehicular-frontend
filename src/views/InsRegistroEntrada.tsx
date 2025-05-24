@@ -99,7 +99,7 @@ function RegistroInspeccionEntrada() {
 
         // Validación de odómetro
         const odometroNum = Number(formData.odometro);
-        if (isNaN(odometroNum) {
+        if (isNaN(odometroNum)) {
             alert("El odómetro debe ser un número válido");
             return false;
         }
