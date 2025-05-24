@@ -156,7 +156,7 @@ function RegistroInspeccionEntrada() {
                         )}
                         {lastOdometro !== null && !loadingOdometro && (
                             <p className="text-sm text-gray-500 mt-1">
-                                Último registro: {lastOdometro} (Ingrese un valor mayor)
+                                Último registro: {lastOdometro}
                                 {Number(formData.odometro) <= lastOdometro && (
                                     <span className="block text-red-500">El valor debe ser mayor al último registro.</span>
                                 )}
