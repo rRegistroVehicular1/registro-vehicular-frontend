@@ -101,7 +101,6 @@ function RegistroInspeccionEntrada() {
                   Último odómetro de salida: <strong>{lastOdometroSalida}</strong>
                 </p>
               )}
-            </form>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="md:col-span-2">
                         <label className="block text-gray-700 font-semibold mb-2">
