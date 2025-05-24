@@ -8,7 +8,7 @@ export const handleSubmit = async (
     setIsSubmitting: (value: boolean) => void,
     setFormData: (data: { revisiones: any[]; observacion: string; odometro: string }) => void,
     navigate: (path: string) => void,
-    lastOdometroSalida?: number
+    //lastOdometroSalida?: number
 ) => {
     e.preventDefault();
 
@@ -21,13 +21,13 @@ export const handleSubmit = async (
 
         // Validación de odómetro
         const odometroNum = Number(formData.odometro);
-        if (isNaN(odometroNum) || odometroNum < 0) {
+        if (isNaN(odometroNum)) {
             throw new Error("El odómetro debe ser un número válido");
         }
 
-        if (lastOdometroSalida !== undefined && odometroNum <= lastOdometroSalida) {
+        {/*if (lastOdometroSalida !== undefined && odometroNum <= lastOdometroSalida) {
             throw new Error(`El odómetro de entrada (${odometroNum}) debe ser mayor al último registro de salida (${lastOdometroSalida})`);
-        }
+        }*/}
 
         setIsSubmitting(true);
         
@@ -36,6 +36,7 @@ export const handleSubmit = async (
             throw new Error('No se encontró información del vehículo');
         }
         console.log('La ultima placa es:', lastPlacaInfo);
+        
         // Obtiene la matricula del vehiculo
         const placaInfo = JSON.parse(lastPlacaInfo);
         const placa = placaInfo.placa; // Extrae la placa
