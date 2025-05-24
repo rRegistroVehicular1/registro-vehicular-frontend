@@ -45,16 +45,6 @@ function RegistroInspeccionEntrada() {
     
       loadLastOdometro();
     }, []);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const odometroNum = Number(formData.odometro);
-        if (lastOdometroSalida !== null && odometroNum <= lastOdometroSalida) {
-            alert(`Error: El odómetro de entrada (${odometroNum}) debe ser mayor al último registro de salida (${lastOdometroSalida})`);
-            return;
-        }
-    };
     
     const handleInputChange = (index: number, value: boolean) => {
         const newRevisiones = [...formData.revisiones];
