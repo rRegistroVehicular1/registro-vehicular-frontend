@@ -71,7 +71,7 @@ function StepTres({
       try {
         console.log('Buscando odometro para la placa:', selectedPlaca);
         const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-            params: { placa: selectedPlaca }
+            params: { placa: selectedPlaca, tipo: 'entrada' }
         });
         
         // Validar respuesta
