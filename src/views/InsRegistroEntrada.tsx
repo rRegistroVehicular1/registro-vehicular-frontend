@@ -46,16 +46,25 @@ function RegistroInspeccionEntrada() {
       loadLastOdometro();
     }, []);
 
-    const handleFormSubmit = async (e: React.FormEvent) => {
+    const handleFormSubmit = async (
+        formData: typeof formData,
+        setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
+        setFormData: React.Dispatch<React.SetStateAction<{
+          revisiones: Revision[];
+          observacion: string;
+          odometro: string;
+        }>>,
+        navigate: ReturnType<typeof useNavigate>
+      ) => {
         await handleSubmit(
-            e,
-            formData,
-            setIsSubmitting,
-            setFormData,
-            navigate,
-            lastOdometroSalida || undefined  // Pasa undefined si es null
+          new Event('submit') as React.FormEvent,
+          formData,
+          setIsSubmitting,
+          setFormData,
+          navigate,
+          lastOdometroSalida || undefined
         );
-    };
+      };
     
     const handleInputChange = (index: number, value: boolean) => {
         const newRevisiones = [...formData.revisiones];
