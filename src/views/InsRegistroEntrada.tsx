@@ -21,13 +21,13 @@ function RegistroInspeccionEntrada() {
     }));
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [lastOdometro, setLastOdometro] = useState<number | null>(null);
+    const [lastOdometroSalida, setLastOdometroSalida] = useState<number | null>(null);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const navigate = useNavigate();
 
     // Obtener el último odómetro cuando se carga el componente
     useEffect(() => {
-        const fetchLastOdometro = async () => {
+        const fetchOdometros = async () => {
             const lastPlacaInfo = localStorage.getItem('lastPlacaInfo');
             if (!lastPlacaInfo) return;
             
@@ -38,18 +38,24 @@ function RegistroInspeccionEntrada() {
                 if (!placa) return;
                 
                 setLoadingOdometro(true);
-                const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-                    params: { placa }
-                });
+
+                // Obtener ambos odómetros en paralelo
+                const [salidaRes, entradaRes] = await Promise.all([
+                    axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro-salida`, { params: { placa } }),
+                    axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, { params: { placa } })
+                ]);
                 
-                const odometro = Number(response.data.lastOdometro) || 0;
-                setLastOdometro(odometro);
+                const odometroSalida = salidaRes.data.lastOdometro || 0;
+                const odometroEntrada = entradaRes.data.lastOdometro || 0;
                 
-                // Sugerir automáticamente el último odómetro como valor inicial
-                if (odometro > 0 && (!formData.odometro || Number(formData.odometro) < odometro)) {
+                setLastOdometroSalida(odometroSalida);
+                setLastOdometroEntrada(odometroEntrada); // Estado existente
+                
+                // Sugerir valor inicial para entrada (última salida + 1)
+                if (odometroSalida > 0) {
                     setFormData(prev => ({
                         ...prev,
-                        odometro: String(odometro)
+                        odometro: String(Number(odometroSalida) + 1)
                     }));
                 }
             } catch (error) {
@@ -59,7 +65,7 @@ function RegistroInspeccionEntrada() {
             }
         };
         
-        fetchLastOdometro();
+        fetchOdometros();
     }, []);
 
     const handleInputChange = (index: number, value: boolean) => {
@@ -86,6 +92,16 @@ function RegistroInspeccionEntrada() {
             });
         }
         navigate("/");
+    };
+
+    // Validación en el formulario
+    const validateOdometro = (value: string) => {
+        const numValue = Number(value);
+        if (isNaN(numValue)) return "Debe ser un número válido";
+        if (lastOdometroSalida !== null && numValue <= lastOdometroSalida) {
+            return `Debe ser mayor que el último odómetro de salida (${lastOdometroSalida})`;
+        }
+        return null;
     };
 
     return (
