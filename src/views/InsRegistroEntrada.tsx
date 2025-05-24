@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { BASE_URL } from '@/validation/url';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
 
