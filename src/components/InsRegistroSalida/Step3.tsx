@@ -231,7 +231,7 @@ function StepTres({
                 />
                 {lastOdometro !== null && (
                     <p className="text-sm text-gray-500 mt-1">
-                        Último registro: {lastOdometro} (Ingrese igual o mayor)
+                        Último registro: {lastOdometro}
                         <span className="block text-red-500">Ingrese un valor igual o mayor.</span>
                     </p>
                 )}
