@@ -27,10 +27,9 @@ function Falla() {
             }
         
             const placas = response.data
-                .map(p => p?.toString().trim())
-                .filter(p => p);
+                .filter(item => item.placa && item.placa.trim() !== '');
   
-            setPlacasList([...new Set(placas)].sort());
+            setPlacasList(placas);
         } catch (error) {
             console.error('Error al obtener placas:', error);
             setPlacasList([]);
@@ -42,6 +41,18 @@ function Falla() {
     useEffect(() => {
         fetchPlacas();
     }, []);
+
+    const handlePlacaChange = (selectedPlaca: string) => {
+        setPlaca(selectedPlaca);
+        
+        // Buscar el vehículo correspondiente a la placa seleccionada
+        const vehiculoSeleccionado = placasList.find(item => item.placa === selectedPlaca);
+        if (vehiculoSeleccionado) {
+            setVehiculo(vehiculoSeleccionado.numeroVehiculo);
+        } else {
+            setVehiculo("");
+        }
+    };
 
     const handleSubmitFalla = async (event: FormEvent) => {
         event.preventDefault();
@@ -116,6 +127,7 @@ function Falla() {
                             type="text"
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
                             placeholder="Número de Vehículo"
+                            readOnly
                         />
                     </div>
                     <div className="w-full md:w-1/2">
@@ -134,9 +146,9 @@ function Falla() {
                             ) : (
                                 <>
                                     <option value="">Seleccione una placa</option>
-                                    {placasList.map((placaItem, index) => (
-                                        <option key={`${placaItem}-${index}`} value={placaItem}>
-                                            {placaItem}
+                                    {placasList.map((item, index) => (
+                                        <option key={`${item.placa}-${index}`} value={item.placa}>
+                                            {item.placa}
                                         </option>
                                     ))}
                                 </>
