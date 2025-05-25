@@ -34,6 +34,10 @@ function Falla() {
         } catch (error) {
             console.error('Error al obtener placas:', error);
             setPlacasList([]);
+        } finally {
+            setLoadingPlacas(false);
+        }
+    };
 
     useEffect(() => {
         fetchPlacas();
@@ -164,5 +168,5 @@ function Falla() {
         </div>
     );
 }
-
+    
 export default Falla;
