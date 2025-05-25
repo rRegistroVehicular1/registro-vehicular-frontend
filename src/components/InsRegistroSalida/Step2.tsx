@@ -15,16 +15,7 @@ function StepDos({ sucursal, setSucursal, onNext }: Step2Props) {
         
         return true;
     };
-
-
-
-
-
-
-
-
-
-
+    
     return (
         <div>
             <div className="mb-4">
