@@ -125,7 +125,6 @@ function Falla() {
                             value={placa}
                             onChange={(e) => setPlaca(e.target.value)}
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
-                            placeholder="Número de Placa"
                             required
                             disabled={loadingPlacas}
                         >
