@@ -20,6 +20,7 @@ function RegistroInspeccionEntrada() {
     }));
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [lastOdometroSalida, setLastOdometroSalida] = useState<number | null>(null);
     const navigate = useNavigate();
 
     const fetchLastOdometroSalida = async () => {
