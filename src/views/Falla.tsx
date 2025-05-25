@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { handleSubmitFallas } from "../validation/Fallas";
 import axios from "axios";
 import { BASE_URL } from "../validation/url";
+import { PlacaInfo } from "@/types/placas";
+
 
 function Falla() {
     const [sucursal, setSucursal] = useState("");
@@ -20,7 +22,7 @@ function Falla() {
     const fetchPlacas = async () => {
         setLoadingPlacas(true);
         try {
-            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+            const response = await axios.get<PlacaInfo[]>(`${BASE_URL}/placas/get-data-placas`);
 
             if (!response.data || !Array.isArray(response.data)) {
                 throw new Error('Formato de respuesta inválido');
@@ -134,7 +136,7 @@ function Falla() {
                         <label className="block text-gray-700">N° Placa:</label>
                         <select
                             value={placa}
-                            onChange={(e) => setPlaca(e.target.value)}
+                            onChange={(e) => handlePlacaChange(e.target.value)}
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
                             required
                             disabled={loadingPlacas}
