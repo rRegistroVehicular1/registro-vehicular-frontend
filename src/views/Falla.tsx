@@ -4,66 +4,25 @@ import { handleSubmitFallas } from "../validation/Fallas";
 import axios from "axios";
 import { BASE_URL } from "../validation/url";
 
-interface PlacaData {
-  placa: string;
-  numeroVehiculo: string;
-}
-
 function Falla() {
 
     const [sucursal, setSucursal] = useState("");
-    const [fecha, setFecha] = useState("");
-    const [conductor, setConductor] = useState("");
-    const [vehiculo, setVehiculo] = useState("");
-    const [placa, setPlaca] = useState("");
-    const [detalles, setDetalles] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [placasList, setPlacasList] = useState<string[]>([]);
-    const [loadingPlacas, setLoadingPlacas] = useState(true);
 
-    const navigate = useNavigate();
-
-    const fetchPlacas = async () => {
-        setLoadingPlacas(true);
-        try {
-            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-            
             if (!response.data || !Array.isArray(response.data)) {
                 throw new Error('Formato de respuesta inválido');
             }
-
-            const placasData = response.data
-                .filter(item => item && item.length >= 3 && item[0] && item[2]) // Filtramos items válidos
-                .map(item => ({
-                    numeroVehiculo: item[0]?.toString().trim(),
-                    placa: item[2]?.toString().trim()
-                }))
-                .filter(item => item.placa && item.numeroVehiculo); // Filtramos items con datos completos
-            
-            setPlacasList(placasData);
+        
+            const placas = response.data
+                .map(p => p?.toString().trim())
+                .filter(p => p);
+  
+            setPlacasList([...new Set(placas)].sort());
         } catch (error) {
             console.error('Error al obtener placas:', error);
             setPlacasList([]);
-        } finally {
-            setLoadingPlacas(false);
-        }
-    };
 
-    useEffect(() => {
         fetchPlacas();
     }, []);
-
-    const handlePlacaChange = (selectedPlaca: string) => {
-        setPlaca(selectedPlaca);
-        
-        // Buscar el vehículo correspondiente a la placa seleccionada
-        const vehiculoSeleccionado = placasList.find(item => item.placa === selectedPlaca);
-        if (vehiculoSeleccionado) {
-            setVehiculo(vehiculoSeleccionado.numeroVehiculo);
-        } else {
-            setVehiculo(""); // Limpiar si no se encuentra
-        }
-    };
 
     const handleSubmitFalla = async (event: FormEvent) => {
         event.preventDefault();
@@ -82,7 +41,7 @@ function Falla() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-            <h1 className="text-2xl font-bold mb-4 text-center">R07-PT-19 REPORTE DE FALLAS</h1>
+            <h1 className="text-2xl font-bold mb-4 text-center">R07-PT-19 REVISIÓN DE VEHÍCULOS</h1>
             <form
                 onSubmit={handleSubmitFalla}
                 className="w-full max-w-3xl bg-white p-6 rounded shadow-md space-y-4"
@@ -103,8 +62,8 @@ function Falla() {
                             <option value="(SU04) Chorrera Planta">Chorrera Planta</option>
                             <option value="(SU05) Colón">Colón</option>
                             <option value="(SU06) Juan Díaz">Juan Díaz</option>
-                            <option value="(SU08) Aguadulce">Aguadulce</option>
-                            <option value="(SU09) Los Santos">Los Santos</option>
+                            <option value="(SU07) Aguadulce">Aguadulce</option>
+                            <option value="(SU08) Los Santos">Los Santos</option>
                         </select>
                     </div>
                     <div className="w-full md:w-1/2">
@@ -138,7 +97,6 @@ function Falla() {
                             type="text"
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
                             placeholder="Número de Vehículo"
-                            readOnly
                         />
                     </div>
                     <div className="w-full md:w-1/2">
@@ -157,9 +115,9 @@ function Falla() {
                             ) : (
                                 <>
                                     <option value="">Seleccione una placa</option>
-                                    {placasList.map((item, index) => (
-                                        <option key={`${item.placa}-${index}`} value={item.placa}>
-                                            {item.placa}
+                                    {placasList.map((placaItem, index) => (
+                                        <option key={`${placaItem}-${index}`} value={placaItem}>
+                                            {placaItem}
                                         </option>
                                     ))}
                                 </>
@@ -188,7 +146,6 @@ function Falla() {
                     </button>
                 </div>
             </form>
-
         </div>
     );
 }
