@@ -1,12 +1,9 @@
-import { FormEvent, useState, useEffect } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleSubmitFallas } from "../validation/Fallas";
-import axios from "axios";
-import { BASE_URL } from "../validation/url";
-import { PlacaInfo } from "@/types/placas";
-
 
 function Falla() {
+
     const [sucursal, setSucursal] = useState("");
     const [fecha, setFecha] = useState("");
     const [conductor, setConductor] = useState("");
@@ -14,44 +11,8 @@ function Falla() {
     const [placa, setPlaca] = useState("");
     const [detalles, setDetalles] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [placasList, setPlacasList] = useState<string[]>([]);
-    const [loadingPlacas, setLoadingPlacas] = useState(true);
 
     const navigate = useNavigate();
-
-    const fetchPlacas = async () => {
-        setLoadingPlacas(true);
-        try {
-            const response = await axios.get<PlacaInfo[]>(`${BASE_URL}/placas/get-data-placas`);
-
-            if (!response.data || !Array.isArray(response.data)) {
-                throw new Error('Formato de respuesta inválido');
-            }
-        
-            const placas = response.data
-                .filter(item => item?.placa && item.placa.trim() !== '');
-  
-            setPlacasList(placas);
-        } catch (error) {
-            console.error('Error al obtener placas:', error);
-            setPlacasList([]);
-        } finally {
-            setLoadingPlacas(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchPlacas();
-    }, []);
-
-    const handlePlacaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedPlaca = e.target.value;
-        setPlaca(selectedPlaca);
-        
-        // Buscar el vehículo correspondiente a la placa seleccionada
-        const vehiculoSeleccionado = placasList.find(item => item.placa === selectedPlaca);
-        setVehiculo(vehiculoSeleccionado?.numeroVehiculo || "");
-    };
 
     const handleSubmitFalla = async (event: FormEvent) => {
         event.preventDefault();
@@ -91,8 +52,8 @@ function Falla() {
                             <option value="(SU04) Chorrera Planta">Chorrera Planta</option>
                             <option value="(SU05) Colón">Colón</option>
                             <option value="(SU06) Juan Díaz">Juan Díaz</option>
-                            <option value="(SU07) Aguadulce">Aguadulce</option>
-                            <option value="(SU08) Los Santos">Los Santos</option>
+                            <option value="(SU08) Aguadulce">Aguadulce</option>
+                            <option value="(SU09) Los Santos">Los Santos</option>
                         </select>
                     </div>
                     <div className="w-full md:w-1/2">
@@ -126,33 +87,17 @@ function Falla() {
                             type="text"
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
                             placeholder="Número de Vehículo"
-                            readOnly
                         />
                     </div>
                     <div className="w-full md:w-1/2">
                         <label className="block text-gray-700">N° Placa:</label>
-                        <select
+                        <input
                             value={placa}
-                            onChange={handlePlacaChange}
+                            onChange={(e) => setPlaca(e.target.value)}
+                            type="text"
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
-                            required
-                            disabled={loadingPlacas}
-                        >
-                            {loadingPlacas ? (
-                                <option value="">Cargando placas...</option>
-                            ) : placasList.length === 0 ? (
-                                <option value="" disabled>No hay placas registradas</option>
-                            ) : (
-                                <>
-                                    <option value="">Seleccione una placa</option>
-                                    {placasList.map((item, index) => (
-                                        <option key={`${item.placa}-${index}`} value={item.placa}>
-                                            {item.placa}
-                                        </option>
-                                    ))}
-                                </>
-                            )}
-                        </select>
+                            placeholder="Número de Placa"
+                        />
                     </div>
                 </div>
 
@@ -176,8 +121,10 @@ function Falla() {
                     </button>
                 </div>
             </form>
+
         </div>
     );
 }
-    
+
 export default Falla;
+
