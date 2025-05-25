@@ -110,13 +110,12 @@ function RegistroInspeccionEntrada() {
                                 disabled={loadingOdometro}
                                 placeholder="Odómetro de entrada"            
                             />
-                            // Mensaje de validación
                             {lastOdometroSalida !== null && (
                                 <p className="text-sm text-gray-500 mt-1">
-                                    Último odómetro de SALIDA registrado: {lastOdometroSalida} 
+                                    Último odómetro de SALIDA: {lastOdometroSalida} 
                                     {Number(formData.odometro) <= lastOdometroSalida && (
                                         <span className="block text-red-500">
-                                            El odómetro de entrada debe ser mayor al último odómetro de salida
+                                            (El odómetro de entrada debe ser mayor al último odómetro de salida.)
                                         </span>
                                     )}
                                 </p>
