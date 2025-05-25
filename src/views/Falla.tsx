@@ -35,6 +35,7 @@ function Falla() {
             console.error('Error al obtener placas:', error);
             setPlacasList([]);
 
+    useEffect(() => {
         fetchPlacas();
     }, []);
 
