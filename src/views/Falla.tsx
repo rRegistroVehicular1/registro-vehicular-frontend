@@ -29,7 +29,7 @@ function Falla() {
             }
         
             const placas = response.data
-                .filter(item => item.placa && item.placa.trim() !== '');
+                .filter(item => item?.placa && item.placa.trim() !== '');
   
             setPlacasList(placas);
         } catch (error) {
@@ -44,16 +44,13 @@ function Falla() {
         fetchPlacas();
     }, []);
 
-    const handlePlacaChange = (selectedPlaca: string) => {
+    const handlePlacaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedPlaca = e.target.value;
         setPlaca(selectedPlaca);
         
         // Buscar el vehículo correspondiente a la placa seleccionada
         const vehiculoSeleccionado = placasList.find(item => item.placa === selectedPlaca);
-        if (vehiculoSeleccionado) {
-            setVehiculo(vehiculoSeleccionado.numeroVehiculo);
-        } else {
-            setVehiculo("");
-        }
+        setVehiculo(vehiculoSeleccionado?.numeroVehiculo || "");
     };
 
     const handleSubmitFalla = async (event: FormEvent) => {
@@ -136,7 +133,7 @@ function Falla() {
                         <label className="block text-gray-700">N° Placa:</label>
                         <select
                             value={placa}
-                            onChange={(e) => handlePlacaChange(e.target.value)}
+                            onChange={handlePlacaChange}
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
                             required
                             disabled={loadingPlacas}
