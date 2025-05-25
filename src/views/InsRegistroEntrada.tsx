@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getInitialFormData, Revision } from '../components/InsRegistroEntrada/Variables/Variables1';
 import { handleSubmit } from '../validation/InsRegistroEntrada';
+import { BASE_URL } from '../validation/url'; // Asegúrate de que esta constante esté definida
 
 function RegistroInspeccionEntrada() {
 
