@@ -92,37 +92,36 @@ function RegistroInspeccionEntrada() {
                     <div className="md:col-span-2">
                         <label className="block text-gray-700 font-semibold mb-2">
                             Odómetro de entrada
+                            <input
+                                type="number"
+                                name="odometro"
+                                id="odometro"
+                                min={lastOdometroSalida ? lastOdometroSalida + 1 : 0}
+                                value={formData.odometro}
+                                onChange={(e) =>
+                                    setFormData({ ...formData, odometro: e.target.value })
+                                }
+                                className={`mt-1 p-2 border rounded w-full${
+                                    lastOdometroSalida !== null && Number(formData.odometro) <= lastOdometroSalida 
+                                        ? 'border-red-500 bg-red-50' 
+                                        : ''
+                                    }`}
+                                required
+                                disabled={loadingOdometro}
+                                placeholder="Odómetro de entrada"            
+                            />
+                            // Mensaje de validación
+                            {lastOdometroSalida !== null && (
+                                <p className="text-sm text-gray-500 mt-1">
+                                    Último odómetro de SALIDA registrado: {lastOdometroSalida} 
+                                    {Number(formData.odometro) <= lastOdometroSalida && (
+                                        <span className="block text-red-500">
+                                            El odómetro de entrada debe ser mayor al último odómetro de salida
+                                        </span>
+                                    )}
+                                </p>
+                            )}
                         </label>
-                        <input
-                            type="number"
-                            name="odometro"
-                            id="odometro"
-                            value={formData.odometro}
-                            onChange={(e) =>
-                                setFormData({ ...formData, odometro: e.target.value })
-                            }
-                            className={`w-full p-2 border rounded mt-1 ${
-                                lastOdometroSalida !== null && Number(formData.odometro) <= lastOdometroSalida 
-                                    ? 'border-red-500 bg-red-50' 
-                                    : ''
-                            }`}
-                            placeholder="Odómetro de entrada"
-                            min={lastOdometroSalida ? lastOdometroSalida + 1 : 0}
-                            disabled={loadingOdometro}
-                            required
-                        />
-                        // Mensaje de validación
-                        {lastOdometroSalida !== null && (
-                            <p className="text-sm text-gray-500 mt-1">
-                                Último odómetro de SALIDA registrado: {lastOdometroSalida} 
-                                (El odómetro de ENTRADA debe ser mayor)
-                                {Number(formData.odometro) <= lastOdometroSalida && (
-                                    <span className="block text-red-500">
-                                        El odómetro de entrada debe ser mayor al último odómetro de salida
-                                    </span>
-                                )}
-                            </p>
-                        )}
                     </div>
                     {formData.revisiones.map((item, index) => (
                         <div key={index} className="p-4 bg-gray-50 border rounded">
