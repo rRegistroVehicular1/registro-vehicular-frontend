@@ -1,6 +1,8 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleSubmitFallas } from "../validation/Fallas";
+import axios from "axios";
+import { BASE_URL } from "../validation/url";
 
 function Falla() {
 
@@ -11,8 +13,36 @@ function Falla() {
     const [placa, setPlaca] = useState("");
     const [detalles, setDetalles] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [placasList, setPlacasList] = useState<string[]>([]);
+    const [loadingPlacas, setLoadingPlacas] = useState(true);
 
     const navigate = useNavigate();
+
+    const fetchPlacas = async () => {
+        setLoadingPlacas(true);
+        try {
+            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+            
+            if (!response.data || !Array.isArray(response.data)) {
+                throw new Error('Formato de respuesta inválido');
+            }
+        
+            const placas = response.data
+                .map(p => p?.toString().trim())
+                .filter(p => p);
+            
+            setPlacasList([...new Set(placas)].sort());
+        } catch (error) {
+            console.error('Error al obtener placas:', error);
+            setPlacasList([]);
+        } finally {
+            setLoadingPlacas(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPlacas();
+    }, []);
 
     const handleSubmitFalla = async (event: FormEvent) => {
         event.preventDefault();
@@ -31,7 +61,7 @@ function Falla() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-            <h1 className="text-2xl font-bold mb-4 text-center">R07-PT-19 REVISIÓN DE VEHÍCULOS</h1>
+            <h1 className="text-2xl font-bold mb-4 text-center">R07-PT-19 REPORTE DE FALLAS</h1>
             <form
                 onSubmit={handleSubmitFalla}
                 className="w-full max-w-3xl bg-white p-6 rounded shadow-md space-y-4"
@@ -91,13 +121,29 @@ function Falla() {
                     </div>
                     <div className="w-full md:w-1/2">
                         <label className="block text-gray-700">N° Placa:</label>
-                        <input
+                        <select
                             value={placa}
                             onChange={(e) => setPlaca(e.target.value)}
-                            type="text"
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
                             placeholder="Número de Placa"
-                        />
+                            required
+                            disabled={loadingPlacas}
+                        >
+                            {loadingPlacas ? (
+                                <option value="">Cargando placas...</option>
+                            ) : placasList.length === 0 ? (
+                                <option value="" disabled>No hay placas registradas</option>
+                            ) : (
+                                <>
+                                    <option value="">Seleccione una placa</option>
+                                    {placasList.map((placaItem, index) => (
+                                        <option key={`${placaItem}-${index}`} value={placaItem}>
+                                            {placaItem}
+                                        </option>
+                                    ))}
+                                </>
+                            )}
+                        </select>
                     </div>
                 </div>
 
