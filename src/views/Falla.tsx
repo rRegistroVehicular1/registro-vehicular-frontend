@@ -5,8 +5,22 @@ import axios from "axios";
 import { BASE_URL } from "../validation/url";
 
 function Falla() {
-
     const [sucursal, setSucursal] = useState("");
+    const [fecha, setFecha] = useState("");
+    const [conductor, setConductor] = useState("");
+    const [vehiculo, setVehiculo] = useState("");
+    const [placa, setPlaca] = useState("");
+    const [detalles, setDetalles] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [placasList, setPlacasList] = useState<string[]>([]);
+    const [loadingPlacas, setLoadingPlacas] = useState(true);
+
+    const navigate = useNavigate();
+
+    const fetchPlacas = async () => {
+        setLoadingPlacas(true);
+        try {
+            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
 
             if (!response.data || !Array.isArray(response.data)) {
                 throw new Error('Formato de respuesta inválido');
