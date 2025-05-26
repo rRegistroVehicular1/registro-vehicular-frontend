@@ -110,16 +110,6 @@ function Falla() {
 
                 <div className="flex flex-col md:flex-row justify-between md:space-x-4 space-y-4 md:space-y-0">
                     <div className="w-full md:w-1/2">
-                        <label className="block text-gray-700">N° de Vehículo:</label>
-                        <input
-                            value={vehiculo}
-                            onChange={(e) => setVehiculo(e.target.value)}
-                            type="text"
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                            placeholder="Número de Vehículo"
-                        />
-                    </div>
-                    <div className="w-full md:w-1/2">
                         <label className="block text-gray-700">N° Placa:</label>
                         <select
                             value={placa}
@@ -143,6 +133,16 @@ function Falla() {
                                 </>
                             )}
                         </select>
+                    </div>
+                    <div className="w-full md:w-1/2">
+                        <label className="block text-gray-700">N° de Vehículo:</label>
+                        <input
+                            value={vehiculo}
+                            onChange={(e) => setVehiculo(e.target.value)}
+                            type="text"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded"
+                            placeholder="Número de Vehículo"
+                        />
                     </div>
                 </div>
 
