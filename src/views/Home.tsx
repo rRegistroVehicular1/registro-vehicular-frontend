@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { handleSubmit } from "../validation/Home";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BASE_URL } from "../validation/url";
 
 function Home() {
   const [placa, setPlaca] = useState("");
   const [error, setError] = useState("");
+  const [isChecking, setIsChecking] = useState(false);
   const navigate = useNavigate();
 
   const handleClear = () => {
@@ -12,19 +15,59 @@ function Home() {
     setError("");
   };
 
+  const checkPlacaExists = async (placa: string) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+      const placasList = response.data.map(p => p?.toString().trim().toUpperCase()).filter(p => p);
+      return placasList.includes(placa.trim().toUpperCase());
+    } catch (error) {
+      console.error("Error al verificar placa:", error);
+      return false;
+    }
+  };
+  
   const handleCheckPlaca = async () => {
-    const result = await handleSubmit(placa, setError);
+    if (!placa.trim()) {
+      setError("El campo de placa es obligatorio.");
+      return;
+    }
 
-    if (result.data?.rowIndex > 0) {
-      //localStorage.setItem("lastPlacaInfo", JSON.stringify(result.data.rowIndex));
-      localStorage.setItem("lastPlacaInfo", JSON.stringify({ rowIndex: result.data.rowIndex, placa: placa}) // Guarda la placa junto al índice    
-    );
-      navigate("/registro-inspeccion-entrada");
-    } else if (typeof result.data?.rowIndex === "undefined" || result.data?.rowIndex === null) {
-      alert("Esta placa no esta registrada");
-      navigate("/registro-inspeccion-salida");
-    } else {
-      alert("Error: No se pudo determinar el estado de la placa.");
+    setIsChecking(true);
+    setError("");
+
+    try{
+      // Primero verificar si la placa existe en la lista
+      const placaExists = await checkPlacaExists(placa);
+      
+      if (!placaExists) {
+        setError("Esta placa no está registrada en el sistema.");
+        setIsChecking(false);
+        return;
+      }
+
+      // Si existe, proceder con la lógica actual  
+      const result = await handleSubmit(placa, setError);
+  
+      if (result.data?.rowIndex > 0) {
+        
+        localStorage.setItem("lastPlacaInfo", JSON.stringify({ rowIndex: result.data.rowIndex, placa: placa}) // Guarda la placa junto al índice    
+      );
+          if (result.data?.estado === "entrada"){
+          navigate("/registro-inspeccion-entrada");
+        } else {
+          alert("Esta placa no esta registrada");
+          navigate("/registro-inspeccion-salida");
+          }
+      } else {
+        // Si no hay rowIndex pero la placa existe, ir a registro salida
+        navigate("/registro-inspeccion-salida");
+        alert("Error: No se pudo determinar el estado de la placa.");
+      }
+    }catch (error) {
+      console.error("Error:", error);
+      setError("Ocurrió un error al procesar la placa.");
+    } finally {
+      setIsChecking(false);
     }
   };
 
@@ -35,7 +78,10 @@ function Home() {
       </h1>
       <form
         className="w-full max-w-sm sm:max-w-md bg-white p-4 sm:p-6 rounded-lg shadow-md"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleCheckPlaca();
+        }}
       >
         <label className="block mb-4">
           <span className="text-gray-700">Ingrese su placa: </span>
@@ -62,8 +108,9 @@ function Home() {
             type="button"
             onClick={handleCheckPlaca}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full text-sm sm:text-base"
+            disabled={isChecking}
           >
-            Enviar
+            {isChecking ? 'Verificando...' : 'Enviar'}
           </button>
         </div>
       </form>
