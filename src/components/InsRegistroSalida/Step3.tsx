@@ -36,28 +36,51 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
+    const [placaTipoMap, setPlacaTipoMap] = useState<Record<string, string>>({});
 
-    const fetchPlacas = async () => {
+    const fetchPlacasAndTypes = async () => {
       setLoadingPlacas(true);
       try {
-        const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+            const response = await axios.get(`${BASE_URL}/placas/get-placas-and-types`);
+            
+            if (!response.data || !response.data.placas || !response.data.placaTipoMap) {
+              throw new Error('Formato de respuesta inválido');
+            }
         
-        if (!response.data || !Array.isArray(response.data)) {
-          throw new Error('Formato de respuesta inválido');
-        }
-    
-        const placas = response.data
-          .map(p => p?.toString().trim())
-          .filter(p => p);
-        
-        setPlacasList([...new Set(placas)].sort());
+            const { placas, placaTipoMap } = response.data;
+            
+            setPlacasList([...new Set(placas)].sort());
+            setPlacaTipoMap(placaTipoMap);
+
+            // Si ya hay una placa seleccionada, actualizar el tipo de vehículo
+            if (placa && placaTipoMap[placa]) {
+                const tipo = placaTipoMap[placa];
+                setTipoVehiculo(tipo);
+                actualizarLlantasPorTipo(tipo);
+            }
       } catch (error) {
-        console.error('Error al obtener placas:', error);
-        setPlacasList([]);
-        alert('Error al cargar las placas disponibles');
+            console.error('Error al obtener placas y tipos:', error);
+            setPlacasList([]);
+            setPlacaTipoMap({});
+            alert('Error al cargar las placas y tipos de vehículo disponibles');
       } finally {
         setLoadingPlacas(false);
       }
+    };
+
+    const handlePlacaChange = (selectedPlaca: string) => {
+        setPlaca(selectedPlaca);
+        
+        // Actualizar el tipo de vehículo si existe en el mapa
+        if (selectedPlaca && placaTipoMap[selectedPlaca]) {
+            const tipo = placaTipoMap[selectedPlaca];
+            setTipoVehiculo(tipo);
+            actualizarLlantasPorTipo(tipo);
+        } else {
+            setTipoVehiculo(''); // Resetear si no hay tipo asociado
+        }
+        
+        fetchLastOdometro(selectedPlaca);
     };
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
@@ -105,6 +128,10 @@ function StepTres({
         fetchPlacas();
     }, []);
 
+    useEffect(() => {
+        fetchPlacasAndTypes(); // Cambiar a la nueva función
+    }, []);
+    
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
@@ -157,7 +184,7 @@ function StepTres({
                 <select
                     value={placa}
                     onChange={(e) => {
-                        console.log("Placa seleccionada en onChange:", e.target.value); // Debug
+                        console.log("Placa seleccionada en onChange:", handlePlacaChange(e.target.value)); // Debug
                         setPlaca(e.target.value);
                         fetchLastOdometro(e.target.value);
                     }}
