@@ -124,9 +124,9 @@ function StepTres({
       }
     };
     
-    useEffect(() => {
+    {/*useEffect(() => {
         fetchPlacas();
-    }, []);
+    }, []);*/}
 
     useEffect(() => {
         fetchPlacasAndTypes(); // Cambiar a la nueva función
