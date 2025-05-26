@@ -62,7 +62,7 @@ function Home() {
       } else {
         // Si no hay rowIndex pero la placa existe, ir a registro salida
         navigate("/registro-inspeccion-salida");
-        alert("Error: No se pudo determinar el estado de la placa.");
+        //alert("Error: No se pudo determinar el estado de la placa.");
       }
     }catch (error) {
       console.error("Error:", error);
