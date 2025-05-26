@@ -15,10 +15,12 @@ function Home() {
     setError("");
   };
 
-  const checkPlacaExists = async (placa: string) => {
+  const checkPlacaExists = async (placa: string): Promise<boolean> => {
     try {
-      const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-      const placasList = response.data.map(p => p?.toString().trim().toUpperCase()).filter(p => p);
+      const response = await axios.get<string[]>(`${BASE_URL}/placas/get-data-placas`);
+      const placasList = response.data
+        .map((p: string) => p?.toString().trim().toUpperCase())
+        .filter((p: string) => p);
       return placasList.includes(placa.trim().toUpperCase());
     } catch (error) {
       console.error("Error al verificar placa:", error);
@@ -49,7 +51,6 @@ function Home() {
       const result = await handleSubmit(placa, setError);
   
       if (result.data?.rowIndex > 0) {
-        
         localStorage.setItem("lastPlacaInfo", JSON.stringify({ rowIndex: result.data.rowIndex, placa: placa}) // Guarda la placa junto al índice    
       );
           if (result.data?.estado === "entrada"){
@@ -105,7 +106,7 @@ function Home() {
             Cancelar
           </button>
           <button
-            type="button"
+            type="submit"
             onClick={handleCheckPlaca}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full text-sm sm:text-base"
             disabled={isChecking}
