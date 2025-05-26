@@ -15,6 +15,7 @@ function Falla() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [placasList, setPlacasList] = useState<string[]>([]);
     const [loadingPlacas, setLoadingPlacas] = useState(true);
+    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
 
     const navigate = useNavigate();
 
@@ -40,9 +41,32 @@ function Falla() {
         }
     };
 
+    // Función para obtener el mapeo de placas a vehículos
+    const fetchVehiculos = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/placas/get-vehiculos`);
+            setVehiculosMap(response.data);
+        } catch (error) {
+            console.error('Error al obtener vehículos:', error);
+        }
+    }
+
     useEffect(() => {
+        fetchVehiculos();
         fetchPlacas();
     }, []);
+
+    // Función para manejar el cambio de placa
+    const handlePlacaChange = (selectedPlaca: string) => {
+        setPlaca(selectedPlaca);
+        
+        // Buscar el vehículo correspondiente a la placa seleccionada
+        if (vehiculosMap[selectedPlaca]) {
+            setVehiculo(vehiculosMap[selectedPlaca]);
+        } else {
+            setVehiculo(''); // Limpiar si no se encuentra
+        }
+    };
 
     const handleSubmitFalla = async (event: FormEvent) => {
         event.preventDefault();
@@ -113,7 +137,7 @@ function Falla() {
                         <label className="block text-gray-700">N° Placa:</label>
                         <select
                             value={placa}
-                            onChange={(e) => setPlaca(e.target.value)}
+                            onChange={(e) => handlePlacaChange(e.target.value)}
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
                             required
                             disabled={loadingPlacas}
