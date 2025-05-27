@@ -36,7 +36,29 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
+    const [placasYTipo, setPlacasYTipo] = useState<Record<string, string>>({});
 
+    // Función para obtener el mapeo de placas a tipos de vehículo
+    const fetchPlacasYTipo = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/placas/get-placas-y-tipos`);
+            if (response.data && typeof response.data === 'object') {
+                setPlacasYTipo(response.data);
+            }
+        } catch (error) {
+            console.error('Error al obtener el mapeo de placas y tipos:', error);
+        }
+    };
+
+    // Función para autocompletar el tipo de vehículo cuando se selecciona una placa
+    const autocompletarTipoVehiculo = (placaSeleccionada: string) => {
+        if (placaSeleccionada && placasYTipo[placaSeleccionada]) {
+            const tipo = placasYTipo[placaSeleccionada];
+            setTipoVehiculo(tipo);
+            actualizarLlantasPorTipo(tipo);
+        }
+    };
+    
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
       try {
@@ -108,6 +130,7 @@ function StepTres({
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
+            autocompletarTipoVehiculo(placa);
         } else {
         setLastOdometro(null);
         }
