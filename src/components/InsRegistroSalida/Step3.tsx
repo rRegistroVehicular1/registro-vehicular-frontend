@@ -45,11 +45,6 @@ function StepTres({
             setVehiculosMap(response.data);
         } catch (error) {
             console.error('Error al obtener placas y tipos:', error);
-            setPlacasList([]);
-            setVehiculosMap({});
-            alert('Error al cargar los datos de vehículos');
-        } finally {
-            setLoadingPlacas(false);
         }
     };
     
