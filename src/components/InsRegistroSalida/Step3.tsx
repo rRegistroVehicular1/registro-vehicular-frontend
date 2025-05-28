@@ -213,10 +213,12 @@ function StepTres({
             <label className="block mb-4">
                 Tipo de Vehículo:
                 <input
-                    type="text"
                     value={tipoVehiculo}
-                    readOnly
+                    onChange={(e) => setVehiculosMap(e.target.value)}
+                    type="text"
                     className="mt-1 p-2 border rounded w-full bg-gray-100"
+                    placeholder="Tipo de Vehículo"
+                    readOnly
                 />  
             </label>
 
