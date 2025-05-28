@@ -38,7 +38,7 @@ function StepTres({
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
 
-    / Nuevo método independiente para obtener placas y tipos de vehículo
+    // Nuevo método independiente para obtener placas y tipos de vehículo
     const fetchPlacasYTipoVehiculo = async () => {
         setLoadingPlacas(true);
         try {
