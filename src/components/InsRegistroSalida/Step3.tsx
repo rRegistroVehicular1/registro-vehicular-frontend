@@ -113,9 +113,15 @@ function StepTres({
     };
     
     useEffect(() => {
-        fetchPlacasYTipoVehiculo();
         fetchPlacas();
     }, []);
+
+    useEffect(() => {
+        if (placa && vehiculosMap[placa]) {
+            setTipoVehiculo(vehiculosMap[placa]);
+            actualizarLlantasPorTipo(vehiculosMap[placa]);
+        }
+    }, [placa, vehiculosMap]);
 
     useEffect(() => {
         if (placa) {
