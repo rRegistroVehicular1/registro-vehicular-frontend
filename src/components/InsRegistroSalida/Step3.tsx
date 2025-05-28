@@ -40,29 +40,9 @@ function StepTres({
 
     // Nuevo método independiente para obtener placas y tipos de vehículo
     const fetchPlacasYTipoVehiculo = async () => {
-        setLoadingPlacas(true);
         try {
             const response = await axios.get(`${BASE_URL}/placas/get-placas-y-tipos`);
-            
-            if (!response.data || !Array.isArray(response.data)) {
-                throw new Error('Formato de respuesta inválido');
-            }
-            
-            // Procesar datos para obtener lista de placas
-            const placas = response.data
-                .map(item => item?.placa?.toString().trim())
-                .filter(placa => placa);
-            
-            // Crear mapeo de placa a tipo de vehículo
-            const map: Record<string, string> = {};
-            response.data.forEach(item => {
-                if (item.placa && item.tipoVehiculo) {
-                    map[item.placa.toString().trim()] = item.tipoVehiculo.toString().trim().toLowerCase();
-                }
-            });
-            
-            setPlacasList([...new Set(placas)].sort());
-            setVehiculosMap(map);
+            setVehiculosMap(response.data);
         } catch (error) {
             console.error('Error al obtener placas y tipos:', error);
             setPlacasList([]);
@@ -145,17 +125,10 @@ function StepTres({
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
-            
-            // Autocompletar tipo de vehículo cuando se selecciona una placa
-            if (vehiculosMap[placa]) {
-                const tipo = vehiculosMap[placa];
-                setTipoVehiculo(tipo);
-                actualizarLlantasPorTipo(tipo);
-            }
         } else {
         setLastOdometro(null);
         }
-    }, [placa, vehiculosMap]);
+    }, [placa]);
 
     useEffect(() => {
         if (odometroSalida && lastOdometro !== null) {
