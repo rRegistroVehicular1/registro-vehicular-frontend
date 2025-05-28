@@ -36,7 +36,43 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
+    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
 
+    / Nuevo método independiente para obtener placas y tipos de vehículo
+    const fetchPlacasYTipoVehiculo = async () => {
+        setLoadingPlacas(true);
+        try {
+            const response = await axios.get(`${BASE_URL}/placas/get-placas-y-tipos`);
+            
+            if (!response.data || !Array.isArray(response.data)) {
+                throw new Error('Formato de respuesta inválido');
+            }
+            
+            // Procesar datos para obtener lista de placas
+            const placas = response.data
+                .map(item => item?.placa?.toString().trim())
+                .filter(placa => placa);
+            
+            // Crear mapeo de placa a tipo de vehículo
+            const map: Record<string, string> = {};
+            response.data.forEach(item => {
+                if (item.placa && item.tipoVehiculo) {
+                    map[item.placa.toString().trim()] = item.tipoVehiculo.toString().trim().toLowerCase();
+                }
+            });
+            
+            setPlacasList([...new Set(placas)].sort());
+            setVehiculosMap(map);
+        } catch (error) {
+            console.error('Error al obtener placas y tipos:', error);
+            setPlacasList([]);
+            setVehiculosMap({});
+            alert('Error al cargar los datos de vehículos');
+        } finally {
+            setLoadingPlacas(false);
+        }
+    };
+    
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
       try {
@@ -102,16 +138,24 @@ function StepTres({
     };
     
     useEffect(() => {
+        fetchPlacasYTipoVehiculo();
         fetchPlacas();
     }, []);
 
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
+            
+            // Autocompletar tipo de vehículo cuando se selecciona una placa
+            if (vehiculosMap[placa]) {
+                const tipo = vehiculosMap[placa];
+                setTipoVehiculo(tipo);
+                actualizarLlantasPorTipo(tipo);
+            }
         } else {
         setLastOdometro(null);
         }
-    }, [placa]);
+    }, [placa, vehiculosMap]);
 
     useEffect(() => {
         if (odometroSalida && lastOdometro !== null) {
@@ -195,18 +239,12 @@ function StepTres({
 
             <label className="block mb-4">
                 Tipo de Vehículo:
-                <select
+                <input
+                    type="text"
                     value={tipoVehiculo}
-                    onChange={(e) => handleTipoVehiculoChange(e.target.value)}
-                    className="mt-1 p-2 border rounded w-full"
-                    required
-                >
-                    <option value="">Seleccione un tipo</option>
-                    <option value="sedan">Sedán</option>
-                    <option value="pickup">Pickup</option>
-                    <option value="panel">Panel</option>
-                    <option value="camion">Camión</option>
-                </select>
+                    readOnly
+                    className="mt-1 p-2 border rounded w-full bg-gray-100"
+                />  
             </label>
 
             <label className="block mb-4">
