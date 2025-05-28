@@ -158,7 +158,7 @@ function StepTres({
     };
 
     const handleTipoVehiculoChange = (value: string) => {
-        setVehiculosMap(value);
+        setTipoVehiculo(value);
         actualizarLlantasPorTipo(value);
     };
 
@@ -209,7 +209,7 @@ function StepTres({
                 Tipo de Vehículo:
                 <input
                     value={tipoVehiculo}
-                    onChange={(e) => setVehiculosMap(e.target.value)}
+                    onChange={(e) => setTipoVehiculo(e.target.value)}
                     type="text"
                     className="mt-1 p-2 border rounded w-full bg-gray-100"
                     placeholder="Tipo de Vehículo"
