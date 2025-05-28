@@ -36,13 +36,13 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
-    const [tipoVehiculosMap, setTipoVehiculosMap] = useState<Record<string, string>>({});
+    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
 
     // Nuevo método independiente para obtener placas y tipos de vehículo
     const fetchPlacasYTipoVehiculo = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/placas/get-placas-y-tipos`);
-            setTiposVehiculosMap(response.data);
+            setVehiculosMap(response.data);
         } catch (error) {
             console.error('Error al obtener placas y tipos:', error);
         }
@@ -158,7 +158,7 @@ function StepTres({
     };
 
     const handleTipoVehiculoChange = (value: string) => {
-        setTipoVehiculoMap(value);
+        setVehiculosMap(value);
         actualizarLlantasPorTipo(value);
     };
 
@@ -209,7 +209,7 @@ function StepTres({
                 Tipo de Vehículo:
                 <input
                     value={tipoVehiculo}
-                    onChange={(e) => setTipoVehiculosMap(e.target.value)}
+                    onChange={(e) => setVehiculosMap(e.target.value)}
                     type="text"
                     className="mt-1 p-2 border rounded w-full bg-gray-100"
                     placeholder="Tipo de Vehículo"
