@@ -41,22 +41,12 @@ function StepTres({
 
     // Nuevo método independiente para obtener placas y tipos de vehículo
     const fetchPlacasYTipoVehiculo = async () => {
-        setLoadingVehiculosMap(true);
         try {
-            const response = await axios.get<Record<string, string>>(`${BASE_URL}/placas/get-placas-y-tipos`);
-            // Normaliza las claves (placas) a mayúsculas y sin espacios
-            const normalizedMap: Record<string, string> = {};
-            Object.entries(response.data).forEach(([placa, tipo]) => {
-                if (placa && tipo) {
-                    normalizedMap[placa.trim().toUpperCase()] = tipo.toString().trim();
-                }
-            });
-            setVehiculosMap(normalizedMap);
+            const response = await axios.get(`${BASE_URL}/placas/get-placas-y-tipos`);
+            console.log('Datos de placas y tipos:', response.data); // Añade este log
+            setVehiculosMap(response.data);
         } catch (error) {
             console.error('Error al obtener placas y tipos:', error);
-            setVehiculosMap({});
-        } finally {
-            setLoadingVehiculosMap(false);
         }
     };
     
