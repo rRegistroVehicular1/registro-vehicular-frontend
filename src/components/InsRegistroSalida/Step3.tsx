@@ -125,41 +125,19 @@ function StepTres({
     };
     
     useEffect(() => {
-        const loadData = async () => {
-            setLoadingPlacas(true);
-            setLoadingVehiculosMap(true);
-            
-            try {
-                await Promise.all([
-                    fetchPlacas(),
-                    fetchPlacasYTipoVehiculo()
-                ]);
-            } catch (error) {
-                console.error('Error loading initial data:', error);
-            } finally {
-                setLoadingPlacas(false);
-                setLoadingVehiculosMap(false);
-            }
-        };
-        
-        loadData();
+        fetchPlacas();
+        fetchPlacasYTipoVehiculo(); // Añade esta línea para cargar los tipos de vehículo
     }, []);
-    
+
     useEffect(() => {
-        if (!placa || Object.keys(vehiculosMap).length === 0) return;
-        
-        const placaNormalizada = placa.trim().toUpperCase();
-        const tipo = vehiculosMap[placaNormalizada];
-        
-        if (tipo) {
-            setTipoVehiculo(tipo);
-            actualizarLlantasPorTipo(tipo);
+        if (placa && vehiculosMap[placa]) {
+            setTipoVehiculo(vehiculosMap[placa]);
+            actualizarLlantasPorTipo(vehiculosMap[placa]);
         } else {
-            console.warn(`No se encontró tipo de vehículo para placa: ${placa}`);
-            setTipoVehiculo('');
+            setTipoVehiculo(''); 
         }
     }, [placa, vehiculosMap]);
-
+    
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
