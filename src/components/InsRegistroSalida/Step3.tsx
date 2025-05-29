@@ -36,18 +36,20 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
-    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>(null);
+    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [loadingVehiculosMap, setLoadingVehiculosMap] = useState(false);
 
     // Nuevo método independiente para obtener placas y tipos de vehículo
     const fetchPlacasYTipoVehiculo = async () => {
         setLoadingVehiculosMap(true);
         try {
-            const response = await axios.get(`${BASE_URL}/placas/get-placas-y-tipos`);
+            const response = await axios.get<Record<string, string>>(`${BASE_URL}/placas/get-placas-y-tipos`);
             // Normaliza las claves (placas) a mayúsculas y sin espacios
-            const normalizedMap = {};
+            const normalizedMap: Record<string, string> = {};
             Object.entries(response.data).forEach(([placa, tipo]) => {
-                normalizedMap[placa.trim().toUpperCase()] = tipo;
+                if (placa && tipo) {
+                    normalizedMap[placa.trim().toUpperCase()] = tipo.toString().trim();
+                }
             });
             setVehiculosMap(normalizedMap);
         } catch (error) {
@@ -144,7 +146,7 @@ function StepTres({
     }, []);
     
     useEffect(() => {
-        if (!placa || !vehiculosMap) return;
+        if (!placa || Object.keys(vehiculosMap).length === 0) return;
         
         const placaNormalizada = placa.trim().toUpperCase();
         const tipo = vehiculosMap[placaNormalizada];
@@ -248,21 +250,11 @@ function StepTres({
 
             <label className="block mb-4">
                 Tipo de Vehículo:
-                {loadingVehiculosMap ? (
-                    <input
-                        value="Cargando tipos..."
-                        className="mt-1 p-2 border rounded w-full bg-gray-100"
-                        readOnly
-                    />
-                ) : (
-                    <input
-                        value={tipoVehiculo || 'No encontrado'}
-                        onChange={(e) => setTipoVehiculo(e.target.value)}
-                        type="text"
-                        className="mt-1 p-2 border rounded w-full bg-gray-100"
-                        readOnly
-                    />
-                )}
+                <input
+                    value={loadingVehiculosMap ? "Cargando..." : tipoVehiculo || 'No especificado'}
+                    className="mt-1 p-2 border rounded w-full bg-gray-100"
+                    readOnly
+                />
             </label>
 
             <label className="block mb-4">
