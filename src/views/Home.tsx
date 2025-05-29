@@ -51,18 +51,20 @@ function Home() {
       const result = await handleSubmit(placa, setError);
   
       if (result.data?.rowIndex > 0) {
-        localStorage.setItem("lastPlacaInfo", JSON.stringify({ rowIndex: result.data.rowIndex, placa: placa}) // Guarda la placa junto al índice    
+        localStorage.setItem("lastPlacaInfo", JSON.stringify({ rowIndex: result.data.rowIndex, placa: placa, estado: result.data?.estado}) // Guarda la placa junto al índice    
       );
           if (result.data?.estado === "entrada"){
           navigate("/registro-inspeccion-entrada");
-        } else {
-          alert("Esta placa no esta registrada");
-          navigate("/registro-inspeccion-salida");
+          } else if(result.data?.estado === "salida"){
+            alert("Esta placa no esta registrada");
+            navigate("/registro-inspeccion-salida");
+          } else{
+            // Si no hay estado definido, asumimos que es una nueva entrada
+            navigate("/registro-inspeccion-entrada");
           }
       } else {
         // Si no hay rowIndex pero la placa existe, ir a registro salida
         navigate("/registro-inspeccion-salida");
-        //alert("Error: No se pudo determinar el estado de la placa.");
       }
     }catch (error) {
       console.error("Error:", error);
