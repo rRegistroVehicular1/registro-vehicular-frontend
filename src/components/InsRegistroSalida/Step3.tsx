@@ -114,6 +114,7 @@ function StepTres({
     
     useEffect(() => {
         fetchPlacas();
+        fetchPlacasYTipoVehiculo();
     }, []);
 
     useEffect(() => {
