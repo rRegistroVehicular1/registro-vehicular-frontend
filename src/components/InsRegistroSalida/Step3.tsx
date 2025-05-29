@@ -36,15 +36,25 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
-    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
+    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>(null);
+    const [loadingVehiculosMap, setLoadingVehiculosMap] = useState(false);
 
     // Nuevo método independiente para obtener placas y tipos de vehículo
     const fetchPlacasYTipoVehiculo = async () => {
+        setLoadingVehiculosMap(true);
         try {
             const response = await axios.get(`${BASE_URL}/placas/get-placas-y-tipos`);
-            setVehiculosMap(response.data);
+            // Normaliza las claves (placas) a mayúsculas y sin espacios
+            const normalizedMap = {};
+            Object.entries(response.data).forEach(([placa, tipo]) => {
+                normalizedMap[placa.trim().toUpperCase()] = tipo;
+            });
+            setVehiculosMap(normalizedMap);
         } catch (error) {
             console.error('Error al obtener placas y tipos:', error);
+            setVehiculosMap({});
+        } finally {
+            setLoadingVehiculosMap(false);
         }
     };
     
@@ -113,21 +123,38 @@ function StepTres({
     };
     
     useEffect(() => {
-        console.log('Placa cambiada:', placa);
-        console.log('VehiculosMap:', vehiculosMap);
-        if (placa && vehiculosMap[placa]) {
-            console.log('Encontrado tipo para placa:', placa, '->', vehiculosMap[placa]);
-            setTipoVehiculo(vehiculosMap[placa]);
-            actualizarLlantasPorTipo(vehiculosMap[placa]);
-        } else {
-            console.log('No se encontró tipo para placa:', placa);
-        }
-    }, [placa, vehiculosMap]);
-
+        const loadData = async () => {
+            setLoadingPlacas(true);
+            setLoadingVehiculosMap(true);
+            
+            try {
+                await Promise.all([
+                    fetchPlacas(),
+                    fetchPlacasYTipoVehiculo()
+                ]);
+            } catch (error) {
+                console.error('Error loading initial data:', error);
+            } finally {
+                setLoadingPlacas(false);
+                setLoadingVehiculosMap(false);
+            }
+        };
+        
+        loadData();
+    }, []);
+    
     useEffect(() => {
-        if (placa && vehiculosMap[placa]) {
-            setTipoVehiculo(vehiculosMap[placa]);
-            actualizarLlantasPorTipo(vehiculosMap[placa]);
+        if (!placa || !vehiculosMap) return;
+        
+        const placaNormalizada = placa.trim().toUpperCase();
+        const tipo = vehiculosMap[placaNormalizada];
+        
+        if (tipo) {
+            setTipoVehiculo(tipo);
+            actualizarLlantasPorTipo(tipo);
+        } else {
+            console.warn(`No se encontró tipo de vehículo para placa: ${placa}`);
+            setTipoVehiculo('');
         }
     }, [placa, vehiculosMap]);
 
@@ -221,14 +248,21 @@ function StepTres({
 
             <label className="block mb-4">
                 Tipo de Vehículo:
-                <input
-                    value={tipoVehiculo}
-                    onChange={(e) => setTipoVehiculo(e.target.value)}
-                    type="text"
-                    className="mt-1 p-2 border rounded w-full bg-gray-100"
-                    placeholder="Tipo de Vehículo"
-                    readOnly
-                />  
+                {loadingVehiculosMap ? (
+                    <input
+                        value="Cargando tipos..."
+                        className="mt-1 p-2 border rounded w-full bg-gray-100"
+                        readOnly
+                    />
+                ) : (
+                    <input
+                        value={tipoVehiculo || 'No encontrado'}
+                        onChange={(e) => setTipoVehiculo(e.target.value)}
+                        type="text"
+                        className="mt-1 p-2 border rounded w-full bg-gray-100"
+                        readOnly
+                    />
+                )}
             </label>
 
             <label className="block mb-4">
