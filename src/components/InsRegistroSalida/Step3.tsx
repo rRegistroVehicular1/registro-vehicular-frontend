@@ -36,6 +36,7 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
+    const [placasMap, setPlacasMap] = useState<Record<string, string>>({});
 
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -46,6 +47,11 @@ function StepTres({
           throw new Error('Formato de respuesta inválido');
         }
     
+        const placasResponse = await axios.get(`${BASE_URL}/placas/get-vehiculos`);
+        if (placasResponse.data) {
+          setPlacasMap(placasResponse.data);
+        }
+          
         const placas = response.data
           .map(p => p?.toString().trim())
           .filter(p => p);
@@ -58,6 +64,23 @@ function StepTres({
       } finally {
         setLoadingPlacas(false);
       }
+    };
+
+    // Función para manejar el cambio de placa
+    const handlePlacaChange = (selectedPlaca: string) => {
+        setPlaca(selectedPlaca);
+        
+        // Buscar el tipo de vehículo correspondiente a la placa seleccionada
+        if (placasMap[selectedPlaca]) {
+            const tipo = placasMap[selectedPlaca].toLowerCase();
+            setTipoVehiculo(tipo);
+            actualizarLlantasPorTipo(tipo);
+        } else {
+            setTipoVehiculo(''); // Limpiar si no se encuentra
+        }
+        
+        // Lógica existente para obtener odómetro
+        fetchLastOdometro(selectedPlaca);
     };
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
@@ -195,18 +218,14 @@ function StepTres({
 
             <label className="block mb-4">
                 Tipo de Vehículo:
-                <select
+                <input
+                    type="text"
                     value={tipoVehiculo}
                     onChange={(e) => handleTipoVehiculoChange(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
-                >
-                    <option value="">Seleccione un tipo</option>
-                    <option value="sedan">Sedán</option>
-                    <option value="pickup">Pickup</option>
-                    <option value="panel">Panel</option>
-                    <option value="camion">Camión</option>
-                </select>
+                    readOnly // Hacemos el campo de solo lectura ya que se autocompleta
+                />
             </label>
 
             <label className="block mb-4">
