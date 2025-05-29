@@ -36,20 +36,7 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
-    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
-    const [loadingVehiculosMap, setLoadingVehiculosMap] = useState(false);
 
-    // Nuevo método independiente para obtener placas y tipos de vehículo
-    const fetchPlacasYTipoVehiculo = async () => {
-        try {
-            const response = await axios.get(`${BASE_URL}/placas/get-placas-y-tipos`);
-            console.log('Datos de placas y tipos:', response.data); // Añade este log
-            setVehiculosMap(response.data);
-        } catch (error) {
-            console.error('Error al obtener placas y tipos:', error);
-        }
-    };
-    
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
       try {
@@ -116,18 +103,8 @@ function StepTres({
     
     useEffect(() => {
         fetchPlacas();
-        fetchPlacasYTipoVehiculo(); // Añade esta línea para cargar los tipos de vehículo
     }, []);
 
-    useEffect(() => {
-        if (placa && vehiculosMap[placa]) {
-            setTipoVehiculo(vehiculosMap[placa]);
-            actualizarLlantasPorTipo(vehiculosMap[placa]);
-        } else {
-            setTipoVehiculo(''); 
-        }
-    }, [placa, vehiculosMap]);
-    
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
@@ -218,11 +195,18 @@ function StepTres({
 
             <label className="block mb-4">
                 Tipo de Vehículo:
-                <input
-                    value={loadingVehiculosMap ? "Cargando..." : tipoVehiculo || 'No especificado'}
-                    className="mt-1 p-2 border rounded w-full bg-gray-100"
-                    readOnly
-                />
+                <select
+                    value={tipoVehiculo}
+                    onChange={(e) => handleTipoVehiculoChange(e.target.value)}
+                    className="mt-1 p-2 border rounded w-full"
+                    required
+                >
+                    <option value="">Seleccione un tipo</option>
+                    <option value="sedan">Sedán</option>
+                    <option value="pickup">Pickup</option>
+                    <option value="panel">Panel</option>
+                    <option value="camion">Camión</option>
+                </select>
             </label>
 
             <label className="block mb-4">
@@ -275,3 +259,4 @@ function StepTres({
 }
 
 export default StepTres;
+
