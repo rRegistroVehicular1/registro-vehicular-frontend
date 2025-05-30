@@ -57,7 +57,7 @@ function Home() {
           alert("Esta placa no esta registrada");
           navigate("/registro-inspeccion-salida");
       } else {
-        /alert("Error: No se pudo determinar el estado de la placa.");
+          alert("Error: No se pudo determinar el estado de la placa.");
       }
     }catch (error) {
       console.error("Error:", error);
