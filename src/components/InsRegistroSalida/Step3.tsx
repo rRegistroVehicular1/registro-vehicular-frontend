@@ -231,10 +231,10 @@ function StepTres({
                     required
                 >
                     <option value="">Seleccione un tipo</option>
-                    <option value="sedan">Sedán</option>
-                    <option value="pickup">Pickup</option>
-                    <option value="panel">Panel</option>
-                    <option value="camion">Camión</option>
+                    <option value="sedan">SEDAN</option>
+                    <option value="pickup">PICKUP</option>
+                    <option value="panel">PANEL</option>
+                    <option value="camion">CAMION</option>
                 </select>
             </label>
 
