@@ -28,6 +28,25 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
         return true;
     };
 
+    const handleRadioChange = (luzId: number, field: keyof Luz) => {
+        const updatedLuces = luces.map((luz) => {
+            if (luz.id === luzId) {
+                // Reset all options to false
+                const updatedLuz = {
+                    ...luz,
+                    funcionaSi: false,
+                    funcionaNo: false,
+                    funcionaNA: false
+                };
+                // Set only the selected option to true
+                updatedLuz[field] = true;
+                return updatedLuz;
+            }
+            return luz;
+        });
+        setLuces(updatedLuces);
+    };
+
     return (
         <div>
             <h2 className="text-xl font-bold mb-4">Revisión de Luces</h2>
@@ -38,11 +57,9 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                         <label className="inline-flex items-center mr-4">
                             <input
                                 type="radio"
+                                name={`luz-${luz.id}`}
                                 checked={luz.funcionaSi}
-                                onChange={(e) => {
-                                    const updatedLuces = [...luces];
-                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaSi: e.target.checked, funcionaNo: !e.target.checked, funcionaNA: e.target.checked };
-                                    setLuces(updatedLuces);
+                                onChange={() => handleRadioChange(luz.id, 'funcionaSi')}
                                 }}
                             />
                             Funciona (SI)
@@ -50,11 +67,9 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                         <label className="inline-flex items-center">
                             <input
                                 type="radio"
+                                name={`luz-${luz.id}`}
                                 checked={luz.funcionaNo}
-                                onChange={(e) => {
-                                    const updatedLuces = [...luces];
-                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaNo: e.target.checked, funcionaSi: !e.target.checked, funcionaNA: e.target.checked };
-                                    setLuces(updatedLuces);
+                                onChange={() => handleRadioChange(luz.id, 'funcionaNo')}
                                 }}
                             />
                             Funciona (NO)
@@ -62,11 +77,9 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                         <label className="inline-flex items-center mr-4">
                             <input
                                 type="radio"
+                                name={`luz-${luz.id}`}
                                 checked={luz.funcionaNA}
-                                onChange={(e) => {
-                                    const updatedLuces = [...luces];
-                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaNA: e.target.checked, funcionaSi: e.target.checked, funcionaNo: !e.target.checked };
-                                    setLuces(updatedLuces);
+                                onChange={() => handleRadioChange(luz.id, 'funcionaNA')}
                                 }}
                             />
                             No Aplica (N/A)
