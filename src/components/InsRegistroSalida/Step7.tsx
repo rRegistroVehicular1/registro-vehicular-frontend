@@ -65,7 +65,7 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                                 checked={luz.funcionaNA}
                                 onChange={(e) => {
                                     const updatedLuces = [...luces];
-                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaNA: e.target.checked,, funcionaSi: e.target.checked, funcionaNo: !e.target.checked };
+                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaNA: e.target.checked, funcionaSi: e.target.checked, funcionaNo: !e.target.checked };
                                     setLuces(updatedLuces);
                                 }}
                             />
