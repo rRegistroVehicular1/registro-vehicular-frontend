@@ -5,6 +5,7 @@ interface Luz {
     nombre: string;
     funcionaSi: boolean;
     funcionaNo: boolean;
+    funcionaNA: boolean;
 }
 
 interface StepSieteProps {
@@ -17,7 +18,7 @@ interface StepSieteProps {
 function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: StepSieteProps) {
 
     const validateStep7 = () => {
-        const isInvalid = luces.some((luz) => !luz.funcionaSi && !luz.funcionaNo);
+        const isInvalid = luces.some((luz) => !luz.funcionaSi && !luz.funcionaNo && !luz.funcionaNA);
 
         if (isInvalid) {
             alert('Debe seleccionar al menos una opción ("Funciona (SI)", "Funciona (NO)" o "No Aplica (N/A)") para cada luz.');
