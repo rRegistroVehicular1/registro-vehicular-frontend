@@ -60,7 +60,6 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                                 name={`luz-${luz.id}`}
                                 checked={luz.funcionaSi}
                                 onChange={() => handleRadioChange(luz.id, 'funcionaSi')}
-                                }}
                             />
                             Funciona (SI)
                         </label>
@@ -70,7 +69,6 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                                 name={`luz-${luz.id}`}
                                 checked={luz.funcionaNo}
                                 onChange={() => handleRadioChange(luz.id, 'funcionaNo')}
-                                }}
                             />
                             Funciona (NO)
                         </label>
@@ -80,7 +78,6 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                                 name={`luz-${luz.id}`}
                                 checked={luz.funcionaNA}
                                 onChange={() => handleRadioChange(luz.id, 'funcionaNA')}
-                                }}
                             />
                             No Aplica (N/A)
                         </label>
