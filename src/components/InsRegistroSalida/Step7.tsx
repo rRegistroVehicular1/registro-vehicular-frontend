@@ -28,19 +28,15 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
         return true;
     };
 
-    const handleRadioChange = (luzId: number, field: keyof Luz) => {
+    const handleRadioChange = (luzId: number, field: 'funcionaSi' | 'funcionaNo' | 'funcionaNA') => {
         const updatedLuces = luces.map((luz) => {
             if (luz.id === luzId) {
-                // Reset all options to false
-                const updatedLuz = {
+                return {
                     ...luz,
-                    funcionaSi: false,
-                    funcionaNo: false,
-                    funcionaNA: false
+                    funcionaSi: field === 'funcionaSi',
+                    funcionaNo: field === 'funcionaNo',
+                    funcionaNA: field === 'funcionaNA'
                 };
-                // Set only the selected option to true
-                updatedLuz[field] = true;
-                return updatedLuz;
             }
             return luz;
         });
