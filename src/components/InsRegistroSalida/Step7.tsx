@@ -41,7 +41,7 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                                 checked={luz.funcionaSi}
                                 onChange={(e) => {
                                     const updatedLuces = [...luces];
-                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaSi: e.target.checked, funcionaNo: !e.target.checked };
+                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaSi: e.target.checked, funcionaNo: !e.target.checked, funcionaNA: e.target.checked };
                                     setLuces(updatedLuces);
                                 }}
                             />
@@ -53,7 +53,7 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                                 checked={luz.funcionaNo}
                                 onChange={(e) => {
                                     const updatedLuces = [...luces];
-                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaNo: e.target.checked, funcionaSi: !e.target.checked };
+                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaNo: e.target.checked, funcionaSi: !e.target.checked, funcionaNA: e.target.checked };
                                     setLuces(updatedLuces);
                                 }}
                             />
@@ -65,7 +65,7 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                                 checked={luz.funcionaNA}
                                 onChange={(e) => {
                                     const updatedLuces = [...luces];
-                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaNA: e.target.checked, funcionaNo: !e.target.checked };
+                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaNA: e.target.checked,, funcionaSi: e.target.checked, funcionaNo: !e.target.checked };
                                     setLuces(updatedLuces);
                                 }}
                             />
