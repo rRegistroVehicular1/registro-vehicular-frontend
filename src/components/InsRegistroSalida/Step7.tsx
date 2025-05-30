@@ -20,7 +20,7 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
         const isInvalid = luces.some((luz) => !luz.funcionaSi && !luz.funcionaNo);
 
         if (isInvalid) {
-            alert('Debe seleccionar al menos una opción ("Funciona (SI)" o "Funciona (NO)") para cada luz.');
+            alert('Debe seleccionar al menos una opción ("Funciona (SI)", "Funciona (NO)" o "No Aplica (N/A)") para cada luz.');
             return false;
         }
         //console.log(`luz.funcionaSi: ${luz.funcionaSi} - luz.funcionaNo: ${luz.funcionaNo} - isInvalid: ${isInvalid} `);
@@ -57,6 +57,18 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                                 }}
                             />
                             Funciona (NO)
+                        </label>
+                        <label className="inline-flex items-center mr-4">
+                            <input
+                                type="checkbox"
+                                checked={luz.funcionaNA}
+                                onChange={(e) => {
+                                    const updatedLuces = [...luces];
+                                    updatedLuces[luz.id - 1] = { ...updatedLuces[luz.id - 1], funcionaNA: e.target.checked, funcionaNo: !e.target.checked };
+                                    setLuces(updatedLuces);
+                                }}
+                            />
+                            No Aplica (N/A)
                         </label>
                     </div>
                 ))}
