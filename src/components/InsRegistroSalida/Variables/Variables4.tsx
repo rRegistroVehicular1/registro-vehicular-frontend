@@ -11,7 +11,7 @@ function Variables4(){
           { id: 5, nombre: 'Intermitentes', funcionaSi: false, funcionaNo: false, },
           { id: 6, nombre: 'Stops', funcionaSi: false, funcionaNo: false, },
           { id: 7, nombre: 'Cabina', funcionaSi: false, funcionaNo: false, },
-          { id: 8, nombre: 'Escolta', funcionaSi: false, funcionaNo: false, },
+          { id: 8, nombre: 'Escolta', funcionaSi: false, funcionaNo: false, funcionaNA: false, },
         ]
       );
     
