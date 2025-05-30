@@ -18,7 +18,7 @@ interface StepSieteProps {
 function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: StepSieteProps) {
 
     const validateStep7 = () => {
-        const isInvalid = luces.some((luz) => !luz.funcionaSi || !luz.funcionaNo || !luz.funcionaNA);
+        const isInvalid = luces.some((luz) => !luz.funcionaSi && !luz.funcionaNo && !luz.funcionaNA);
 
         if (isInvalid) {
             alert('Debe seleccionar al menos una opción ("Funciona (SI)", "Funciona (NO)" o "No Aplica (N/A)") para cada luz.');
@@ -37,7 +37,7 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                         <h3 className="font-bold">{luz.nombre}</h3>
                         <label className="inline-flex items-center mr-4">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 checked={luz.funcionaSi}
                                 onChange={(e) => {
                                     const updatedLuces = [...luces];
@@ -49,7 +49,7 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                         </label>
                         <label className="inline-flex items-center">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 checked={luz.funcionaNo}
                                 onChange={(e) => {
                                     const updatedLuces = [...luces];
@@ -61,7 +61,7 @@ function StepSiete({ luces, setLuces, handlePreviousStep, handleNextStep }: Step
                         </label>
                         <label className="inline-flex items-center mr-4">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 checked={luz.funcionaNA}
                                 onChange={(e) => {
                                     const updatedLuces = [...luces];
