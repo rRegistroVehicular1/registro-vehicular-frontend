@@ -16,7 +16,7 @@ interface StepOchoProps {
 function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: StepOchoProps) {
 
     const validateStep8 = () => {
-        const isInvalid = insumos.some((insumo) => !insumo.disponibleSi && !insumo.disponibleNo && !luz.funcionaNA);
+        const isInvalid = insumos.some((insumo) => !insumo.disponibleSi && !insumo.disponibleNo && !insumo.funcionaNA);
 
         if (isInvalid) {
             alert('Debe seleccionar al menos una opción ("Disponible (SI)", "Funciona (NO)" o "No Aplica (N/A)") para cada insumo.');
@@ -40,7 +40,6 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
         });
         setInsumos(updatedInsumos);
     };
-
 
     return (
         <div>
