@@ -3,6 +3,7 @@ interface Insumo {
     nombre: string;
     disponibleSi: boolean;
     disponibleNo: boolean;
+    funcionaNA: boolean;
 }
 
 interface StepOchoProps {
@@ -15,15 +16,31 @@ interface StepOchoProps {
 function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: StepOchoProps) {
 
     const validateStep8 = () => {
-        const isInvalid = insumos.some((insumo) => !insumo.disponibleSi && !insumo.disponibleNo);
+        const isInvalid = insumos.some((insumo) => !insumo.disponibleSi && !insumo.disponibleNo && !luz.funcionaNA);
 
         if (isInvalid) {
-            alert('Debe seleccionar al menos una opción ("Disponible (SI)" o "Disponible (NO)") para cada insumo.');
+            alert('Debe seleccionar al menos una opción ("Disponible (SI)", "Funciona (NO)" o "No Aplica (N/A)") para cada insumo.');
             return false;
         }
         //console.log(`insumo: ${insumo} - isInvalid: ${isInvalid} `);
         return true;
     };
+
+    const handleRadioChange = (insumosId: number, field: 'funcionaSi' | 'funcionaNo' | 'funcionaNA') => {
+        const updatedInsumos = insumos.map(insumo) => {
+            if (insumos.id === insumosId) {
+                return {
+                    ...insumo,
+                    funcionaSi: field === 'funcionaSi',
+                    funcionaNo: field === 'funcionaNo',
+                    funcionaNA: field === 'funcionaNA'
+                };
+            }
+            return insumo;
+        });
+        setInsumos(updatedInsumos);
+    };
+
 
     return (
         <div>
@@ -34,27 +51,30 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
                         <h3 className="font-bold">{insumo.nombre}</h3>
                         <label className="inline-flex items-center mr-4">
                             <input
-                                type="checkbox"
+                                type="radio"
+                                name={`insumo-${insumo.id}`}
                                 checked={insumo.disponibleSi}
-                                onChange={(e) => {
-                                    const updatedInsumos = [...insumos];
-                                    updatedInsumos[insumo.id - 1] = { ...updatedInsumos[insumo.id - 1], disponibleSi: e.target.checked, disponibleNo: !e.target.checked };
-                                    setInsumos(updatedInsumos);
-                                }}
+                                onChange={() => handleRadioChange(insumo.id, 'funcionaSi')}
                             />
                             Disponible (SI)
                         </label>
                         <label className="inline-flex items-center">
                             <input
-                                type="checkbox"
+                                type="radio"
+                                name={`insumo-${insumo.id}`}
                                 checked={insumo.disponibleNo}
-                                onChange={(e) => {
-                                    const updatedInsumos = [...insumos];
-                                    updatedInsumos[insumo.id - 1] = { ...updatedInsumos[insumo.id - 1], disponibleNo: e.target.checked, disponibleSi: !e.target.checked };
-                                    setInsumos(updatedInsumos);
-                                }}
+                                onChange={() => handleRadioChange(insumo.id, 'funcionaNo')}
                             />
                             Disponible (NO)
+                        </label>
+                        <label className="inline-flex items-center">
+                            <input
+                                type="radio"
+                                name={`insumo-${insumo.id}`}
+                                checked={insumo.funcionaNA}
+                                onChange={() => handleRadioChange(insumo.id, 'funcionaNA')}
+                            />
+                            No Aplica (N/A)
                         </label>
                     </div>
                 ))}
