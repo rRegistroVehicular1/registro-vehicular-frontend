@@ -3,6 +3,8 @@ interface Documento {
     nombre: string;
     disponibleSi: boolean;
     disponibleNo: boolean;
+    disponibleNA: boolean;
+
 }
 
 interface StepNueveProps {
@@ -15,14 +17,30 @@ interface StepNueveProps {
 function StepNueve({ documentacion, setDocumentacion, handlePreviousStep, handleNextStep }: StepNueveProps) {
 
     const validateStep9 = () => {
-        const isInvalid = documentacion.some((doc) => !doc.disponibleSi && !doc.disponibleNo);
+        const isInvalid = documentacion.some((doc) => !doc.disponibleSi && !doc.disponibleNo && !doc.disponibleNA
+);
 
         if (isInvalid) {
-            alert('Debe seleccionar al menos una opción ("Disponible (SI)" o "Disponible (NO)") para cada documento.');
+            alert('Debe seleccionar al menos una opción ("Disponible (SI)", "Disponible (NO)" o "No Aplica (N/A)") para cada documento.');
             return false;
         }
         //console.log(`doc: ${doc} - isInvalid: ${isInvalid} `);
         return true;
+    };
+
+    const handleRadioChange = (documentoId: number, field: 'disponibleSi' | 'disponibleNo' | 'disponibleNA') => {
+        const updatedDocumentos = documentacion.map((insumo) => {
+            if (documento.id === documentoId) {
+                return {
+                    ...documento,
+                    disponibleSi: field === 'disponibleSi',
+                    disponibleNo: field === 'disponibleNo',
+                    disponibleNA: field === 'disponibleNA'
+                };
+            }
+            return documento;
+        });
+        setInsumos(updatedDocumentos);
     };
 
     return (
@@ -34,27 +52,30 @@ function StepNueve({ documentacion, setDocumentacion, handlePreviousStep, handle
                         <h3 className="font-bold">{doc.nombre}</h3>
                         <label className="inline-flex items-center mr-4">
                             <input
-                                type="checkbox"
+                                type="radio"
+                                name={`documento-${documento.id}`}
                                 checked={doc.disponibleSi}
-                                onChange={(e) => {
-                                    const updatedDocumentacion = [...documentacion];
-                                    updatedDocumentacion[doc.id - 1] = { ...updatedDocumentacion[doc.id - 1], disponibleSi: e.target.checked, disponibleNo: !e.target.checked };
-                                    setDocumentacion(updatedDocumentacion);
-                                }}
+                                onChange={() => handleRadioChange(documento.id, 'disponibleSi')}
                             />
                             Disponible (SI)
                         </label>
                         <label className="inline-flex items-center">
                             <input
-                                type="checkbox"
+                                type="radio"
+                                name={`documento-${documento.id}`}
                                 checked={doc.disponibleNo}
-                                onChange={(e) => {
-                                    const updatedDocumentacion = [...documentacion];
-                                    updatedDocumentacion[doc.id - 1] = { ...updatedDocumentacion[doc.id - 1], disponibleNo: e.target.checked, disponibleSi: !e.target.checked };
-                                    setDocumentacion(updatedDocumentacion);
-                                }}
+                                onChange={() => handleRadioChange(documento.id, 'disponibleNo')}
                             />
                             Disponible (NO)
+                        </label>
+                        <label className="inline-flex items-center">
+                            <input
+                                type="radio"
+                                name={`documento-${documento.id}`}
+                                checked={doc.disponibleNA}
+                                onChange={() => handleRadioChange(documento.id, 'disponibleNA')}
+                            />
+                            No Aplica (N/A)
                         </label>
                     </div>
                 ))}
