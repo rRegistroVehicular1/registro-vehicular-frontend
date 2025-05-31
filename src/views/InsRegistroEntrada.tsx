@@ -148,6 +148,16 @@ function RegistroInspeccionEntrada() {
                                     />
                                     <span className="ml-2">No</span>
                                 </label>
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name={`respuesta-${index}`}
+                                        checked={item.opcion === null}
+                                        onChange={() => handleInputChange(index, null)}
+                                        className="form-radio h-5 w-5"
+                                    />
+                                    <span className="ml-2">N/A</span>
+                                </label>
                             </div>
                         </div>
                     ))}
