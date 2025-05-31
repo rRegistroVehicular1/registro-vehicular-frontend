@@ -3,7 +3,7 @@ interface Insumo {
     nombre: string;
     disponibleSi: boolean;
     disponibleNo: boolean;
-    disponibleNA: boolean; 
+    disponibleNA: boolean;
 }
 
 interface StepOchoProps {
@@ -14,20 +14,20 @@ interface StepOchoProps {
 }
 
 function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: StepOchoProps) {
-
     const validateStep8 = () => {
-        const isInvalid = insumos.some((insumo) => !insumo.disponibleSi && !insumo.disponibleNo && !insumo.disponibleNA);
+        const isInvalid = insumos.some((insumo) => 
+            !insumo.disponibleSi && !insumo.disponibleNo && !insumo.disponibleNA
+        );
 
         if (isInvalid) {
-            alert('Debe seleccionar al menos una opción ("Disponible (SI)", "Funciona (NO)" o "No Aplica (N/A)") para cada insumo.');
+            alert('Debe seleccionar al menos una opción ("Disponible (SI)", "Disponible (NO)" o "No Aplica (N/A)") para cada insumo.');
             return false;
         }
-        //console.log(`insumo: ${insumo} - isInvalid: ${isInvalid} `);
         return true;
     };
 
-    const handleRadioChange = (insumoId: number, field: 'funcionaSi' | 'funcionaNo' | 'funcionaNA') => {
-        const updatedInsumos = insumos.map(insumo) => {
+    const handleRadioChange = (insumoId: number, field: 'disponibleSi' | 'disponibleNo' | 'disponibleNA') => {
+        const updatedInsumos = insumos.map((insumo) => {
             if (insumo.id === insumoId) {
                 return {
                     ...insumo,
@@ -54,15 +54,17 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
                                 name={`insumo-${insumo.id}`}
                                 checked={insumo.disponibleSi}
                                 onChange={() => handleRadioChange(insumo.id, 'disponibleSi')}
+                                className="mr-2"
                             />
                             Disponible (SI)
                         </label>
-                        <label className="inline-flex items-center">
+                        <label className="inline-flex items-center mr-4">
                             <input
                                 type="radio"
                                 name={`insumo-${insumo.id}`}
                                 checked={insumo.disponibleNo}
                                 onChange={() => handleRadioChange(insumo.id, 'disponibleNo')}
+                                className="mr-2"
                             />
                             Disponible (NO)
                         </label>
@@ -72,13 +74,14 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
                                 name={`insumo-${insumo.id}`}
                                 checked={insumo.disponibleNA}
                                 onChange={() => handleRadioChange(insumo.id, 'disponibleNA')}
+                                className="mr-2"
                             />
                             No Aplica (N/A)
                         </label>
                     </div>
                 ))}
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-6">
                 <button
                     type="button"
                     className="bg-gray-500 text-white px-4 py-2 rounded"
@@ -100,6 +103,6 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
             </div>
         </div>
     );
-};
+}
 
 export default StepOcho;
