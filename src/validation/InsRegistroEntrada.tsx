@@ -13,7 +13,7 @@ export const handleSubmit = async (
 
     try {
         // Validación de campos completos
-        const allFilled = formData.revisiones.every(item => item.opcion !== null);
+        const allFilled = formData.revisiones.every(item => item.opcion !== undefined);
         if (!allFilled) {
             throw new Error("Por favor, selecciona una opción en todas las revisiones");
         }
