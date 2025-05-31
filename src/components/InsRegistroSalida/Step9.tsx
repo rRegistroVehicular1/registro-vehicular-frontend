@@ -40,7 +40,7 @@ function StepNueve({ documentacion, setDocumentacion, handlePreviousStep, handle
             }
             return doc;
         });
-        setInsumos(updatedDocumentos);
+        setDocumentacion(updatedDocumentos);
     };
 
     return (
