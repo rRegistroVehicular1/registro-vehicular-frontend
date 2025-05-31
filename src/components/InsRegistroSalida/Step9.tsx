@@ -29,16 +29,16 @@ function StepNueve({ documentacion, setDocumentacion, handlePreviousStep, handle
     };
 
     const handleRadioChange = (documentoId: number, field: 'disponibleSi' | 'disponibleNo' | 'disponibleNA') => {
-        const updatedDocumentos = documentacion.map((insumo) => {
-            if (documento.id === documentoId) {
+        const updatedDocumentos = documentacion.map((doc) => {
+            if (doc.id === documentoId) {
                 return {
-                    ...documento,
+                    ...doc,
                     disponibleSi: field === 'disponibleSi',
                     disponibleNo: field === 'disponibleNo',
                     disponibleNA: field === 'disponibleNA'
                 };
             }
-            return documento;
+            return doc;
         });
         setInsumos(updatedDocumentos);
     };
@@ -53,27 +53,27 @@ function StepNueve({ documentacion, setDocumentacion, handlePreviousStep, handle
                         <label className="inline-flex items-center mr-4">
                             <input
                                 type="radio"
-                                name={`documento-${documento.id}`}
+                                name={`documento-${doc.id}`}
                                 checked={doc.disponibleSi}
-                                onChange={() => handleRadioChange(documento.id, 'disponibleSi')}
+                                onChange={() => handleRadioChange(doc.id, 'disponibleSi')}
                             />
                             Disponible (SI)
                         </label>
                         <label className="inline-flex items-center">
                             <input
                                 type="radio"
-                                name={`documento-${documento.id}`}
+                                name={`documento-${doc.id}`}
                                 checked={doc.disponibleNo}
-                                onChange={() => handleRadioChange(documento.id, 'disponibleNo')}
+                                onChange={() => handleRadioChange(doc.id, 'disponibleNo')}
                             />
                             Disponible (NO)
                         </label>
                         <label className="inline-flex items-center">
                             <input
                                 type="radio"
-                                name={`documento-${documento.id}`}
+                                name={`documento-${doc.id}`}
                                 checked={doc.disponibleNA}
-                                onChange={() => handleRadioChange(documento.id, 'disponibleNA')}
+                                onChange={() => handleRadioChange(doc.id, 'disponibleNA')}
                             />
                             No Aplica (N/A)
                         </label>
