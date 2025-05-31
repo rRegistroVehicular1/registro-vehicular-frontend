@@ -3,7 +3,7 @@ interface Insumo {
     nombre: string;
     disponibleSi: boolean;
     disponibleNo: boolean;
-    funcionaNA: boolean;
+    disponibleNA: boolean; 
 }
 
 interface StepOchoProps {
@@ -16,7 +16,7 @@ interface StepOchoProps {
 function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: StepOchoProps) {
 
     const validateStep8 = () => {
-        const isInvalid = insumos.some((insumo) => !insumo.disponibleSi && !insumo.disponibleNo && !insumo.funcionaNA);
+        const isInvalid = insumos.some((insumo) => !insumo.disponibleSi && !insumo.disponibleNo && !insumo.disponibleNA);
 
         if (isInvalid) {
             alert('Debe seleccionar al menos una opción ("Disponible (SI)", "Funciona (NO)" o "No Aplica (N/A)") para cada insumo.');
@@ -26,14 +26,14 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
         return true;
     };
 
-    const handleRadioChange = (insumosId: number, field: 'funcionaSi' | 'funcionaNo' | 'funcionaNA') => {
+    const handleRadioChange = (insumoId: number, field: 'funcionaSi' | 'funcionaNo' | 'funcionaNA') => {
         const updatedInsumos = insumos.map(insumo) => {
-            if (insumos.id === insumosId) {
+            if (insumo.id === insumoId) {
                 return {
                     ...insumo,
-                    funcionaSi: field === 'funcionaSi',
-                    funcionaNo: field === 'funcionaNo',
-                    funcionaNA: field === 'funcionaNA'
+                    disponibleSi: field === 'disponibleSi',
+                    disponibleNo: field === 'disponibleNo',
+                    disponibleNA: field === 'disponibleNA'
                 };
             }
             return insumo;
@@ -53,7 +53,7 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
                                 type="radio"
                                 name={`insumo-${insumo.id}`}
                                 checked={insumo.disponibleSi}
-                                onChange={() => handleRadioChange(insumo.id, 'funcionaSi')}
+                                onChange={() => handleRadioChange(insumo.id, 'disponibleSi')}
                             />
                             Disponible (SI)
                         </label>
@@ -62,7 +62,7 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
                                 type="radio"
                                 name={`insumo-${insumo.id}`}
                                 checked={insumo.disponibleNo}
-                                onChange={() => handleRadioChange(insumo.id, 'funcionaNo')}
+                                onChange={() => handleRadioChange(insumo.id, 'disponibleNo')}
                             />
                             Disponible (NO)
                         </label>
@@ -70,8 +70,8 @@ function StepOcho({ insumos, setInsumos, handlePreviousStep, handleNextStep }: S
                             <input
                                 type="radio"
                                 name={`insumo-${insumo.id}`}
-                                checked={insumo.funcionaNA}
-                                onChange={() => handleRadioChange(insumo.id, 'funcionaNA')}
+                                checked={insumo.disponibleNA}
+                                onChange={() => handleRadioChange(insumo.id, 'disponibleNA')}
                             />
                             No Aplica (N/A)
                         </label>
