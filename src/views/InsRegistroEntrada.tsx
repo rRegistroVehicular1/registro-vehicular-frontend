@@ -50,7 +50,7 @@ function RegistroInspeccionEntrada() {
         fetchLastOdometroSalida();
     }, []);
 
-    const handleInputChange = (index: number, value: boolean) => {
+    const handleInputChange = (index: number, value: boolean | null) => {
         const newRevisiones = [...formData.revisiones];
         newRevisiones[index].opcion = value;
         setFormData({
