@@ -37,6 +37,8 @@ function StepTres({
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
+    const [conductoresList, setConductoresList] = useState<string[]>([]);
+    const [loadingConductores, setLoadingConductores] = useState(true);
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -111,6 +113,28 @@ function StepTres({
         setLoadingOdometro(false);
       }
     };
+
+    const fetchConductores = async () => {
+        setLoadingConductores(true);
+        try {
+            const response = await axios.get(`${BASE_URL}/placas/get-conductores`);
+            
+            if (!response.data || !Array.isArray(response.data)) {
+                throw new Error('Formato de respuesta inválido');
+            }
+            
+            setConductoresList(response.data.sort());
+        } catch (error) {
+            console.error('Error al obtener conductores:', error);
+            setConductoresList([]);
+        } finally {
+            setLoadingConductores(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchConductores();
+    }, []);
     
     useEffect(() => {
         fetchPlacas();
