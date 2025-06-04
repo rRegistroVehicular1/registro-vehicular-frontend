@@ -274,6 +274,8 @@ function StepTres({
                     <option value="pickup">PICKUP</option>
                     <option value="panel">PANEL</option>
                     <option value="camion">CAMION</option>
+                    <option value="cabezal">CABEZAL</option>
+                    <option value="orca">ORCA</option>
                 </select>
             </label>
 
