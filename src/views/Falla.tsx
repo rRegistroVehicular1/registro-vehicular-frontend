@@ -16,6 +16,8 @@ function Falla() {
     const [placasList, setPlacasList] = useState<string[]>([]);
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
+    const [conductoresList, setConductoresList] = useState<string[]>([]);
+    const [loadingConductores, setLoadingConductores] = useState(true);
 
     const navigate = useNavigate();
 
@@ -50,6 +52,29 @@ function Falla() {
             console.error('Error al obtener vehículos:', error);
         }
     }
+
+    // Función para obtener conductores
+    const fetchConductores = async () => {
+        setLoadingConductores(true);
+        try {
+            const response = await axios.get(`${BASE_URL}/placas/get-conductores`);
+            
+            if (!response.data || !Array.isArray(response.data)) {
+                throw new Error('Formato de respuesta inválido');
+            }
+            
+            setConductoresList(response.data.sort());
+        } catch (error) {
+            console.error('Error al obtener conductores:', error);
+            setConductoresList([]);
+        } finally {
+            setLoadingConductores(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchConductores();
+    }, []);
 
     useEffect(() => {
         fetchVehiculos();
@@ -121,14 +146,29 @@ function Falla() {
                         />
                     </div>
                     <div className="w-full md:w-1/2">
-                        <label className="block text-gray-700">Nombre legible del Conductor:</label>
-                        <input
+                        <label className="block text-gray-700">Nombre del Conductor:</label>
+                        <select
                             value={conductor}
                             onChange={(e) => setConductor(e.target.value)}
-                            type="text"
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
-                            placeholder="Nombre del Conductor"
-                        />
+                            required
+                            disabled={loadingConductores}
+                        >
+                            {loadingConductores ? (
+                                <option value="">Cargando conductores...</option>
+                            ) : conductoresList.length === 0 ? (
+                                <option value="" disabled>No hay conductores registrados</option>
+                            ) : (
+                                <>
+                                    <option value="">Seleccione un conductor</option>
+                                    {conductoresList.map((conductorItem, index) => (
+                                        <option key={`${conductorItem}-${index}`} value={conductorItem}>
+                                            {conductorItem}
+                                        </option>
+                                    ))}
+                                </>
+                            )}
+                        </select>
                     </div>
                 </div>
 
