@@ -237,13 +237,28 @@ function StepTres({
 
             <label className="block mb-4">
                 Nombre del Conductor:
-                <input
-                    type="text"
+                <select
                     value={conductor}
                     onChange={(e) => setConductor(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
-                />
+                    disabled={loadingConductores}
+                >
+                    {loadingConductores ? (
+                        <option value="">Cargando conductores...</option>
+                    ) : conductoresList.length === 0 ? (
+                        <option value="" disabled>No hay conductores registrados</option>
+                    ) : (
+                        <>
+                            <option value="">Seleccione un conductor</option>
+                            {conductoresList.map((conductorItem, index) => (
+                                <option key={`${conductorItem}-${index}`} value={conductorItem}>
+                                    {conductorItem}
+                                </option>
+                            ))}
+                        </>
+                    )}
+                </select>
             </label>
 
             <label className="block mb-4">
