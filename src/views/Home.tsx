@@ -88,7 +88,7 @@ function Home() {
             className={`mt-1 p-2 border rounded w-full text-sm sm:text-base ${error ? "border-red-500" : "border-gray-300"
               }`}
             placeholder="Ingrese su placa"
-            //required
+            required
           />
         </label>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -109,11 +109,6 @@ function Home() {
             {isChecking ? 'Verificando...' : 'Enviar'}
           </button>
         </div>
-        <a href="/falla">
-            <button className="w-full mt-10 bg-green-500 text-white py-2 px-4 rounded">
-              Reportar una falla
-            </button>
-        </a>
       </form>
     </div>
   );
