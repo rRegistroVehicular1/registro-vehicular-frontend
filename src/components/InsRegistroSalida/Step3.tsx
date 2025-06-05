@@ -193,7 +193,7 @@ function StepTres({
     
     useEffect(() => {
         if (placa && llantasMap[placa]) {
-            const cantidad = llantasMap[placa];
+            const cantidad = Number(llantasMap[placa]);
             actualizarLlantasPorTipo(cantidad);
         }
     }, [placa, llantasMap]);
