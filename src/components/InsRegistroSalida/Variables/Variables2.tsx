@@ -17,17 +17,30 @@ function Variables2() {
   //const [observacionGeneral, setObservacionGeneral] = useState('');
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
-  // Función para actualizar llantas según tipo de vehículo
-  const actualizarLlantasPorTipo = (tipoVehiculo: string) => {
-    if (tipoVehiculo === 'camion') {
-      setLlantas(todasLlantas.filter(llanta => 
-        [1, 2, 5, 6, 7, 8].includes(llanta.id)
-      ));
-    } else {
-      setLlantas(todasLlantas.filter(llanta => 
-        [1, 2, 5, 7].includes(llanta.id)
-      ));
-    }
+  // Función para actualizar llantas según cantidad de llantas
+  const actualizarLlantasPorTipo = (tipoVehiculo: string, cantidadLlantas: number = 4) => {
+      let llantasFiltradas: Llanta[] = [];
+      
+      if (cantidadLlantas === 4) {
+          llantasFiltradas = todasLlantas.filter(llanta => 
+              [1, 2, 5, 7].includes(llanta.id)
+          );
+      } else if (cantidadLlantas === 6) {
+          llantasFiltradas = todasLlantas.filter(llanta => 
+              [1, 2, 5, 6, 7, 8].includes(llanta.id)
+          );
+      } else if (cantidadLlantas === 10) {
+          llantasFiltradas = todasLlantas.filter(llanta => 
+              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(llanta.id)
+          );
+      } else {
+          // Default a 4 llantas si el número no coincide
+          llantasFiltradas = todasLlantas.filter(llanta => 
+              [1, 2, 5, 7].includes(llanta.id)
+          );
+      }
+      
+      setLlantas(llantasFiltradas);
   };
 
   return {
