@@ -14,7 +14,7 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorTipo: (tipo: string, cantidadLlantas: number) => void;
+    actualizarLlantasPorTipo: (tipo: string) => void;
 }
 
 function StepTres({ 
@@ -39,7 +39,7 @@ function StepTres({
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
-    const [llantasPorPlaca, setLlantasPorPlaca] = useState<Record<string, number>>({});
+    const [llantasMap, setLlantasMap] = useState<Record<string, number>>({});
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -143,15 +143,15 @@ function StepTres({
     }, []);
 
     useEffect(() => {
-        const fetchLlantasPorPlaca = async () => {
+        const fetchCantidadLlantas = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/placas/get-llantas-por-placa`);
-                setLlantasPorPlaca(response.data);
+                const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
+                setLlantasMap(response.data);
             } catch (error) {
-                console.error('Error al obtener mapeo de llantas por placa:', error);
+                console.error('Error al obtener cantidad de llantas:', error);
             }
         };
-        fetchLlantasPorPlaca();
+        fetchCantidadLlantas();
     }, []);
 
     useEffect(() => {
@@ -170,8 +170,6 @@ function StepTres({
             if (vehiculosMap[placa]) {
                 const tipo = vehiculosMap[placa].toLowerCase();
                 setTipoVehiculo(tipo);
-
-                const cantidadLlantas = llantasPorPlaca[placa] || 4; // Default 4 si no se encuentra
                 actualizarLlantasPorTipo(tipo);
             } else {
                 setTipoVehiculo(''); // Limpiar si no se encuentra
@@ -179,7 +177,26 @@ function StepTres({
         } else {
             setLastOdometro(null);
         }
-    }, [placa, vehiculosMap, llantasPorPlaca]);
+    }, [placa]);
+
+    useEffect(() => {
+        const fetchCantidadLlantas = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
+                setLlantasMap(response.data);
+            } catch (error) {
+                console.error('Error al obtener cantidad de llantas:', error);
+            }
+        };
+        fetchCantidadLlantas();
+    }, []);
+    
+    useEffect(() => {
+        if (placa && llantasMap[placa]) {
+            const cantidad = llantasMap[placa];
+            actualizarLlantasPorCantidad(cantidad);
+        }
+    }, [placa, llantasMap]);
 
     useEffect(() => {
         if (odometroSalida && lastOdometro !== null) {
