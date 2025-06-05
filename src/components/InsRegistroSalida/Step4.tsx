@@ -68,7 +68,9 @@ function StepCuatro({
                 {/* Imagen de referencia */}
                 <div className="flex justify-center items-center order-1 md:order-1 mb-4 md:mb-0 md:h-[calc(100vh-200px)] md:sticky md:top-20">
                     <img
-                        src="/assets/Inspeccion_10llantas.jpg"
+                        src={llantas.length === 4 ? "/assets/Inspeccion_10llantas.jpg" : 
+                              llantas.length === 6 ? "/assets/Inspeccion_10llantas.jpg" : 
+                              "/assets/Inspeccion_10llantas.jpg"}
                         alt="Diagrama de inspección de llantas"
                         className="max-w-full max-h-[70vh] w-auto object-contain border border-gray-200 rounded-lg shadow-sm"
                     />
