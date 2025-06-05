@@ -21,7 +21,7 @@ function Variables2() {
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
   // Función para actualizar llantas según cantidad
-    const actualizarLlantasPorCantidad = (cantidad: number) => {
+    const actualizarLlantasPorTipo = (cantidad: number) => {
         let llantasIds: number[] = [];
         
         switch(cantidad) {
@@ -46,7 +46,7 @@ function Variables2() {
     setLlantas,
     observacionGeneralLlantas,
     setObservacionGeneralLlantas,
-    actualizarLlantasPorCantidad
+    actualizarLlantasPorTipo
   };
 }
 
