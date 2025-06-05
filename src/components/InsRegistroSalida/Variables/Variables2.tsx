@@ -20,6 +20,12 @@ function Variables2() {
   const [llantas, setLlantas] = useState<Llanta[]>([]);
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
+  const actualizarLlantasPorTipo = (tipo: string) => {
+    // Mantenemos esta función por compatibilidad
+    const cantidad = tipo === 'camion' ? 6 : 4;
+    actualizarLlantasPorCantidad(cantidad);
+  };
+  
   // Función para actualizar llantas según tipo de vehículo
   const actualizarLlantasPorCantidad = (cantidad: number) => {
     let llantasFiltradas: Llanta[] = [];
@@ -46,6 +52,7 @@ function Variables2() {
     setLlantas,
     observacionGeneralLlantas,
     setObservacionGeneralLlantas,
+    actualizarLlantasPorTipo,
     actualizarLlantasPorCantidad
   };
 }
