@@ -49,6 +49,9 @@ function RegistroInspeccionSalida() {
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [llantasPorPlaca, setLlantasPorPlaca] = useState<Record<string, number>>({});
+
+  
   
   const handleNextStep = () => {
     setStep(step + 1);
@@ -93,6 +96,18 @@ function RegistroInspeccionSalida() {
     obtenerPlacas();
   }, []);
 
+  useEffect(() => {
+      const fetchLlantasPorPlaca = async () => {
+          try {
+              const response = await axios.get(`${BASE_URL}/placas/get-llantas-por-placa`);
+              setLlantasPorPlaca(response.data);
+          } catch (error) {
+              console.error('Error al obtener llantas por placa:', error);
+          }
+      };
+      fetchLlantasPorPlaca();
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">R06-PT-19 REVICION DE VEHICULOS - SALIDA </h1>
@@ -125,7 +140,11 @@ function RegistroInspeccionSalida() {
             tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
             odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
             onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
-            actualizarLlantasPorTipo={actualizarLlantasPorTipo}
+            actualizarLlantasPorTipo={(tipo) => {
+                // Obtener la cantidad de llantas para esta placa
+                const cantidadLlantas = llantasPorPlaca[placa] || 4;
+                actualizarLlantasPorTipo(tipo, cantidadLlantas);
+            }}
           />
         )}
 
