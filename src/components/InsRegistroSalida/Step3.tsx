@@ -150,6 +150,21 @@ function StepTres({
     }, [placa]);
 
     useEffect(() => {
+      const fetchCantidadLlantas = async () => {
+        if (placa) {
+          try {
+            const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
+            const cantidad = response.data[placa.toUpperCase()] || 4;
+            actualizarLlantasPorCantidad(cantidad);
+          } catch (error) {
+            console.error('Error al obtener cantidad de llantas:', error);
+          }
+        }
+      };
+      fetchCantidadLlantas();
+    }, [placa]);
+
+    useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
             
