@@ -21,9 +21,12 @@ function Variables2() {
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
   const actualizarLlantasPorTipo = (tipo: string) => {
-    // Mantenemos esta función por compatibilidad
-    const cantidad = tipo === 'camion' ? 6 : 4;
-    actualizarLlantasPorCantidad(cantidad);
+    // Lógica original para compatibilidad
+    if (tipo === 'camion') {
+      setLlantas(todasLlantas.filter(llanta => [1, 2, 5, 6, 7, 8].includes(llanta.id)));
+    } else {
+      setLlantas(todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id)));
+    }
   };
   
   // Función para actualizar llantas según tipo de vehículo
