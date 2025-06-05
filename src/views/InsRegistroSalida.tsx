@@ -140,11 +140,7 @@ function RegistroInspeccionSalida() {
             tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
             odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
             onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
-            actualizarLlantasPorTipo={(tipo) => {
-                // Obtener la cantidad de llantas para esta placa
-                const cantidadLlantas = llantasPorPlaca[placa] || 4;
-                actualizarLlantasPorTipo(tipo, cantidadLlantas);
-            }}
+            actualizarLlantasPorTipo={cantidadLlantas}
           />
         )}
 
