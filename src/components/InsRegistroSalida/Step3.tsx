@@ -39,6 +39,7 @@ function StepTres({
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
+    const [llantasPorPlaca, setLlantasPorPlaca] = useState<Record<string, number>>({});
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -142,6 +143,18 @@ function StepTres({
     }, []);
 
     useEffect(() => {
+        const fetchLlantasPorPlaca = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/placas/get-llantas-por-placa`);
+                setLlantasPorPlaca(response.data);
+            } catch (error) {
+                console.error('Error al obtener mapeo de llantas por placa:', error);
+            }
+        };
+        fetchLlantasPorPlaca();
+    }, []);
+
+    useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
         } else {
@@ -157,6 +170,8 @@ function StepTres({
             if (vehiculosMap[placa]) {
                 const tipo = vehiculosMap[placa].toLowerCase();
                 setTipoVehiculo(tipo);
+
+                const cantidadLlantas = llantasPorPlaca[placa] || 4; // Default 4 si no se encuentra
                 actualizarLlantasPorTipo(tipo);
             } else {
                 setTipoVehiculo(''); // Limpiar si no se encuentra
@@ -164,7 +179,7 @@ function StepTres({
         } else {
             setLastOdometro(null);
         }
-    }, [placa]);
+    }, [placa, vehiculosMap, llantasPorPlaca]);
 
     useEffect(() => {
         if (odometroSalida && lastOdometro !== null) {
