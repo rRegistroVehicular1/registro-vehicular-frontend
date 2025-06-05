@@ -1,8 +1,8 @@
 export interface Llanta {
   id: number;
   nombre: string;
-  posicion: string; // 'delantera', 'trasera', 'extra'
-  lado: 'izquierda' | 'derecha' | 'central'; 
+  posicion: 'delantera' | 'trasera' | 'extra-delantera' | 'extra-trasera' | 'central';
+  lado: 'izquierda' | 'derecha' | 'central';
   fp: boolean;    // Falta presión
   pe: boolean;    // Presión excesiva
   pa: boolean;    // Presión adecuada
