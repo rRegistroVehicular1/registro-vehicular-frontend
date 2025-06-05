@@ -32,7 +32,7 @@ function RegistroInspeccionSalida() {
   }, []);
 
   const {
-    llantas, setLlantas, /*llantasParte2, setLlantasParte2,*/ observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
+    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
   } = Variables2();
 
   const {
