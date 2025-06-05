@@ -14,7 +14,7 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorTipo: (tipo: number) => void;
+    actualizarLlantasPorTipo: (tipo: string) => void;
 }
 
 function StepTres({ 
@@ -39,7 +39,6 @@ function StepTres({
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
-    const [llantasMap, setLlantasMap] = useState<Record<string, number>>({});
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -143,18 +142,6 @@ function StepTres({
     }, []);
 
     useEffect(() => {
-        const fetchCantidadLlantas = async () => {
-            try {
-                const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
-                setLlantasMap(response.data);
-            } catch (error) {
-                console.error('Error al obtener cantidad de llantas:', error);
-            }
-        };
-        fetchCantidadLlantas();
-    }, []);
-
-    useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
         } else {
@@ -178,25 +165,6 @@ function StepTres({
             setLastOdometro(null);
         }
     }, [placa]);
-
-    useEffect(() => {
-        const fetchCantidadLlantas = async () => {
-            try {
-                const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
-                setLlantasMap(response.data);
-            } catch (error) {
-                console.error('Error al obtener cantidad de llantas:', error);
-            }
-        };
-        fetchCantidadLlantas();
-    }, []);
-    
-    useEffect(() => {
-        if (placa && llantasMap[placa]) {
-            const cantidad = Number(llantasMap[placa]);
-            actualizarLlantasPorTipo(cantidad);
-        }
-    }, [placa, llantasMap]);
 
     useEffect(() => {
         if (odometroSalida && lastOdometro !== null) {
@@ -361,4 +329,3 @@ function StepTres({
 }
 
 export default StepTres;
-
