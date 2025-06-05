@@ -20,40 +20,33 @@ function Variables2() {
   const [llantas, setLlantas] = useState<Llanta[]>([]);
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
-  // Función para actualizar llantas según cantidad de llantas
-  const actualizarLlantasPorTipo = (tipoVehiculo: string, cantidadLlantas: number) => {
-      let llantasFiltradas: Llanta[] = [];
-      
-      // Primero filtramos por cantidad de llantas
-      switch(cantidadLlantas) {
-        case 4:
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
-          break;
-        case 6:
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 6, 7, 8].includes(llanta.id));
-          break;
-        case 10:
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(llanta.id));
-          break;
-        default:
-          // Por defecto mostramos 4 llantas si el número no coincide
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
-      }
-  
-      // Opcional: ajustes adicionales basados en el tipo de vehículo
-      if (tipoVehiculo === 'camion') {
-        // Podemos hacer ajustes específicos para camiones si es necesario
-      }
-      
-      setLlantas(llantasFiltradas);
-  };
+  // Función para actualizar llantas según cantidad
+    const actualizarLlantasPorCantidad = (cantidad: number) => {
+        let llantasIds: number[] = [];
+        
+        switch(cantidad) {
+            case 4:
+                llantasIds = [1, 2, 5, 7]; // Delanteras y traseras básicas
+                break;
+            case 6:
+                llantasIds = [1, 2, 5, 6, 7, 8]; // Delanteras y traseras con extras
+                break;
+            case 10:
+                llantasIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Todas las llantas
+                break;
+            default:
+                llantasIds = [1, 2, 5, 7]; // Default a 4 llantas
+        }
+
+        setLlantas(todasLlantas.filter(llanta => llantasIds.includes(llanta.id)));
+    };
 
   return {
     llantas,
     setLlantas,
     observacionGeneralLlantas,
     setObservacionGeneralLlantas,
-    actualizarLlantasPorTipo
+    actualizarLlantasPorCantidad
   };
 }
 
