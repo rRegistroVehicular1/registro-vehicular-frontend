@@ -14,7 +14,7 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorTipo: (tipo: string) => void;
+    actualizarLlantasPorTipo: (tipo: number) => void;
 }
 
 function StepTres({ 
