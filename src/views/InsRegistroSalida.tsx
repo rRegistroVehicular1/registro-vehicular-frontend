@@ -125,7 +125,7 @@ function RegistroInspeccionSalida() {
             tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
             odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
             onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
-            actualizarLlantasPorTipo={actualizarLlantasPorTipo}
+            actualizarLlantasPorTipo={actualizarLlantasPorCantidad}
           />
         )}
 
