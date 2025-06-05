@@ -32,7 +32,7 @@ function RegistroInspeccionSalida() {
   }, []);
 
   const {
-    llantas, setLlantas, /*llantasParte2, setLlantasParte2,*/ observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
+    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo, actualizarLlantasPorCantidad
   } = Variables2();
 
   const {
@@ -125,7 +125,8 @@ function RegistroInspeccionSalida() {
             tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
             odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
             onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
-            actualizarLlantasPorTipo={actualizarLlantasPorCantidad}
+            actualizarLlantasPorTipo={actualizarLlantasPorTipo}
+            actualizarLlantasPorCantidad={actualizarLlantasPorCantidad}
           />
         )}
 
