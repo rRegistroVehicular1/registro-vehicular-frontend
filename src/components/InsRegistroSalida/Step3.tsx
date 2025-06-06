@@ -153,13 +153,14 @@ function StepTres({
         if (placa) {
             fetchLastOdometro(placa);
             
-            // Buscar el tipo de vehículo correspondiente a la placa seleccionada
+            // Buscar el tipo de vehículo y cantidad de llantas correspondiente
             if (vehiculosMap[placa]) {
-                const tipo = vehiculosMap[placa].toLowerCase();
+                const { tipo, llantas } = vehiculosMap[placa];
                 setTipoVehiculo(tipo);
-                actualizarLlantasPorTipo(tipo);
+                actualizarLlantasPorTipo(tipo, llantas); // Pasamos la cantidad de llantas
             } else {
                 setTipoVehiculo(''); // Limpiar si no se encuentra
+                actualizarLlantasPorTipo('', 4); // Default a 4 llantas
             }
         } else {
             setLastOdometro(null);
