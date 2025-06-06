@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '@/validation/url';
+import { VehiculoInfo, VehiculosMap } from '@/types/inspeccion';
 
 type Step3Props = {
     placa: string;
@@ -14,14 +15,10 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorTipo: (tipo: string, llantas?: number) => void;
-    vehiculosMap: Record<string, VehiculoInfo>;
+    actualizarLlantasPorTipo: (tipo: string, cantidadLlantas?: number) => void;
+    vehiculosMap: VehiculosMap;
+    setVehiculosMap: React.Dispatch<React.SetStateAction<VehiculosMap>>;
 }
-
-type VehiculoInfo = {
-    tipo: string;
-    llantas: number;
-};
 
 function StepTres({ 
     placa, 
@@ -35,7 +32,9 @@ function StepTres({
     onPrevious, 
     onNext, 
     datos, 
-    actualizarLlantasPorTipo 
+    actualizarLlantasPorTipo,
+    vehiculosMap,
+    setVehiculosMap
 }: Step3Props) {
     
     const [placasList, setPlacasList] = useState<string[]>([]);
@@ -73,7 +72,7 @@ function StepTres({
     // Función para obtener el mapeo de placas a tipos de vehículo
     const fetchTiposVehiculo = async () => {
         try {
-            const response = await axios.get<Record<string, VehiculoInfo>>(`${BASE_URL}/placas/get-tipos-vehiculo`);
+            const response = await axios.get<VehiculosMap>(`${BASE_URL}/placas/get-tipos-vehiculo`);
             setVehiculosMap(response.data);
         } catch (error) {
             console.error('Error al obtener tipos de vehículo:', error);
