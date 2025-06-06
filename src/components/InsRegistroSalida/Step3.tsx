@@ -14,8 +14,14 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorTipo: (tipo: string) => void;
+    actualizarLlantasPorTipo: (tipo: string, llantas?: number) => void;
+    vehiculosMap: Record<string, VehiculoInfo>;
 }
+
+type VehiculoInfo = {
+    tipo: string;
+    llantas: number;
+};
 
 function StepTres({ 
     placa, 
