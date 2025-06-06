@@ -32,7 +32,7 @@ function RegistroInspeccionSalida() {
   }, []);
 
   const {
-    llantas, setLlantas, /*llantasParte2, setLlantasParte2,*/ observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
+    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
   } = Variables2();
 
   const {
@@ -49,6 +49,7 @@ function RegistroInspeccionSalida() {
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [vehiculosMap, setVehiculosMap] = useState<VehiculosMap>({});
   
   const handleNextStep = () => {
     setStep(step + 1);
@@ -126,6 +127,7 @@ function RegistroInspeccionSalida() {
             odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
             onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
             actualizarLlantasPorTipo={actualizarLlantasPorTipo}
+            vehiculosMap={vehiculosMap} setVehiculosMap={setVehiculosMap}
           />
         )}
 
