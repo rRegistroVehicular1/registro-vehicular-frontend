@@ -45,6 +45,7 @@ function StepTres({
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
+    const [vehiculosMap, setVehiculosMap] = useState<Record<string, VehiculoInfo>>({});
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -72,7 +73,7 @@ function StepTres({
     // Función para obtener el mapeo de placas a tipos de vehículo
     const fetchTiposVehiculo = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
+            const response = await axios.get<Record<string, VehiculoInfo>>(`${BASE_URL}/placas/get-tipos-vehiculo`);
             setVehiculosMap(response.data);
         } catch (error) {
             console.error('Error al obtener tipos de vehículo:', error);
