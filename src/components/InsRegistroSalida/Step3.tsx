@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '@/validation/url';
-import { VehiculoInfo, VehiculosMap } from '@/types/inspeccion';
 
 type Step3Props = {
     placa: string;
@@ -15,9 +14,7 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorTipo: (tipo: string, cantidadLlantas?: number) => void;
-    vehiculosMap: VehiculosMap;
-    setVehiculosMap: React.Dispatch<React.SetStateAction<VehiculosMap>>;
+    actualizarLlantasPorTipo: (tipo: string) => void;
 }
 
 function StepTres({ 
@@ -32,7 +29,7 @@ function StepTres({
     onPrevious, 
     onNext, 
     datos, 
-    actualizarLlantasPorTipo,
+    actualizarLlantasPorTipo 
 }: Step3Props) {
     
     const [placasList, setPlacasList] = useState<string[]>([]);
@@ -42,7 +39,6 @@ function StepTres({
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
-    const [vehiculosMap, setVehiculosMap] = useState<Record<string, VehiculoInfo>>({});
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -70,7 +66,7 @@ function StepTres({
     // Función para obtener el mapeo de placas a tipos de vehículo
     const fetchTiposVehiculo = async () => {
         try {
-            const response = await axios.get<VehiculosMap>(`${BASE_URL}/placas/get-tipos-vehiculo`);
+            const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
             setVehiculosMap(response.data);
         } catch (error) {
             console.error('Error al obtener tipos de vehículo:', error);
@@ -157,14 +153,13 @@ function StepTres({
         if (placa) {
             fetchLastOdometro(placa);
             
-            // Buscar el tipo de vehículo y cantidad de llantas correspondiente
+            // Buscar el tipo de vehículo correspondiente a la placa seleccionada
             if (vehiculosMap[placa]) {
-                const { tipo, llantas } = vehiculosMap[placa];
+                const tipo = vehiculosMap[placa].toLowerCase();
                 setTipoVehiculo(tipo);
-                actualizarLlantasPorTipo(tipo, llantas); // Pasamos la cantidad de llantas
+                actualizarLlantasPorTipo(tipo);
             } else {
                 setTipoVehiculo(''); // Limpiar si no se encuentra
-                actualizarLlantasPorTipo('', 4); // Default a 4 llantas
             }
         } else {
             setLastOdometro(null);
