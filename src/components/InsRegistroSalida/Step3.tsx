@@ -33,8 +33,6 @@ function StepTres({
     onNext, 
     datos, 
     actualizarLlantasPorTipo,
-    vehiculosMap,
-    setVehiculosMap
 }: Step3Props) {
     
     const [placasList, setPlacasList] = useState<string[]>([]);
