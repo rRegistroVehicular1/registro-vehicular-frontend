@@ -1,14 +1,12 @@
 export interface Llanta {
   id: number;
   nombre: string;
-  posicion: string; // 'delantera', 'trasera', 'extra'
-  lado: 'izquierda' | 'derecha' | 'central'; 
-  fp: boolean;    // Falta presión
-  pe: boolean;    // Presión excesiva
-  pa: boolean;    // Presión adecuada
+  posicion: string;
+  lado: 'izquierda' | 'derecha' | 'central';
+  fp: boolean;
+  pe: boolean;
+  pa: boolean;
   desgaste: boolean;
 }
 
-// Alias para compatibilidad
-export type Llantas = Llanta;
-
+export type CantidadLlantas = 4 | 6 | 10;
