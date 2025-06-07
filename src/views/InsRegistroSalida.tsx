@@ -32,7 +32,8 @@ function RegistroInspeccionSalida() {
   }, []);
 
   const {
-    llantas, setLlantas, /*llantasParte2, setLlantasParte2,*/ observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
+    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas, cantidadLlantas,
+    actualizarLlantasPorPlaca
   } = Variables2();
 
   const {
@@ -67,8 +68,8 @@ function RegistroInspeccionSalida() {
     setIsSubmitting(true);
     try {
       await handleSubmit({
-        placa, conductor, sucursal, tipoVehiculo, odometroSalida, llantas,
-        /*llantasParte1, llantasParte2,*/ observacionGeneralLlantas, fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales, luces,
+        placa, conductor, sucursal, tipoVehiculo, odometroSalida, llantas, cantidadLlantas, 
+        observacionGeneralLlantas, fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales, luces,
         insumos, documentacion, danosCarroceria
       });
       navigate('/');
@@ -125,7 +126,7 @@ function RegistroInspeccionSalida() {
             tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
             odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
             onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
-            actualizarLlantasPorTipo={actualizarLlantasPorTipo}
+            actualizarLlantasPorPlaca={actualizarLlantasPorPlaca}
           />
         )}
 
