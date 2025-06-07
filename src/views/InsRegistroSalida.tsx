@@ -138,6 +138,7 @@ function RegistroInspeccionSalida() {
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
             titulo="Revisión de Llantas"
+            cantidadLlantas={cantidadLlantas}
           />
         )}
         
