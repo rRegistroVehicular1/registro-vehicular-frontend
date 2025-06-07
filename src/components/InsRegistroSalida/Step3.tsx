@@ -14,7 +14,7 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorTipo: (tipo: string) => void;
+    actualizarLlantasPorPlaca: (placa: string) => void;
 }
 
 function StepTres({ 
@@ -29,7 +29,7 @@ function StepTres({
     onPrevious, 
     onNext, 
     datos, 
-    actualizarLlantasPorTipo 
+    actualizarLlantasPorPlaca
 }: Step3Props) {
     
     const [placasList, setPlacasList] = useState<string[]>([]);
@@ -39,6 +39,7 @@ function StepTres({
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
+    const [cantidadLlantasMap, setCantidadLlantasMap] = useState<Record<string, number>>({});
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -60,6 +61,17 @@ function StepTres({
         alert('Error al cargar las placas disponibles');
       } finally {
         setLoadingPlacas(false);
+      }
+    };
+
+    // Función para obtener el mapeo de placas a cantidad de llantas
+    const fetchCantidadLlantas = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
+        setCantidadLlantasMap(response.data);
+      } catch (error) {
+        console.error('Error al obtener cantidad de llantas:', error);
+        setCantidadLlantasMap({});
       }
     };
 
@@ -139,11 +151,21 @@ function StepTres({
     useEffect(() => {
         fetchPlacas();
         fetchTiposVehiculo();
+        fetchCantidadLlantas();
     }, []);
 
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
+            actualizarLlantasPorPlaca(placa);
+
+            // Mantener la lógica de tipo de vehículo si es necesaria
+            if (vehiculosMap[placa]) {
+                const tipo = vehiculosMap[placa].toLowerCase();
+                setTipoVehiculo(tipo);
+            } else {
+                setTipoVehiculo('');
+            }
         } else {
         setLastOdometro(null);
         }
@@ -213,6 +235,7 @@ function StepTres({
                         console.log("Placa seleccionada en onChange:", e.target.value); // Debug
                         setPlaca(e.target.value);
                         fetchLastOdometro(e.target.value);
+                        actualizarLlantasPorPlaca(e.target.value);
                     }}
                     className="mt-1 p-2 border rounded w-full"
                     required
@@ -227,7 +250,7 @@ function StepTres({
                             <option value="">Seleccione una placa</option>
                             {placasList.map((placaItem, index) => (
                                 <option key={`${placaItem}-${index}`} value={placaItem}>
-                                    {placaItem}
+                                    {placaItem} ({cantidadLlantasMap[placaItem] || 4} llantas)
                                 </option>
                             ))}
                         </>
