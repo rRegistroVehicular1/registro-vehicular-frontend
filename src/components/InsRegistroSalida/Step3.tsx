@@ -169,24 +169,7 @@ function StepTres({
         } else {
         setLastOdometro(null);
         }
-    }, [placa]);
-
-    useEffect(() => {
-        if (placa) {
-            fetchLastOdometro(placa);
-            
-            // Buscar el tipo de vehículo correspondiente a la placa seleccionada
-            if (vehiculosMap[placa]) {
-                const tipo = vehiculosMap[placa].toLowerCase();
-                setTipoVehiculo(tipo);
-                actualizarLlantasPorTipo(tipo);
-            } else {
-                setTipoVehiculo(''); // Limpiar si no se encuentra
-            }
-        } else {
-            setLastOdometro(null);
-        }
-    }, [placa]);
+    }, [placa]); 
 
     useEffect(() => {
         if (odometroSalida && lastOdometro !== null) {
