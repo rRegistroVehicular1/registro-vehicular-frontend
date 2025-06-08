@@ -15,7 +15,7 @@ type Step3Props = {
     onNext: () => void;
     datos: string[];
     actualizarLlantasPorPlaca: (placa: string) => void;
-}
+};
 
 function StepTres({ 
     placa, 
@@ -29,7 +29,7 @@ function StepTres({
     onPrevious, 
     onNext, 
     datos, 
-    actualizarLlantasPorPlaca
+    actualizarLlantasPorPlaca 
 }: Step3Props) {
     
     const [placasList, setPlacasList] = useState<string[]>([]);
@@ -39,7 +39,6 @@ function StepTres({
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
-    const [cantidadLlantasMap, setCantidadLlantasMap] = useState<Record<string, number>>({});
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -64,18 +63,6 @@ function StepTres({
       }
     };
 
-    // Función para obtener el mapeo de placas a cantidad de llantas
-    const fetchCantidadLlantas = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
-        setCantidadLlantasMap(response.data);
-      } catch (error) {
-        console.error('Error al obtener cantidad de llantas:', error);
-        setCantidadLlantasMap({});
-      }
-    };
-
-    // Función para obtener el mapeo de placas a tipos de vehículo
     const fetchTiposVehiculo = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
@@ -151,31 +138,29 @@ function StepTres({
     useEffect(() => {
         fetchPlacas();
         fetchTiposVehiculo();
-        fetchCantidadLlantas();
     }, []);
 
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
-            actualizarLlantasPorPlaca(placa);
-
-            // Mantener la lógica de tipo de vehículo si es necesaria
+            actualizarLlantasPorPlaca(placa); // Nueva función para actualizar llantas
+            
+            // Buscar el tipo de vehículo correspondiente a la placa seleccionada
             if (vehiculosMap[placa]) {
                 const tipo = vehiculosMap[placa].toLowerCase();
                 setTipoVehiculo(tipo);
             } else {
-                setTipoVehiculo('');
+                setTipoVehiculo(''); // Limpiar si no se encuentra
             }
         } else {
-        setLastOdometro(null);
+            setLastOdometro(null);
         }
-    }, [placa]); 
+    }, [placa]);
 
     useEffect(() => {
         if (odometroSalida && lastOdometro !== null) {
             const currentValue = Number(odometroSalida);
             if (!isNaN(currentValue) && currentValue < lastOdometro) {
-                // El campo ya se marca en rojo por la clase CSS
                 console.log(`Advertencia: Odómetro actual (${currentValue}) es menor que el último registro (${lastOdometro})`);
             }
         }
@@ -203,11 +188,6 @@ function StepTres({
         return true;
     };
 
-    const handleTipoVehiculoChange = (value: string) => {
-        setTipoVehiculo(value);
-        actualizarLlantasPorTipo(value);
-    };
-
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label className="block mb-4">
@@ -215,10 +195,10 @@ function StepTres({
                 <select
                     value={placa}
                     onChange={(e) => {
-                        console.log("Placa seleccionada en onChange:", e.target.value); // Debug
+                        console.log("Placa seleccionada en onChange:", e.target.value);
                         setPlaca(e.target.value);
                         fetchLastOdometro(e.target.value);
-                        actualizarLlantasPorPlaca(e.target.value);
+                        actualizarLlantasPorPlaca(e.target.value); // Actualizar llantas al cambiar placa
                     }}
                     className="mt-1 p-2 border rounded w-full"
                     required
@@ -233,7 +213,7 @@ function StepTres({
                             <option value="">Seleccione una placa</option>
                             {placasList.map((placaItem, index) => (
                                 <option key={`${placaItem}-${index}`} value={placaItem}>
-                                    {placaItem} ({cantidadLlantasMap[placaItem] || 4} llantas)
+                                    {placaItem}
                                 </option>
                             ))}
                         </>
@@ -271,7 +251,7 @@ function StepTres({
                 Tipo de Vehículo:
                 <select
                     value={tipoVehiculo}
-                    onChange={(e) => handleTipoVehiculoChange(e.target.value)}
+                    onChange={(e) => setTipoVehiculo(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 >
