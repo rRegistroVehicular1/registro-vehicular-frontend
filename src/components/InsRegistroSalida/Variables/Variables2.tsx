@@ -4,12 +4,7 @@ import axios from 'axios';
 import { BASE_URL } from '@/validation/url';
 
 function Variables2() {
-  
-  const [llantas, setLlantas] = useState<Llanta[]>([]);
-  const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
-  const [cantidadLlantas, setCantidadLlantas] = useState<CantidadLlantas>(4);
-
-  // 1. Definir llantasBase como constante primero
+  // Definición de todas las posibles llantas
   const todasLlantas: Llanta[] = [
     { id: 1, nombre: '1 - Delantera Izquierda', posicion: 'delantera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
     { id: 2, nombre: '2 - Delantera Derecha', posicion: 'delantera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
@@ -23,27 +18,54 @@ function Variables2() {
     { id: 10, nombre: '10 - Central Derecha', posicion: 'central', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false }
   ];
 
-  // Función para actualizar llantas según cantidad de ruedas
+  // Estados
+  const [llantas, setLlantas] = useState<Llanta[]>([]);
+  const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
+  const [cantidadLlantas, setCantidadLlantas] = useState<CantidadLlantas>(4);
+
+  // Función para actualizar las llantas según la placa
   const actualizarLlantasPorPlaca = async (placa: string) => {
+    if (!placa) {
+      // Si no hay placa, mostrar configuración por defecto (4 llantas)
+      setLlantas(todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id)));
+      setCantidadLlantas(4);
+      return;
+    }
+
     try {
+      // Obtener la cantidad de llantas desde el backend
       const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
       const cantidad = response.data[placa.toUpperCase()] || 4;
-      setCantidadLlantas(cantidad as CantidadLlantas);
       
+      // Validar que sea 4, 6 o 10
+      const cantidadValida: CantidadLlantas = 
+        cantidad === 4 || cantidad === 6 || cantidad === 10 ? cantidad : 4;
+      
+      setCantidadLlantas(cantidadValida);
+
+      // Filtrar llantas según la cantidad
       let llantasFiltradas: Llanta[] = [];
       
-      if (cantidad === 4) {
-        llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
-      } else if (cantidad === 6) {
-        llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 6, 7, 8].includes(llanta.id));
-      } else { // 10 llantas
-        llantasFiltradas = [...todasLlantas];
+      switch(cantidadValida) {
+        case 4:
+          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
+          break;
+        case 6:
+          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 6, 7, 8].includes(llanta.id));
+          break;
+        case 10:
+          llantasFiltradas = [...todasLlantas];
+          break;
+        default:
+          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
       }
       
       setLlantas(llantasFiltradas);
     } catch (error) {
       console.error('Error al obtener cantidad de llantas:', error);
+      // Fallback a 4 llantas si hay error
       setLlantas(todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id)));
+      setCantidadLlantas(4);
     }
   };
 
@@ -58,4 +80,3 @@ function Variables2() {
 }
 
 export default Variables2;
-
