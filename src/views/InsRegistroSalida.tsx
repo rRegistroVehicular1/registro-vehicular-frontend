@@ -1,4 +1,3 @@
-//import StepUno from '../components/InsRegistroSalida/Step1';
 import StepDos from '../components/InsRegistroSalida/Step2';
 import StepTres from '../components/InsRegistroSalida/Step3';
 import StepCuatro from '../components/InsRegistroSalida/Step4';
@@ -18,39 +17,65 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../validation/url';
 import { useNavigate } from 'react-router-dom';
-import { Llanta } from '@/types/llantas';
 
 function RegistroInspeccionSalida() {
-
   const {
-    placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
-    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, step, setStep, datos, setDatos
+    placa, 
+    setPlaca, 
+    conductor, 
+    setConductor, 
+    sucursal, 
+    setSucursal,
+    tipoVehiculo, 
+    setTipoVehiculo, 
+    odometroSalida, 
+    setOdometroSalida, 
+    step, 
+    setStep, 
+    datos, 
+    setDatos
   } = Variables1();
 
-  useEffect(() => {
-    setStep(2); // Inicializa step en 2 al cargar el componente
-  }, []);
-
   const {
-    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas, cantidadLlantas,
+    llantas,
+    setLlantas,
+    observacionGeneralLlantas,
+    setObservacionGeneralLlantas,
+    cantidadLlantas,
     actualizarLlantasPorPlaca
   } = Variables2();
 
   const {
-    fluidos, setFluidos, observacionGeneralFluido, setObservacionGeneralFluido,
-    parametrosVisuales, setParametrosVisuales, observacionGeneralVisuales, setObservacionGeneralVisuales
+    fluidos, 
+    setFluidos, 
+    observacionGeneralFluido, 
+    setObservacionGeneralFluido,
+    parametrosVisuales, 
+    setParametrosVisuales, 
+    observacionGeneralVisuales, 
+    setObservacionGeneralVisuales
   } = Variables3();
 
   const {
-    luces, setLuces, insumos, setInsumos
+    luces, 
+    setLuces, 
+    insumos, 
+    setInsumos
   } = Variables4();
 
   const {
-    documentacion, setDocumentacion, danosCarroceria, setDanosCarroceria
+    documentacion, 
+    setDocumentacion, 
+    danosCarroceria, 
+    setDanosCarroceria
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  useEffect(() => {
+    setStep(2); // Inicializa step en 2 al cargar el componente
+  }, []);
+
   const handleNextStep = () => {
     setStep(step + 1);
   };
@@ -64,13 +89,26 @@ function RegistroInspeccionSalida() {
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Datos a enviar - Llantas:", llantas); // ← Verificacion de envio de data
     setIsSubmitting(true);
+    
     try {
       await handleSubmit({
-        placa, conductor, sucursal, tipoVehiculo, odometroSalida, llantas, cantidadLlantas, 
-        observacionGeneralLlantas, fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales, luces,
-        insumos, documentacion, danosCarroceria
+        placa, 
+        conductor, 
+        sucursal, 
+        tipoVehiculo, 
+        odometroSalida, 
+        llantas,
+        cantidadLlantas, // Nueva propiedad enviada
+        observacionGeneralLlantas, 
+        fluidos, 
+        observacionGeneralFluido, 
+        parametrosVisuales, 
+        observacionGeneralVisuales, 
+        luces,
+        insumos, 
+        documentacion, 
+        danosCarroceria
       });
       navigate('/');
     } catch (error) {
@@ -96,7 +134,7 @@ function RegistroInspeccionSalida() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">R06-PT-19 REVICION DE VEHICULOS - SALIDA </h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">R06-PT-19 REVISIÓN DE VEHÍCULOS - SALIDA</h1>
 
       <div className="w-full max-w-3xl bg-gray-300 rounded-full h-4 mb-4">
         <div
@@ -110,7 +148,6 @@ function RegistroInspeccionSalida() {
       </p>
 
       <div className="w-full max-w-3xl bg-white p-6 rounded shadow-md">
-
         {step === 2 && (
           <StepDos
             sucursal={sucursal}
@@ -121,11 +158,17 @@ function RegistroInspeccionSalida() {
 
         {step === 3 && (
           <StepTres
-            placa={placa} setPlaca={setPlaca}
-            conductor={conductor} setConductor={setConductor}
-            tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
-            odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
-            onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
+            placa={placa} 
+            setPlaca={setPlaca}
+            conductor={conductor} 
+            setConductor={setConductor}
+            tipoVehiculo={tipoVehiculo} 
+            setTipoVehiculo={setTipoVehiculo}
+            odometroSalida={odometroSalida} 
+            setOdometroSalida={setOdometroSalida}
+            onPrevious={handlePreviousStep} 
+            onNext={handleNextStep} 
+            datos={datos}
             actualizarLlantasPorPlaca={actualizarLlantasPorPlaca}
           />
         )}
@@ -201,13 +244,13 @@ function RegistroInspeccionSalida() {
             isSubmitting={isSubmitting}
           />
         )}
+
         <a href="/falla">
           <button className="w-full mt-10 bg-green-500 text-white py-2 px-4 rounded">
             Reportar una falla
           </button>
         </a>
       </div>
-
     </div>
   );
 }
