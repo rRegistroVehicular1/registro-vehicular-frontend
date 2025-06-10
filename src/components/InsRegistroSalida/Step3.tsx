@@ -14,8 +14,8 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorPlaca: (placa: string) => void;
-};
+    actualizarLlantasPorTipo: (tipo: string) => void;
+}
 
 function StepTres({ 
     placa, 
@@ -29,7 +29,7 @@ function StepTres({
     onPrevious, 
     onNext, 
     datos, 
-    actualizarLlantasPorPlaca 
+    actualizarLlantasPorTipo 
 }: Step3Props) {
     
     const [placasList, setPlacasList] = useState<string[]>([]);
@@ -63,6 +63,7 @@ function StepTres({
       }
     };
 
+    // Función para obtener el mapeo de placas a tipos de vehículo
     const fetchTiposVehiculo = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
@@ -143,12 +144,20 @@ function StepTres({
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
-            actualizarLlantasPorPlaca(placa); // Nueva función para actualizar llantas
+        } else {
+        setLastOdometro(null);
+        }
+    }, [placa]);
+
+    useEffect(() => {
+        if (placa) {
+            fetchLastOdometro(placa);
             
             // Buscar el tipo de vehículo correspondiente a la placa seleccionada
             if (vehiculosMap[placa]) {
                 const tipo = vehiculosMap[placa].toLowerCase();
                 setTipoVehiculo(tipo);
+                actualizarLlantasPorTipo(tipo);
             } else {
                 setTipoVehiculo(''); // Limpiar si no se encuentra
             }
@@ -161,6 +170,7 @@ function StepTres({
         if (odometroSalida && lastOdometro !== null) {
             const currentValue = Number(odometroSalida);
             if (!isNaN(currentValue) && currentValue < lastOdometro) {
+                // El campo ya se marca en rojo por la clase CSS
                 console.log(`Advertencia: Odómetro actual (${currentValue}) es menor que el último registro (${lastOdometro})`);
             }
         }
@@ -188,6 +198,11 @@ function StepTres({
         return true;
     };
 
+    const handleTipoVehiculoChange = (value: string) => {
+        setTipoVehiculo(value);
+        actualizarLlantasPorTipo(value);
+    };
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label className="block mb-4">
@@ -195,10 +210,9 @@ function StepTres({
                 <select
                     value={placa}
                     onChange={(e) => {
-                        console.log("Placa seleccionada en onChange:", e.target.value);
+                        console.log("Placa seleccionada en onChange:", e.target.value); // Debug
                         setPlaca(e.target.value);
                         fetchLastOdometro(e.target.value);
-                        actualizarLlantasPorPlaca(e.target.value); // Actualizar llantas al cambiar placa
                     }}
                     className="mt-1 p-2 border rounded w-full"
                     required
@@ -251,7 +265,7 @@ function StepTres({
                 Tipo de Vehículo:
                 <select
                     value={tipoVehiculo}
-                    onChange={(e) => setTipoVehiculo(e.target.value)}
+                    onChange={(e) => handleTipoVehiculoChange(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 >
