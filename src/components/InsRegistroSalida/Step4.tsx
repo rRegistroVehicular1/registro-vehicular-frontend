@@ -1,3 +1,4 @@
+// components/StepLlantas.tsx
 import { Llanta } from '@/types/llantas';
 
 interface StepCuatroProps {
@@ -8,7 +9,6 @@ interface StepCuatroProps {
     handlePreviousStep: () => void;
     handleNextStep: () => void;
     titulo: string;
-    cantidadLlantas: 4 | 6 | 10;
 }
 
 function StepCuatro({ 
@@ -18,8 +18,7 @@ function StepCuatro({
     setObservacionGeneralLlantas,
     handlePreviousStep, 
     handleNextStep,
-    titulo,
-    cantidadLlantas
+    titulo
 }: StepCuatroProps) {
     const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
         const updatedLlantas = llantas.map((llanta, i) => {
@@ -61,38 +60,16 @@ function StepCuatro({
         return true;
     };
 
-    // Seleccionar imagen según cantidad de llantas
-    const getImagenLlantas = () => {
-        switch(cantidadLlantas) {
-            case 4:
-                return "/assets/Inspeccion_4llantas.jpg";
-            case 6:
-                return "/assets/Inspeccion_6llantas.jpg";
-            case 10:
-                return "/assets/Inspeccion_10llantas.jpg";
-            default:
-                return "/assets/Inspeccion_4llantas.jpg";
-        }
-    };
-
-    // Filtrar llantas según cantidad (por si acaso)
-    const llantasMostradas = llantas.filter(llanta => {
-        if (cantidadLlantas === 4) return [1, 2, 5, 7].includes(llanta.id);
-        if (cantidadLlantas === 6) return [1, 2, 5, 6, 7, 8].includes(llanta.id);
-        return true; // 10 llantas
-    });
-
     return (
         <div className="w-full">
             <h2 className="text-xl font-bold mb-4 text-center">{titulo}</h2>
-            <p className="text-center mb-4">Vehículo con {cantidadLlantas} llantas</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                 {/* Imagen de referencia */}
                 <div className="flex justify-center items-center order-1 md:order-1 mb-4 md:mb-0 md:h-[calc(100vh-200px)] md:sticky md:top-20">
                     <img
-                        src={getImagenLlantas()}
-                        alt={`Diagrama de inspección de ${cantidadLlantas} llantas`}
+                        src="/assets/Inspeccion_10llantas.jpg"
+                        alt="Diagrama de inspección de llantas"
                         className="max-w-full max-h-[70vh] w-auto object-contain border border-gray-200 rounded-lg shadow-sm"
                     />
                 </div>
@@ -100,7 +77,7 @@ function StepCuatro({
                 {/* Opciones de llantas */}
                 <div className="order-2 md:order-2">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {llantasMostradas.map((llanta, index) => (
+                        {llantas.map((llanta, index) => (
                             <div key={llanta.id} className="mb-4 p-2 border rounded">
                                 <h3 className="font-bold">{llanta.nombre}</h3>
                                 <div className="flex flex-wrap gap-3 mt-2">
