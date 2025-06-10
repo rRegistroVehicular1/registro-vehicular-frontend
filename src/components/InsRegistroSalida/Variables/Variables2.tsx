@@ -1,71 +1,32 @@
 import { useState } from 'react';
-import { Llanta, CantidadLlantas } from '@/types/llantas';
-import axios from 'axios';
-import { BASE_URL } from '@/validation/url';
+import { Llanta } from '@/types/llantas';
 
 function Variables2() {
-  // Definición de todas las posibles llantas
+  // 1. Definir llantasBase como constante primero
   const todasLlantas: Llanta[] = [
     { id: 1, nombre: '1 - Delantera Izquierda', posicion: 'delantera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
     { id: 2, nombre: '2 - Delantera Derecha', posicion: 'delantera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 3, nombre: '3 - Central Interna Derecha', posicion: 'central', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 4, nombre: '4 - Central Externa Derecha', posicion: 'central', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 5, nombre: '5 - Trasera Interna Derecha', posicion: 'trasera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 6, nombre: '6 - Trasera Externa Derecha', posicion: 'extra-trasera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 7, nombre: '7 - Trasera Interna Izquierda', posicion: 'trasera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 8, nombre: '8 - Trasera Externa Izquierda', posicion: 'extra-trasera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 9, nombre: '9 - Central Interna Izquierda', posicion: 'central', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 10, nombre: '10 - Central Externa Izquierda', posicion: 'central', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false }
-  ];
+    { id: 7, nombre: '7 - Trasera Izquierda', posicion: 'trasera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 8, nombre: '8 - Extra Trasera Izquierda', posicion: 'extra', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 5, nombre: '5 - Trasera Derecha', posicion: 'trasera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 6, nombre: '6 - Extra Trasera Derecha', posicion: 'extra', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false }
+  ]
 
-  // Estados
+  // Estado unificado para todas las llantas
   const [llantas, setLlantas] = useState<Llanta[]>([]);
+  //const [observacionGeneral, setObservacionGeneral] = useState('');
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
-  const [cantidadLlantas, setCantidadLlantas] = useState<CantidadLlantas>(4);
 
-  // Función para actualizar las llantas según la placa
-  const actualizarLlantasPorPlaca = async (placa: string) => {
-    if (!placa) {
-      // Si no hay placa, mostrar configuración por defecto (4 llantas)
-      setLlantas(todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id)));
-      setCantidadLlantas(4);
-      return;
-    }
-
-    try {
-      // Obtener la cantidad de llantas desde el backend
-      const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
-      const cantidad = response.data[placa.toUpperCase()] || 4;
-      
-      // Validar que sea 4, 6 o 10
-      const cantidadValida: CantidadLlantas = 
-        cantidad === 4 || cantidad === 6 || cantidad === 10 ? cantidad : 4;
-      
-      setCantidadLlantas(cantidadValida);
-
-      // Filtrar llantas según la cantidad
-      let llantasFiltradas: Llanta[] = [];
-      
-      switch(cantidadValida) {
-        case 4:
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
-          break;
-        case 6:
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 6, 7, 8].includes(llanta.id));
-          break;
-        case 10:
-          llantasFiltradas = [...todasLlantas];
-          break;
-        default:
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
-      }
-      
-      setLlantas(llantasFiltradas);
-    } catch (error) {
-      console.error('Error al obtener cantidad de llantas:', error);
-      // Fallback a 4 llantas si hay error
-      setLlantas(todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id)));
-      setCantidadLlantas(4);
+  // Función para actualizar llantas según tipo de vehículo
+  const actualizarLlantasPorTipo = (tipoVehiculo: string) => {
+    if (tipoVehiculo === 'camion') {
+      setLlantas(todasLlantas.filter(llanta => 
+        [1, 2, 5, 6, 7, 8].includes(llanta.id)
+      ));
+    } else {
+      setLlantas(todasLlantas.filter(llanta => 
+        [1, 2, 5, 7].includes(llanta.id)
+      ));
     }
   };
 
@@ -74,8 +35,7 @@ function Variables2() {
     setLlantas,
     observacionGeneralLlantas,
     setObservacionGeneralLlantas,
-    cantidadLlantas,
-    actualizarLlantasPorPlaca
+    actualizarLlantasPorTipo
   };
 }
 
