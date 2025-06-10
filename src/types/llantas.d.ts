@@ -9,5 +9,4 @@ export interface Llanta {
   desgaste: boolean;
 }
 
-// Alias para compatibilidad
-export type Llantas = Llanta;
+export type CantidadLlantas = 4 | 6 | 10;
