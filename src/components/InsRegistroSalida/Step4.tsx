@@ -62,7 +62,9 @@ function StepCuatro({
 
     return (
         <div className="w-full">
-            <h2 className="text-xl font-bold mb-4 text-center">{titulo}</h2>
+            <h2 className="text-xl font-bold mb-4 text-center">
+                {titulo} - {llantas.length} Llantas
+            </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                 {/* Imagen de referencia */}
