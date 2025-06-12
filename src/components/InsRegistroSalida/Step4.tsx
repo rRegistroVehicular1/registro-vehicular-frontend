@@ -34,10 +34,9 @@ function StepCuatro({
         }
     };
 
-    const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
-      const updatedLlantas = llantas.map((llanta, i) => {
-        // Usamos llanta.id en lugar del índice i
-        if (llanta.id === llantas[index].id) {
+    const handleOptionChange = (llantaId: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
+      const updatedLlantas = llantas.map((llanta) => {
+        if (llanta.id === llantaId) {
           if (option === 'desgaste') {
             return { ...llanta, desgaste: !llanta.desgaste };
           } else {
