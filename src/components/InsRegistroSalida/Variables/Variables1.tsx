@@ -11,7 +11,7 @@ function Variables1 (){
   const [horaEntrada, setHoraEntrada] = useState('');
   const [odometroSalida, setOdometroSalida] = useState('');
   const [odometroLlegada, setOdometroLlegada] = useState('');
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [datos, setDatos] = useState([]);
 
   return {placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
