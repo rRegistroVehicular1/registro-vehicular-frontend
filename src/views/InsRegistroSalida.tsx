@@ -69,14 +69,14 @@ function RegistroInspeccionSalida() {
       // Filtrar llantas según la cantidad configurada
       const llantasFiltradas = llantas.filter(llanta => {
         if (cantidadLlantas === 4) {
-          return [1, 2, 5, 7].includes(llanta.id);
+          return [1, 2, 5, 7].includes(llanta.id); // Solo 4 llantas básicas
         } else if (cantidadLlantas === 6) {
-          return [1, 2, 5, 6, 7, 8].includes(llanta.id);
+          return [1, 2, 5, 6, 7, 8].includes(llanta.id); // 6 llantas (incluye extras traseras)
         } else {
           return true; // Para 10 llantas, todas son válidas
         }
       });
-
+  
       await handleSubmit({
         placa, 
         conductor, 
@@ -93,7 +93,7 @@ function RegistroInspeccionSalida() {
         insumos, 
         documentacion, 
         danosCarroceria,
-        cantidadLlantas // Enviar cantidad de llantas al backend
+        cantidadLlantas
       });
       
       navigate('/');
