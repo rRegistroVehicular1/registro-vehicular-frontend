@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import StepDos from '../components/InsRegistroSalida/Step2';
 import StepTres from '../components/InsRegistroSalida/Step3';
 import StepCuatro from '../components/InsRegistroSalida/Step4';
@@ -13,67 +14,43 @@ import Variables4 from '../components/InsRegistroSalida/Variables/Variables4';
 import Variables5 from '../components/InsRegistroSalida/Variables/Variables5';
 import Variables1 from '../components/InsRegistroSalida/Variables/Variables1';
 import handleSubmit from '../validation/InsRegistroSalida';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { BASE_URL } from '../validation/url';
 import { useNavigate } from 'react-router-dom';
 import { Llanta } from '@/types/llantas';
+import axios from 'axios';
 
 function RegistroInspeccionSalida() {
   const {
-    placa, 
-    setPlaca, 
-    conductor, 
-    setConductor, 
-    sucursal, 
-    setSucursal,
-    tipoVehiculo, 
-    setTipoVehiculo, 
-    odometroSalida, 
-    setOdometroSalida, 
-    step, 
-    setStep, 
-    datos, 
-    setDatos
+    placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
+    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, 
+    step, setStep, datos, setDatos
   } = Variables1();
 
   const {
-    llantas, 
-    setLlantas, 
-    observacionGeneralLlantas, 
-    setObservacionGeneralLlantas,
-    actualizarLlantasPorPlaca,
-    cantidadLlantas
+    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas,
+    actualizarLlantasPorPlaca, cantidadLlantas
   } = Variables2();
 
   const {
-    fluidos, 
-    setFluidos, 
-    observacionGeneralFluido, 
-    setObservacionGeneralFluido,
-    parametrosVisuales, 
-    setParametrosVisuales, 
-    observacionGeneralVisuales, 
-    setObservacionGeneralVisuales
+    fluidos, setFluidos, observacionGeneralFluido, setObservacionGeneralFluido,
+    parametrosVisuales, setParametrosVisuales, observacionGeneralVisuales, setObservacionGeneralVisuales
   } = Variables3();
 
   const {
-    luces, 
-    setLuces, 
-    insumos, 
-    setInsumos
+    luces, setLuces, insumos, setInsumos
   } = Variables4();
 
   const {
-    documentacion, 
-    setDocumentacion, 
-    danosCarroceria, 
-    setDanosCarroceria
+    documentacion, setDocumentacion, danosCarroceria, setDanosCarroceria
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [tituloLlantas, setTituloLlantas] = useState('Revisión de Llantas');
-  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setStep(2); // Inicializa step en 2 al cargar el componente
+  }, []);
+
   const handleNextStep = () => {
     setStep(step + 1);
   };
@@ -83,24 +60,30 @@ function RegistroInspeccionSalida() {
   };
 
   const totalSteps = 10;
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Actualizar título según cantidad de llantas
-    setTituloLlantas(`Revisión de Llantas (${cantidadLlantas} llantas)`);
-  }, [cantidadLlantas]);
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
     try {
+      // Filtrar llantas según la cantidad configurada
+      const llantasFiltradas = llantas.filter(llanta => {
+        if (cantidadLlantas === 4) {
+          return [1, 2, 5, 7].includes(llanta.id);
+        } else if (cantidadLlantas === 6) {
+          return [1, 2, 5, 6, 7, 8].includes(llanta.id);
+        } else {
+          return true; // Para 10 llantas, todas son válidas
+        }
+      });
+
       await handleSubmit({
         placa, 
         conductor, 
         sucursal, 
         tipoVehiculo, 
         odometroSalida, 
-        llantas,
+        llantas: llantasFiltradas,
         observacionGeneralLlantas, 
         fluidos, 
         observacionGeneralFluido, 
@@ -109,8 +92,10 @@ function RegistroInspeccionSalida() {
         luces,
         insumos, 
         documentacion, 
-        danosCarroceria
+        danosCarroceria,
+        cantidadLlantas // Enviar cantidad de llantas al backend
       });
+      
       navigate('/');
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
@@ -149,6 +134,7 @@ function RegistroInspeccionSalida() {
       </p>
 
       <div className="w-full max-w-3xl bg-white p-6 rounded shadow-md">
+
         {step === 2 && (
           <StepDos
             sucursal={sucursal}
@@ -182,7 +168,8 @@ function RegistroInspeccionSalida() {
             setObservacionGeneralLlantas={setObservacionGeneralLlantas}
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
-            titulo={tituloLlantas}
+            titulo="Revisión de Llantas"
+            cantidadLlantas={cantidadLlantas}
           />
         )}
         
@@ -244,7 +231,6 @@ function RegistroInspeccionSalida() {
             isSubmitting={isSubmitting}
           />
         )}
-        
         <a href="/falla">
           <button className="w-full mt-10 bg-green-500 text-white py-2 px-4 rounded">
             Reportar una falla
