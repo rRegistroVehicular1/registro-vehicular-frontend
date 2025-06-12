@@ -109,7 +109,7 @@ function StepCuatro({
                                             type="radio"
                                             name={`llanta-${llanta.id}-presion`}
                                             checked={llanta.fp}
-                                            onChange={() => handleOptionChange(index, 'fp')}
+                                            onChange={() => handleOptionChange(llanta.id, 'fp')}
                                             className="mr-1"
                                         />
                                         Falta de Presión (FP)
@@ -119,7 +119,7 @@ function StepCuatro({
                                             type="radio"
                                             name={`llanta-${llanta.id}-presion`}
                                             checked={llanta.pe}
-                                            onChange={() => handleOptionChange(index, 'pe')}
+                                            onChange={() => handleOptionChange(llanta.id, 'pe')}
                                             className="mr-1"
                                         />
                                         Presión Excesiva (PE)
@@ -129,7 +129,7 @@ function StepCuatro({
                                             type="radio"
                                             name={`llanta-${llanta.id}-presion`}
                                             checked={llanta.pa}
-                                            onChange={() => handleOptionChange(index, 'pa')}
+                                            onChange={() => handleOptionChange(llanta.id, 'pa')}
                                             className="mr-1"
                                         />
                                         Presión Adecuada (PA)
@@ -138,7 +138,7 @@ function StepCuatro({
                                         <input
                                             type="checkbox"
                                             checked={llanta.desgaste}
-                                            onChange={() => handleOptionChange(index, 'desgaste')}
+                                            onChange={() => handleOptionChange(llanta.id, 'desgaste')}
                                             className="mr-1"
                                         />
                                         Indicador de Desgaste
