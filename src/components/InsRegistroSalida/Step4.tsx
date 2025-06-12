@@ -35,25 +35,23 @@ function StepCuatro({
     };
 
     const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
-        const updatedLlantas = llantas.map((llanta, i) => {
-            console.log('La llanta es:', llanta)
-            console.log('El indice de llanta es:', i)
-            
-            if (i === index) {
-                if (option === 'desgaste') {
-                    return { ...llanta, desgaste: !llanta.desgaste };
-                } else {
-                    return {
-                        ...llanta,
-                        fp: option === 'fp',
-                        pe: option === 'pe',
-                        pa: option === 'pa',
-                    };
-                }
-            }
-            return llanta;
-        });
-        setLlantas(updatedLlantas);
+      const updatedLlantas = llantas.map((llanta, i) => {
+        // Usamos llanta.id en lugar del índice i
+        if (llanta.id === llantas[index].id) {
+          if (option === 'desgaste') {
+            return { ...llanta, desgaste: !llanta.desgaste };
+          } else {
+            return {
+              ...llanta,
+              fp: option === 'fp',
+              pe: option === 'pe',
+              pa: option === 'pa',
+            };
+          }
+        }
+        return llanta;
+      });
+      setLlantas(updatedLlantas);
     };
 
     const validateStep4 = () => {
