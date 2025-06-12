@@ -36,6 +36,9 @@ function StepCuatro({
 
     const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
         const updatedLlantas = llantas.map((llanta, i) => {
+            console.log('La llanta es:', llanta)
+            console.log('El indice de llanta es:', i)
+            
             if (i === index) {
                 if (option === 'desgaste') {
                     return { ...llanta, desgaste: !llanta.desgaste };
