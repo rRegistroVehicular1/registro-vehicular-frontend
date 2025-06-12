@@ -20,9 +20,6 @@ function Variables2() {
 
   // Estado para las llantas seleccionadas
   const [llantas, setLlantas] = useState<Llanta[]>([]);
-
-  console.log('Para variables llantas', llantas)
-  console.log('Para variables setLlantas', setLlantas)
   
   // Estado para observaciones generales
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
