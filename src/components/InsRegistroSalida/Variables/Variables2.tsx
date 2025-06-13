@@ -18,6 +18,8 @@ function Variables2() {
     { id: 10, nombre: '10 - Central Externa Izquierda', posicion: 'extra', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false }
   ];
 
+  console.log('Las llantas registradas son: ', todasLlantas)
+
   // Estado para las llantas seleccionadas
   const [llantas, setLlantas] = useState<Llanta[]>([]);
   
