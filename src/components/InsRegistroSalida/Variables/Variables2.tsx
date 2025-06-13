@@ -44,26 +44,21 @@ function Variables2() {
       setCantidadLlantas(cantidad);
       
       // Determinar qué llantas mostrar según la cantidad
-      let idsLlantas: number[] = [];
+      let llantasFiltradas: Llanta[] = [];
       
       switch (cantidad) {
         case 4:
-          idsLlantas = [1, 2, 5, 7]; // Delanteras + Traseras básicas
+          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
           break;
         case 6:
-          idsLlantas = [1, 2, 5, 6, 7, 8]; // Delanteras + Traseras + Extras traseras
+          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 6, 7, 8].includes(llanta.id));
           break;
         case 10:
-          idsLlantas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Todas las llantas
+          llantasFiltradas = [...todasLlantas];
           break;
         default:
-          idsLlantas = [1, 2, 5, 7]; // Default a 4 llantas
+          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
       }
-      
-      // Filtrar las llantas basándose en los IDs, no en el índice
-      const llantasFiltradas = todasLlantas.filter(llanta => 
-        idsLlantas.includes(llanta.id)
-      );
       
       setLlantas(llantasFiltradas);
     } catch (error) {
@@ -93,7 +88,6 @@ function Variables2() {
     observacionGeneralLlantas,
     setObservacionGeneralLlantas,
     actualizarLlantasPorPlaca, // Nueva función principal
-    actualizarLlantasPorTipo,  // Mantenida por compatibilidad
     cantidadLlantas            // Nueva propiedad
   };
 }
