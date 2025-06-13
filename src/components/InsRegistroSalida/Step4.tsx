@@ -34,9 +34,9 @@ function StepCuatro({
         }
     };
 
-    const handleOptionChange = (llantaId: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
+    const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
       const updatedLlantas = llantas.map((llanta) => {
-        if (llanta.id === llantaId) {
+        if (llanta.id === llantas[index].id) {  // Comparar por ID real
           if (option === 'desgaste') {
             return { ...llanta, desgaste: !llanta.desgaste };
           } else {
