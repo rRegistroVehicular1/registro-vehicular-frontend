@@ -34,11 +34,8 @@ function StepCuatro({
         }
     };
 
-    const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {Add commentMore actions
+    const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
         const updatedLlantas = llantas.map((llanta, i) => {
-            console.log('La llanta es:', llanta)
-            console.log('El indice de llanta es:', i)
-            
             if (i === index) {
                 if (option === 'desgaste') {
                     return { ...llanta, desgaste: !llanta.desgaste };
@@ -111,7 +108,7 @@ function StepCuatro({
                                             type="radio"
                                             name={`llanta-${llanta.id}-presion`}
                                             checked={llanta.fp}
-                                            onChange={() => handleOptionChange(llanta.id, 'fp')}
+                                            onChange={() => handleOptionChange(index, 'fp')}
                                             className="mr-1"
                                         />
                                         Falta de Presión (FP)
@@ -121,7 +118,7 @@ function StepCuatro({
                                             type="radio"
                                             name={`llanta-${llanta.id}-presion`}
                                             checked={llanta.pe}
-                                            onChange={() => handleOptionChange(llanta.id, 'pe')}
+                                            onChange={() => handleOptionChange(index, 'pe')}
                                             className="mr-1"
                                         />
                                         Presión Excesiva (PE)
@@ -131,7 +128,7 @@ function StepCuatro({
                                             type="radio"
                                             name={`llanta-${llanta.id}-presion`}
                                             checked={llanta.pa}
-                                            onChange={() => handleOptionChange(llanta.id, 'pa')}
+                                            onChange={() => handleOptionChange(index, 'pa')}
                                             className="mr-1"
                                         />
                                         Presión Adecuada (PA)
@@ -140,7 +137,7 @@ function StepCuatro({
                                         <input
                                             type="checkbox"
                                             checked={llanta.desgaste}
-                                            onChange={() => handleOptionChange(llanta.id, 'desgaste')}
+                                            onChange={() => handleOptionChange(index, 'desgaste')}
                                             className="mr-1"
                                         />
                                         Indicador de Desgaste
@@ -186,3 +183,4 @@ function StepCuatro({
 }
 
 export default StepCuatro;
+
