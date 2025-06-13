@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+//import StepUno from '../components/InsRegistroSalida/Step1';
 import StepDos from '../components/InsRegistroSalida/Step2';
 import StepTres from '../components/InsRegistroSalida/Step3';
 import StepCuatro from '../components/InsRegistroSalida/Step4';
@@ -14,21 +14,25 @@ import Variables4 from '../components/InsRegistroSalida/Variables/Variables4';
 import Variables5 from '../components/InsRegistroSalida/Variables/Variables5';
 import Variables1 from '../components/InsRegistroSalida/Variables/Variables1';
 import handleSubmit from '../validation/InsRegistroSalida';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { BASE_URL } from '../validation/url';
 import { useNavigate } from 'react-router-dom';
 import { Llanta } from '@/types/llantas';
-import axios from 'axios';
 
 function RegistroInspeccionSalida() {
-  const {
-    placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
-    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, 
-    step, setStep, datos, setDatos
-  } = Variables1();
 
   const {
-    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas,
-    actualizarLlantasPorPlaca, cantidadLlantas
+    placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
+    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, step, setStep, datos, setDatos
+  } = Variables1();
+
+  useEffect(() => {
+    setStep(2); // Inicializa step en 2 al cargar el componente
+  }, []);
+
+  const {
+    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
   } = Variables2();
 
   const {
@@ -45,12 +49,7 @@ function RegistroInspeccionSalida() {
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setStep(2); // Inicializa step en 2 al cargar el componente
-  }, []);
-
+  
   const handleNextStep = () => {
     setStep(step + 1);
   };
@@ -60,42 +59,18 @@ function RegistroInspeccionSalida() {
   };
 
   const totalSteps = 10;
+  const navigate = useNavigate();
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Datos a enviar - Llantas:", llantas); // ← Verificacion de envio de data
     setIsSubmitting(true);
-    
     try {
-      // Filtrar llantas según la cantidad configurada
-      const llantasFiltradas = llantas.filter(llanta => {
-        if (cantidadLlantas === 4) {
-          return [1, 2, 5, 7].includes(llanta.id);
-        } else if (cantidadLlantas === 6) {
-          return [1, 2, 5, 6, 7, 8].includes(llanta.id);
-        } else {
-          return true; // Para 10 llantas, todas son válidas
-        }
-      });
-
       await handleSubmit({
-        placa, 
-        conductor, 
-        sucursal, 
-        tipoVehiculo, 
-        odometroSalida, 
-        llantas: llantasFiltradas,
-        observacionGeneralLlantas, 
-        fluidos, 
-        observacionGeneralFluido, 
-        parametrosVisuales, 
-        observacionGeneralVisuales, 
-        luces,
-        insumos, 
-        documentacion, 
-        danosCarroceria,
-        cantidadLlantas // Enviar cantidad de llantas al backend
+        placa, conductor, sucursal, tipoVehiculo, odometroSalida, llantas,
+        observacionGeneralLlantas, fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales, luces,
+        insumos, documentacion, danosCarroceria
       });
-      
       navigate('/');
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
@@ -120,7 +95,7 @@ function RegistroInspeccionSalida() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">R06-PT-19 REVISION DE VEHICULOS - SALIDA</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">R06-PT-19 REVICION DE VEHICULOS - SALIDA </h1>
 
       <div className="w-full max-w-3xl bg-gray-300 rounded-full h-4 mb-4">
         <div
@@ -145,18 +120,12 @@ function RegistroInspeccionSalida() {
 
         {step === 3 && (
           <StepTres
-            placa={placa} 
-            setPlaca={setPlaca}
-            conductor={conductor} 
-            setConductor={setConductor}
-            tipoVehiculo={tipoVehiculo} 
-            setTipoVehiculo={setTipoVehiculo}
-            odometroSalida={odometroSalida} 
-            setOdometroSalida={setOdometroSalida}
-            onPrevious={handlePreviousStep} 
-            onNext={handleNextStep} 
-            datos={datos}
-            actualizarLlantasPorPlaca={actualizarLlantasPorPlaca}
+            placa={placa} setPlaca={setPlaca}
+            conductor={conductor} setConductor={setConductor}
+            tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
+            odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
+            onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
+            actualizarLlantasPorTipo={actualizarLlantasPorTipo}
           />
         )}
 
@@ -169,7 +138,6 @@ function RegistroInspeccionSalida() {
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
             titulo="Revisión de Llantas"
-            cantidadLlantas={cantidadLlantas}
           />
         )}
         
@@ -237,6 +205,7 @@ function RegistroInspeccionSalida() {
           </button>
         </a>
       </div>
+
     </div>
   );
 }
