@@ -29,7 +29,7 @@ function Variables2() {
   };
 
   // Función para actualizar llantas según cantidad de llantas
-  const actualizarLlantasPorTipo = (cantidadLlantas: string) => {
+  const actualizarLlantasPorTipo = (cantidadLlantas: number) => {
     if (!llantasPorCantidad[cantidadLlantas]) {
       throw new Error(`Cantidad de llantas no soportada: ${cantidadLlantas}`);
     }
