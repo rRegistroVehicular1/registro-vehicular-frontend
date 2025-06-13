@@ -198,7 +198,7 @@ function StepTres({
         return true;
     };
 
-    const handleTipoVehiculoChange = (value: string) => {
+    const handleTipoVehiculoChange = (value: number) => {
         setTipoVehiculo(value);
         actualizarLlantasPorTipo(value);
     };
