@@ -8,14 +8,14 @@ function Variables2() {
   const todasLlantas: Llanta[] = [
     { id: 1, nombre: '1 - Delantera Izquierda', posicion: 'delantera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
     { id: 2, nombre: '2 - Delantera Derecha', posicion: 'delantera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 3, nombre: '3 - Central Izquierda', posicion: 'central', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 4, nombre: '4 - Central Derecha', posicion: 'central', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 5, nombre: '5 - Trasera Derecha', posicion: 'trasera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 6, nombre: '6 - Extra Trasera Derecha', posicion: 'extra', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 7, nombre: '7 - Trasera Izquierda', posicion: 'trasera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 8, nombre: '8 - Extra Trasera Izquierda', posicion: 'extra', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 9, nombre: '9 - Extra Izquierda', posicion: 'extra', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
-    { id: 10, nombre: '10 - Extra Derecha', posicion: 'extra', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false }
+    { id: 3, nombre: '3 - Central Interna Derecha', posicion: 'central', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 4, nombre: '4 - Central Externa Derecha', posicion: 'central', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 5, nombre: '5 - Trasera o Trasera Interna Derecha', posicion: 'trasera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 6, nombre: '6 - Trasera Externa Derecha', posicion: 'extra', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 7, nombre: '7 - Trasera o Trasera Interna Izquierda', posicion: 'trasera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 8, nombre: '8 - Trasera Externa Izquierda', posicion: 'extra', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 9, nombre: '9 - Central Interna Izquierda', posicion: 'extra', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
+    { id: 10, nombre: '10 - Central Externa Izquierda', posicion: 'extra', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false }
   ];
 
   // Estado para las llantas seleccionadas
@@ -40,24 +40,30 @@ function Variables2() {
       // Obtener el mapeo de placas a cantidad de llantas del backend
       const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
       const cantidad = response.data[placa.toUpperCase()] || 4; // Default a 4 si no se encuentra
+      
       setCantidadLlantas(cantidad);
       
-      let llantasFiltradas: Llanta[] = [];
+      // Determinar qué llantas mostrar según la cantidad
+      let idsLlantas: number[] = [];
       
-      // Filtrar llantas según la cantidad
       switch (cantidad) {
         case 4:
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
+          idsLlantas = [1, 2, 5, 7]; // Delanteras + Traseras básicas
           break;
         case 6:
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 6, 7, 8].includes(llanta.id));
+          idsLlantas = [1, 2, 5, 6, 7, 8]; // Delanteras + Traseras + Extras traseras
           break;
         case 10:
-          llantasFiltradas = [...todasLlantas];
+          idsLlantas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Todas las llantas
           break;
         default:
-          llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
+          idsLlantas = [1, 2, 5, 7]; // Default a 4 llantas
       }
+      
+      // Filtrar las llantas basándose en los IDs, no en el índice
+      const llantasFiltradas = todasLlantas.filter(llanta => 
+        idsLlantas.includes(llanta.id)
+      );
       
       setLlantas(llantasFiltradas);
     } catch (error) {
