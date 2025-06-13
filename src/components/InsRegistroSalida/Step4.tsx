@@ -1,3 +1,4 @@
+// components/StepLlantas.tsx
 import { Llanta } from '@/types/llantas';
 
 interface StepCuatroProps {
@@ -8,7 +9,6 @@ interface StepCuatroProps {
     handlePreviousStep: () => void;
     handleNextStep: () => void;
     titulo: string;
-    cantidadLlantas: number; // Nueva prop para la cantidad de llantas
 }
 
 function StepCuatro({ 
@@ -18,22 +18,8 @@ function StepCuatro({
     setObservacionGeneralLlantas,
     handlePreviousStep, 
     handleNextStep,
-    titulo,
-    cantidadLlantas = 4 // Valor por defecto
+    titulo
 }: StepCuatroProps) {
-    // Función para obtener la imagen correcta según la cantidad de llantas
-    const getImagenLlantas = () => {
-        switch(cantidadLlantas) {
-            case 6:
-                return "/assets/Inspeccion_6llantas.jpg";
-            case 10:
-                return "/assets/Inspeccion_10llantas.jpg";
-            case 4:
-            default:
-                return "/assets/Inspeccion_4llantas.jpg";
-        }
-    };
-
     const handleOptionChange = (index: number, option: 'fp' | 'pe' | 'pa' | 'desgaste') => {
         const updatedLlantas = llantas.map((llanta, i) => {
             if (i === index) {
@@ -71,27 +57,19 @@ function StepCuatro({
             return false;
         }
 
-        // Validar que la cantidad de llantas coincida con la configuración
-        if (llantas.length !== cantidadLlantas) {
-            alert(`Error: Se esperaban ${cantidadLlantas} llantas pero se recibieron ${llantas.length}`);
-            return false;
-        }
-
         return true;
     };
 
     return (
         <div className="w-full">
-            <h2 className="text-xl font-bold mb-4 text-center">
-                {titulo} - {cantidadLlantas} Llantas
-            </h2>
+            <h2 className="text-xl font-bold mb-4 text-center">{titulo}</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                 {/* Imagen de referencia */}
                 <div className="flex justify-center items-center order-1 md:order-1 mb-4 md:mb-0 md:h-[calc(100vh-200px)] md:sticky md:top-20">
                     <img
-                        src={getImagenLlantas()}
-                        alt={`Diagrama de inspección de ${cantidadLlantas} llantas`}
+                        src="/assets/Inspeccion_10llantas.jpg"
+                        alt="Diagrama de inspección de llantas"
                         className="max-w-full max-h-[70vh] w-auto object-contain border border-gray-200 rounded-lg shadow-sm"
                     />
                 </div>
@@ -183,4 +161,3 @@ function StepCuatro({
 }
 
 export default StepCuatro;
-
