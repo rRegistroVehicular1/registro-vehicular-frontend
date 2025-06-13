@@ -66,40 +66,16 @@ function RegistroInspeccionSalida() {
     setIsSubmitting(true);
     
     try {
-      // Crear array con todas las llantas posibles inicializadas como null
-      const todasLasLlantas = Array(10).fill(null);
-      
-      // Mapear las llantas según su posición
-      llantas.forEach(llanta => {
-        todasLasLlantas[llanta.id - 1] = llanta;
+      // Filtrar llantas según la cantidad configurada
+      const llantasFiltradas = llantas.filter(llanta => {
+        if (cantidadLlantas === 4) {
+          return [1, 2, 5, 7].includes(llanta.id);
+        } else if (cantidadLlantas === 6) {
+          return [1, 2, 5, 6, 7, 8].includes(llanta.id);
+        } else {
+          return true; // Para 10 llantas, todas son válidas
+        }
       });
-
-      // Filtrar según la cantidad de llantas
-      let llantasFiltradas = [];
-      if (cantidadLlantas === 4) {
-        llantasFiltradas = [
-          todasLasLlantas[0],  // ID 1
-          todasLasLlantas[1],  // ID 2
-          todasLasLlantas[4],  // ID 5
-          todasLasLlantas[6]   // ID 7
-        ];
-      } else if (cantidadLlantas === 6) {
-        llantasFiltradas = [
-          todasLasLlantas[0],  // ID 1
-          todasLasLlantas[1],  // ID 2
-          todasLasLlantas[4],  // ID 5
-          todasLasLlantas[5],  // ID 6
-          todasLasLlantas[6],  // ID 7
-          todasLasLlantas[7]   // ID 8
-        ];
-      } else {
-        llantasFiltradas = todasLasLlantas.filter(llanta => llanta !== null);
-      }
-
-      // Eliminar posibles valores null
-      llantasFiltradas = llantasFiltradas.filter(llanta => llanta !== null);
-
-      console.log('Llantas a enviar:', llantasFiltradas); // Para depuración
 
       await handleSubmit({
         placa, 
@@ -117,7 +93,7 @@ function RegistroInspeccionSalida() {
         insumos, 
         documentacion, 
         danosCarroceria,
-        cantidadLlantas
+        cantidadLlantas // Enviar cantidad de llantas al backend
       });
       
       navigate('/');
