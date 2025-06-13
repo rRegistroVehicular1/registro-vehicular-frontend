@@ -23,13 +23,13 @@ function Variables2() {
 
   // Mapeo de cantidad de llantas a los IDs permitidos
   const llantasPorCantidad: Record<number, number[]> = {
-    4: [1, 2, 5, 7],       // Para vehículos con 4 llantas (sedán, panel)
-    6: [1, 2, 5, 6, 7, 8],  // Para vehículos con 6 llantas (cabezal)
-    10: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Para vehículos con 10 llantas (camión, orca)
+    4: [1, 2, 5, 7],       // Para vehículos con 4 llantas 
+    6: [1, 2, 5, 6, 7, 8],  // Para vehículos con 6 llantas 
+    10: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Para vehículos con 10 llantas 
   };
 
   // Función para actualizar llantas según cantidad de llantas
-  const actualizarLlantasPorTipo = (cantidadLlantas: number) => {
+  const actualizarLlantasPorTipo = (cantidadLlantas: string) => {
     if (!llantasPorCantidad[cantidadLlantas]) {
       throw new Error(`Cantidad de llantas no soportada: ${cantidadLlantas}`);
     }
