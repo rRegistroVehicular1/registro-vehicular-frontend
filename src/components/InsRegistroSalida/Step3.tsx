@@ -14,7 +14,7 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorPlaca: (placa: string) => void; // Cambiado de actualizarLlantasPorTipo
+    actualizarLlantasPorTipo: (tipo: string) => void;
 }
 
 function StepTres({ 
@@ -29,7 +29,7 @@ function StepTres({
     onPrevious, 
     onNext, 
     datos, 
-    actualizarLlantasPorPlaca // Cambiado de actualizarLlantasPorTipo
+    actualizarLlantasPorTipo 
 }: Step3Props) {
     
     const [placasList, setPlacasList] = useState<string[]>([]);
@@ -63,6 +63,7 @@ function StepTres({
       }
     };
 
+    // Función para obtener el mapeo de placas a tipos de vehículo
     const fetchTiposVehiculo = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
@@ -143,10 +144,8 @@ function StepTres({
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
-            // Llamar a la nueva función para actualizar llantas por placa
-            actualizarLlantasPorPlaca(placa);
         } else {
-            setLastOdometro(null);
+        setLastOdometro(null);
         }
     }, [placa]);
 
@@ -158,6 +157,7 @@ function StepTres({
             if (vehiculosMap[placa]) {
                 const tipo = vehiculosMap[placa].toLowerCase();
                 setTipoVehiculo(tipo);
+                actualizarLlantasPorTipo(tipo);
             } else {
                 setTipoVehiculo(''); // Limpiar si no se encuentra
             }
@@ -200,6 +200,7 @@ function StepTres({
 
     const handleTipoVehiculoChange = (value: string) => {
         setTipoVehiculo(value);
+        actualizarLlantasPorTipo(value);
     };
 
     return (
@@ -209,10 +210,9 @@ function StepTres({
                 <select
                     value={placa}
                     onChange={(e) => {
-                        console.log("Placa seleccionada en onChange:", e.target.value);
+                        console.log("Placa seleccionada en onChange:", e.target.value); // Debug
                         setPlaca(e.target.value);
                         fetchLastOdometro(e.target.value);
-                        actualizarLlantasPorPlaca(e.target.value); // Actualizar llantas al cambiar placa
                     }}
                     className="mt-1 p-2 border rounded w-full"
                     required
