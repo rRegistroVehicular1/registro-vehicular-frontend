@@ -35,8 +35,7 @@ function Variables2() {
     }
     
     setLlantas(todasLlantas.filter(llanta => 
-      llantasPorCantidad[cantidadLlantas].includes(llanta.id)
-    );
+      llantasPorCantidad[cantidadLlantas].includes(llanta.id)));
   };
 
   return {
