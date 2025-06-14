@@ -1,3 +1,4 @@
+// components/StepLlantas.tsx
 import { Llanta } from '@/types/llantas';
 
 interface StepCuatroProps {
@@ -59,6 +60,20 @@ function StepCuatro({
         return true;
     };
 
+    // Determinar qué imagen mostrar según la cantidad de llantas
+    const getImageSource = () => {
+        switch(llantas.length) {
+            case 4:
+                return "/assets/Inspeccion_4llantas.jpg";
+            case 6:
+                return "/assets/Inspeccion_6llantas.jpg";
+            case 10:
+                return "/assets/Inspeccion_10llantas.jpg";
+            default:
+                return "/assets/Inspeccion_4llantas.jpg";
+        }
+    };
+
     return (
         <div className="w-full">
             <h2 className="text-xl font-bold mb-4 text-center">{titulo}</h2>
@@ -67,8 +82,8 @@ function StepCuatro({
                 {/* Imagen de referencia */}
                 <div className="flex justify-center items-center order-1 md:order-1 mb-4 md:mb-0 md:h-[calc(100vh-200px)] md:sticky md:top-20">
                     <img
-                        src="/assets/Inspeccion_10llantas.jpg"
-                        alt="Diagrama de inspección de llantas"
+                        src={getImageSource()}
+                        alt={`Diagrama de inspección de ${llantas.length} llantas`}
                         className="max-w-full max-h-[70vh] w-auto object-contain border border-gray-200 rounded-lg shadow-sm"
                     />
                 </div>
