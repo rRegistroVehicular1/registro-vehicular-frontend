@@ -1,4 +1,4 @@
-//import StepUno from '../components/InsRegistroSalida/Step1';
+// views/InsRegistroSalida.tsx
 import StepDos from '../components/InsRegistroSalida/Step2';
 import StepTres from '../components/InsRegistroSalida/Step3';
 import StepCuatro from '../components/InsRegistroSalida/Step4';
@@ -18,13 +18,12 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../validation/url';
 import { useNavigate } from 'react-router-dom';
-import { Llanta } from '@/types/llantas';
 
 function RegistroInspeccionSalida() {
-
   const {
     placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
-    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, step, setStep, datos, setDatos
+    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, 
+    step, setStep, datos, setDatos
   } = Variables1();
 
   useEffect(() => {
@@ -32,7 +31,8 @@ function RegistroInspeccionSalida() {
   }, []);
 
   const {
-    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas, actualizarLlantasPorTipo
+    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas,
+    actualizarLlantasPorCantidad // Cambiado de actualizarLlantasPorTipo
   } = Variables2();
 
   const {
@@ -49,6 +49,7 @@ function RegistroInspeccionSalida() {
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cantidadLlantas, setCantidadLlantas] = useState<number>(4); // Nuevo estado para cantidad de llantas
   
   const handleNextStep = () => {
     setStep(step + 1);
@@ -63,13 +64,25 @@ function RegistroInspeccionSalida() {
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Datos a enviar - Llantas:", llantas); // ← Verificacion de envio de data
     setIsSubmitting(true);
     try {
       await handleSubmit({
-        placa, conductor, sucursal, tipoVehiculo, odometroSalida, llantas,
-        observacionGeneralLlantas, fluidos, observacionGeneralFluido, parametrosVisuales, observacionGeneralVisuales, luces,
-        insumos, documentacion, danosCarroceria
+        placa, 
+        conductor, 
+        sucursal, 
+        tipoVehiculo, 
+        odometroSalida, 
+        llantas,
+        observacionGeneralLlantas, 
+        fluidos, 
+        observacionGeneralFluido, 
+        parametrosVisuales, 
+        observacionGeneralVisuales, 
+        luces,
+        insumos, 
+        documentacion, 
+        danosCarroceria,
+        cantidadLlantas // Pasamos la cantidad de llantas al backend
       });
       navigate('/');
     } catch (error) {
@@ -109,7 +122,6 @@ function RegistroInspeccionSalida() {
       </p>
 
       <div className="w-full max-w-3xl bg-white p-6 rounded shadow-md">
-
         {step === 2 && (
           <StepDos
             sucursal={sucursal}
@@ -120,12 +132,20 @@ function RegistroInspeccionSalida() {
 
         {step === 3 && (
           <StepTres
-            placa={placa} setPlaca={setPlaca}
-            conductor={conductor} setConductor={setConductor}
-            tipoVehiculo={tipoVehiculo} setTipoVehiculo={setTipoVehiculo}
-            odometroSalida={odometroSalida} setOdometroSalida={setOdometroSalida}
-            onPrevious={handlePreviousStep} onNext={handleNextStep} datos={datos}
-            actualizarLlantasPorTipo={actualizarLlantasPorTipo}
+            placa={placa} 
+            setPlaca={setPlaca}
+            conductor={conductor} 
+            setConductor={setConductor}
+            tipoVehiculo={tipoVehiculo} 
+            setTipoVehiculo={setTipoVehiculo}
+            odometroSalida={odometroSalida} 
+            setOdometroSalida={setOdometroSalida}
+            onPrevious={handlePreviousStep} 
+            onNext={handleNextStep} 
+            datos={datos}
+            actualizarLlantasPorCantidad={actualizarLlantasPorCantidad} // Cambiado
+            cantidadLlantas={cantidadLlantas} // Nuevo prop
+            setCantidadLlantas={setCantidadLlantas} // Nuevo prop
           />
         )}
 
@@ -138,6 +158,7 @@ function RegistroInspeccionSalida() {
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
             titulo="Revisión de Llantas"
+            cantidadLlantas={cantidadLlantas} // Nuevo prop
           />
         )}
         
@@ -205,7 +226,6 @@ function RegistroInspeccionSalida() {
           </button>
         </a>
       </div>
-
     </div>
   );
 }
