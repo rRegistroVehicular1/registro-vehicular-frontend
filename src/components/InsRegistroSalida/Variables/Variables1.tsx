@@ -13,10 +13,13 @@ function Variables1 (){
   const [odometroLlegada, setOdometroLlegada] = useState('');
   const [step, setStep] = useState(2);
   const [datos, setDatos] = useState([]);
+  const [cantidadLlantas, setCantidadLlantas] = useState(4); // Nuevo estado
+
 
   return {placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
     tipoVehiculo, setTipoVehiculo, fecha, setFecha, horaSalida, setHoraSalida,
-    horaEntrada, setHoraEntrada, odometroSalida, setOdometroSalida, odometroLlegada,setOdometroLlegada, step, setStep, datos, setDatos
+    horaEntrada, setHoraEntrada, odometroSalida, setOdometroSalida, odometroLlegada,setOdometroLlegada, step, setStep, datos, setDatos,
+    cantidadLlantas, setCantidadLlantas     
   };
 };
 
