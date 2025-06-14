@@ -9,6 +9,7 @@ interface StepCuatroProps {
     handlePreviousStep: () => void;
     handleNextStep: () => void;
     titulo: string;
+    cantidadLlantas: number; // Nueva prop
 }
 
 function StepCuatro({ 
