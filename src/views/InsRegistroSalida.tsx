@@ -132,33 +132,33 @@ function RegistroInspeccionSalida() {
 
         {step === 3 && (
           <StepTres
-            placa={placa} 
-            setPlaca={setPlaca}
-            conductor={conductor} 
-            setConductor={setConductor}
-            tipoVehiculo={tipoVehiculo} 
-            setTipoVehiculo={setTipoVehiculo}
-            odometroSalida={odometroSalida} 
-            setOdometroSalida={setOdometroSalida}
-            onPrevious={handlePreviousStep} 
-            onNext={handleNextStep} 
-            datos={datos}
-            actualizarLlantasPorCantidad={actualizarLlantasPorCantidad} // Cambiado
-            cantidadLlantas={cantidadLlantas} // Nuevo prop
-            setCantidadLlantas={setCantidadLlantas} // Nuevo prop
+              placa={placa}
+              setPlaca={setPlaca}
+              conductor={conductor}
+              setConductor={setConductor}
+              tipoVehiculo={tipoVehiculo}
+              setTipoVehiculo={setTipoVehiculo}
+              odometroSalida={odometroSalida}
+              setOdometroSalida={setOdometroSalida}
+              onPrevious={handlePreviousStep}
+              onNext={handleNextStep}
+              datos={datos}
+              actualizarLlantasPorCantidad={actualizarLlantasPorCantidad}
+              cantidadLlantas={cantidadLlantas}
+              setCantidadLlantas={setCantidadLlantas}
           />
         )}
 
         {step === 4 && (
           <StepCuatro
-            llantas={llantas}
-            setLlantas={setLlantas}
-            observacionGeneralLlantas={observacionGeneralLlantas}
-            setObservacionGeneralLlantas={setObservacionGeneralLlantas}
-            handlePreviousStep={handlePreviousStep}
-            handleNextStep={handleNextStep}
-            titulo="Revisión de Llantas"
-            cantidadLlantas={cantidadLlantas} // Nuevo prop
+              llantas={llantas}
+              setLlantas={setLlantas}
+              observacionGeneralLlantas={observacionGeneralLlantas}
+              setObservacionGeneralLlantas={setObservacionGeneralLlantas}
+              handlePreviousStep={handlePreviousStep}
+              handleNextStep={handleNextStep}
+              titulo="Revisión de Llantas"
+              cantidadLlantas={cantidadLlantas}
           />
         )}
         
