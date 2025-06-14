@@ -14,7 +14,7 @@ type Step3Props = {
     onPrevious: () => void;
     onNext: () => void;
     datos: string[];
-    actualizarLlantasPorTipo: (tipo: string) => void;
+    actualizarLlantasPorCantidad: (cantidad: number) => void; // Cambiado de actualizarLlantasPorTipo
 }
 
 function StepTres({ 
@@ -29,7 +29,7 @@ function StepTres({
     onPrevious, 
     onNext, 
     datos, 
-    actualizarLlantasPorTipo 
+    actualizarLlantasPorCantidad // Cambiado de actualizarLlantasPorTipo
 }: Step3Props) {
     
     const [placasList, setPlacasList] = useState<string[]>([]);
@@ -39,6 +39,7 @@ function StepTres({
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
+    const [cantidadLlantas, setCantidadLlantas] = useState<number>(4); // Nuevo estado para cantidad de llantas
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -63,7 +64,6 @@ function StepTres({
       }
     };
 
-    // Función para obtener el mapeo de placas a tipos de vehículo
     const fetchTiposVehiculo = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
@@ -132,6 +132,19 @@ function StepTres({
         }
     };
 
+    const fetchCantidadLlantas = async (placa: string) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas/${placa}`);
+            const cantidad = response.data.cantidad || 4;
+            setCantidadLlantas(cantidad);
+            actualizarLlantasPorCantidad(cantidad);
+        } catch (error) {
+            console.error('Error al obtener cantidad de llantas:', error);
+            setCantidadLlantas(4);
+            actualizarLlantasPorCantidad(4);
+        }
+    };
+
     useEffect(() => {
         fetchConductores();
     }, []);
@@ -144,20 +157,12 @@ function StepTres({
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
-        } else {
-        setLastOdometro(null);
-        }
-    }, [placa]);
-
-    useEffect(() => {
-        if (placa) {
-            fetchLastOdometro(placa);
+            fetchCantidadLlantas(placa);
             
             // Buscar el tipo de vehículo correspondiente a la placa seleccionada
             if (vehiculosMap[placa]) {
                 const tipo = vehiculosMap[placa].toLowerCase();
                 setTipoVehiculo(tipo);
-                actualizarLlantasPorTipo(tipo);
             } else {
                 setTipoVehiculo(''); // Limpiar si no se encuentra
             }
@@ -200,7 +205,6 @@ function StepTres({
 
     const handleTipoVehiculoChange = (value: string) => {
         setTipoVehiculo(value);
-        actualizarLlantasPorTipo(value);
     };
 
     return (
@@ -210,9 +214,10 @@ function StepTres({
                 <select
                     value={placa}
                     onChange={(e) => {
-                        console.log("Placa seleccionada en onChange:", e.target.value); // Debug
+                        console.log("Placa seleccionada en onChange:", e.target.value);
                         setPlaca(e.target.value);
                         fetchLastOdometro(e.target.value);
+                        fetchCantidadLlantas(e.target.value);
                     }}
                     className="mt-1 p-2 border rounded w-full"
                     required
@@ -329,4 +334,3 @@ function StepTres({
 }
 
 export default StepTres;
-
