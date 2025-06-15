@@ -67,7 +67,8 @@ function Variables1() {
     setStep,
     datos, 
     setDatos,
-    cantidadLlantas // Exportar la cantidad de llantas
+    cantidadLlantas, // Exportar la cantidad de llantas
+    actualizarLlantasPorCantidad
   };
 }
 
