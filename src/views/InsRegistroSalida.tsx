@@ -176,6 +176,7 @@ function RegistroInspeccionSalida() {
             onPrevious={handlePreviousStep} 
             onNext={handleNextStep} 
             datos={datos}
+            actualizarLlantasPorCantidad={actualizarLlantasPorCantidad}
           />
         )}
 
