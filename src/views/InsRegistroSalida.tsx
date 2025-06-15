@@ -1,4 +1,3 @@
-// views/InsRegistroSalida.tsx
 import StepDos from '../components/InsRegistroSalida/Step2';
 import StepTres from '../components/InsRegistroSalida/Step3';
 import StepCuatro from '../components/InsRegistroSalida/Step4';
@@ -21,18 +20,19 @@ import { useNavigate } from 'react-router-dom';
 
 function RegistroInspeccionSalida() {
   const {
-    placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
-    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, 
-    step, setStep, datos, setDatos
+    placa, setPlaca, 
+    conductor, setConductor, 
+    sucursal, setSucursal,
+    tipoVehiculo, setTipoVehiculo, 
+    odometroSalida, setOdometroSalida, 
+    step, setStep, 
+    datos, setDatos
   } = Variables1();
 
-  useEffect(() => {
-    setStep(2); // Inicializa step en 2 al cargar el componente
-  }, []);
-
   const {
-    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas,
-    actualizarLlantasPorCantidad // Cambiado de actualizarLlantasPorTipo
+    llantas, setLlantas,
+    observacionGeneralLlantas, setObservacionGeneralLlantas,
+    actualizarLlantasPorCantidad
   } = Variables2();
 
   const {
@@ -49,8 +49,12 @@ function RegistroInspeccionSalida() {
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [cantidadLlantas, setCantidadLlantas] = useState<number>(4); // Nuevo estado para cantidad de llantas
-  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setStep(2); // Inicializa step en 2 al cargar el componente
+  }, []);
+
   const handleNextStep = () => {
     setStep(step + 1);
   };
@@ -60,11 +64,11 @@ function RegistroInspeccionSalida() {
   };
 
   const totalSteps = 10;
-  const navigate = useNavigate();
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
     try {
       await handleSubmit({
         placa, 
@@ -81,8 +85,7 @@ function RegistroInspeccionSalida() {
         luces,
         insumos, 
         documentacion, 
-        danosCarroceria,
-        cantidadLlantas // Pasamos la cantidad de llantas al backend
+        danosCarroceria
       });
       navigate('/');
     } catch (error) {
@@ -90,6 +93,29 @@ function RegistroInspeccionSalida() {
       alert('Error al enviar el formulario.');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // Nueva función para cargar datos de la placa
+  const fetchPlacaData = async (selectedPlaca: string) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
+      const { tipos, llantas: llantasMap } = response.data;
+      
+      // Actualizar tipo de vehículo si existe
+      if (tipos[selectedPlaca]) {
+        setTipoVehiculo(tipos[selectedPlaca]);
+      }
+      
+      // Actualizar llantas según cantidad
+      const cantidadLlantas = llantasMap[selectedPlaca] || 4;
+      actualizarLlantasPorCantidad(cantidadLlantas);
+      
+    } catch (error) {
+      console.error('Error al obtener datos de la placa:', error);
+      // Valores por defecto si hay error
+      setTipoVehiculo('');
+      actualizarLlantasPorCantidad(4);
     }
   };
 
@@ -106,9 +132,16 @@ function RegistroInspeccionSalida() {
     obtenerPlacas();
   }, []);
 
+  // Efecto para cargar datos cuando cambia la placa
+  useEffect(() => {
+    if (placa) {
+      fetchPlacaData(placa);
+    }
+  }, [placa]);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">R06-PT-19 REVICION DE VEHICULOS - SALIDA </h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">R06-PT-19 REVISION DE VEHICULOS - SALIDA</h1>
 
       <div className="w-full max-w-3xl bg-gray-300 rounded-full h-4 mb-4">
         <div
@@ -132,33 +165,29 @@ function RegistroInspeccionSalida() {
 
         {step === 3 && (
           <StepTres
-              placa={placa}
-              setPlaca={setPlaca}
-              conductor={conductor}
-              setConductor={setConductor}
-              tipoVehiculo={tipoVehiculo}
-              setTipoVehiculo={setTipoVehiculo}
-              odometroSalida={odometroSalida}
-              setOdometroSalida={setOdometroSalida}
-              onPrevious={handlePreviousStep}
-              onNext={handleNextStep}
-              datos={datos}
-              actualizarLlantasPorCantidad={actualizarLlantasPorCantidad}
-              cantidadLlantas={cantidadLlantas}
-              setCantidadLlantas={setCantidadLlantas}
+            placa={placa} 
+            setPlaca={setPlaca}
+            conductor={conductor} 
+            setConductor={setConductor}
+            tipoVehiculo={tipoVehiculo} 
+            setTipoVehiculo={setTipoVehiculo}
+            odometroSalida={odometroSalida} 
+            setOdometroSalida={setOdometroSalida}
+            onPrevious={handlePreviousStep} 
+            onNext={handleNextStep} 
+            datos={datos}
           />
         )}
 
         {step === 4 && (
           <StepCuatro
-              llantas={llantas}
-              setLlantas={setLlantas}
-              observacionGeneralLlantas={observacionGeneralLlantas}
-              setObservacionGeneralLlantas={setObservacionGeneralLlantas}
-              handlePreviousStep={handlePreviousStep}
-              handleNextStep={handleNextStep}
-              titulo="Revisión de Llantas"
-              cantidadLlantas={cantidadLlantas}
+            llantas={llantas}
+            setLlantas={setLlantas}
+            observacionGeneralLlantas={observacionGeneralLlantas}
+            setObservacionGeneralLlantas={setObservacionGeneralLlantas}
+            handlePreviousStep={handlePreviousStep}
+            handleNextStep={handleNextStep}
+            titulo="Revisión de Llantas"
           />
         )}
         
@@ -220,6 +249,7 @@ function RegistroInspeccionSalida() {
             isSubmitting={isSubmitting}
           />
         )}
+
         <a href="/falla">
           <button className="w-full mt-10 bg-green-500 text-white py-2 px-4 rounded">
             Reportar una falla
