@@ -15,6 +15,10 @@ function Variables1() {
   const [step, setStep] = useState(1);
   const [datos, setDatos] = useState([]);
   const [cantidadLlantas, setCantidadLlantas] = useState(4); // Valor por defecto
+  const actualizarLlantasPorCantidad = (cantidad: number) => {
+    // Esta función será reemplazada por la de Variables2
+    console.log(`Cantidad de llantas: ${cantidad}`);
+  };
 
   // Nueva función para obtener la cantidad de llantas
   const fetchCantidadLlantas = async (placa: string) => {
