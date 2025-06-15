@@ -1,4 +1,3 @@
-// components/StepLlantas.tsx
 import { Llanta } from '@/types/llantas';
 
 interface StepCuatroProps {
@@ -9,7 +8,6 @@ interface StepCuatroProps {
     handlePreviousStep: () => void;
     handleNextStep: () => void;
     titulo: string;
-    cantidadLlantas: number; // Nueva prop
 }
 
 function StepCuatro({ 
@@ -61,17 +59,17 @@ function StepCuatro({
         return true;
     };
 
-    // Determinar qué imagen mostrar según la cantidad de llantas
-    const getImageSource = () => {
+    // Función para determinar el layout según la cantidad de llantas
+    const getGridLayout = () => {
         switch(llantas.length) {
             case 4:
-                return "/assets/Inspeccion_4llantas.jpg";
+                return 'grid-cols-1 md:grid-cols-2 gap-4';
             case 6:
-                return "/assets/Inspeccion_6llantas.jpg";
+                return 'grid-cols-1 md:grid-cols-3 gap-4';
             case 10:
-                return "/assets/Inspeccion_10llantas.jpg";
+                return 'grid-cols-1 md:grid-cols-5 gap-2';
             default:
-                return "/assets/Inspeccion_4llantas.jpg";
+                return 'grid-cols-1 md:grid-cols-2 gap-4';
         }
     };
 
@@ -80,10 +78,14 @@ function StepCuatro({
             <h2 className="text-xl font-bold mb-4 text-center">{titulo}</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
-                {/* Imagen de referencia */}
+                {/* Imagen de referencia - ajustar según cantidad de llantas */}
                 <div className="flex justify-center items-center order-1 md:order-1 mb-4 md:mb-0 md:h-[calc(100vh-200px)] md:sticky md:top-20">
                     <img
-                        src={getImageSource()}
+                        src={
+                            llantas.length === 4 ? "/assets/Inspeccion_4llantas.jpg" :
+                            llantas.length === 6 ? "/assets/Inspeccion_6llantas.jpg" :
+                            "/assets/Inspeccion_10llantas.jpg"
+                        }
                         alt={`Diagrama de inspección de ${llantas.length} llantas`}
                         className="max-w-full max-h-[70vh] w-auto object-contain border border-gray-200 rounded-lg shadow-sm"
                     />
@@ -91,7 +93,7 @@ function StepCuatro({
                 
                 {/* Opciones de llantas */}
                 <div className="order-2 md:order-2">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className={`${getGridLayout()}`}>
                         {llantas.map((llanta, index) => (
                             <div key={llanta.id} className="mb-4 p-2 border rounded">
                                 <h3 className="font-bold">{llanta.nombre}</h3>
