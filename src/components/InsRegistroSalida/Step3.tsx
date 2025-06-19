@@ -15,6 +15,7 @@ type Step3Props = {
     onNext: () => void;
     datos: string[];
     actualizarLlantasPorCantidad: (cantidad: number) => void;
+    vehiculosMap: Record<string, { tipo: string; llantas: number }>;
 }
 
 function StepTres({ 
