@@ -17,21 +17,17 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../validation/url';
 import { useNavigate } from 'react-router-dom';
+import { Llanta } from '@/types/llantas';
 
 function RegistroInspeccionSalida() {
   const {
-    placa, setPlaca, 
-    conductor, setConductor, 
-    sucursal, setSucursal,
-    tipoVehiculo, setTipoVehiculo, 
-    odometroSalida, setOdometroSalida, 
-    step, setStep, 
-    datos, setDatos
+    placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
+    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, 
+    step, setStep, datos, setDatos
   } = Variables1();
 
   const {
-    llantas, setLlantas,
-    observacionGeneralLlantas, setObservacionGeneralLlantas,
+    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas,
     actualizarLlantasPorCantidad
   } = Variables2();
 
@@ -49,11 +45,26 @@ function RegistroInspeccionSalida() {
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [vehiculosMap, setVehiculosMap] = useState<{tipos: Record<string, string>, llantas: Record<string, number>}>({
+    tipos: {},
+    llantas: {}
+  });
+  
   const navigate = useNavigate();
 
   useEffect(() => {
     setStep(2); // Inicializa step en 2 al cargar el componente
+    fetchVehiculosData();
   }, []);
+
+  const fetchVehiculosData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo-y-llantas`);
+      setVehiculosMap(response.data);
+    } catch (error) {
+      console.error('Error al obtener tipos de vehículo y llantas:', error);
+    }
+  };
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -68,8 +79,15 @@ function RegistroInspeccionSalida() {
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
     try {
+      // Validar que las llantas coincidan con la cantidad esperada
+      const cantidadEsperada = vehiculosMap.llantas[placa] || 4;
+      const llantasEnviadas = llantas.length;
+      
+      if (llantasEnviadas !== cantidadEsperada) {
+        throw new Error(`La placa ${placa} requiere ${cantidadEsperada} llantas, pero se enviaron ${llantasEnviadas}`);
+      }
+
       await handleSubmit({
         placa, 
         conductor, 
@@ -90,32 +108,9 @@ function RegistroInspeccionSalida() {
       navigate('/');
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
-      alert('Error al enviar el formulario.');
+      alert(error.message || 'Error al enviar el formulario.');
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  // Nueva función para cargar datos de la placa
-  const fetchPlacaData = async (selectedPlaca: string) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
-      const { tipos, llantas: llantasMap } = response.data;
-      
-      // Actualizar tipo de vehículo si existe
-      if (tipos[selectedPlaca]) {
-        setTipoVehiculo(tipos[selectedPlaca]);
-      }
-      
-      // Actualizar llantas según cantidad
-      const cantidadLlantas = llantasMap[selectedPlaca] || 4;
-      actualizarLlantasPorCantidad(cantidadLlantas);
-      
-    } catch (error) {
-      console.error('Error al obtener datos de la placa:', error);
-      // Valores por defecto si hay error
-      setTipoVehiculo('');
-      actualizarLlantasPorCantidad(4);
     }
   };
 
@@ -131,13 +126,6 @@ function RegistroInspeccionSalida() {
 
     obtenerPlacas();
   }, []);
-
-  // Efecto para cargar datos cuando cambia la placa
-  useEffect(() => {
-    if (placa) {
-      fetchPlacaData(placa);
-    }
-  }, [placa]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -176,10 +164,11 @@ function RegistroInspeccionSalida() {
             onPrevious={handlePreviousStep} 
             onNext={handleNextStep} 
             datos={datos}
+            vehiculosMap={vehiculosMap}
             actualizarLlantasPorCantidad={actualizarLlantasPorCantidad}
           />
         )}
-
+        
         {step === 4 && (
           <StepCuatro
             llantas={llantas}
@@ -250,7 +239,7 @@ function RegistroInspeccionSalida() {
             isSubmitting={isSubmitting}
           />
         )}
-
+        
         <a href="/falla">
           <button className="w-full mt-10 bg-green-500 text-white py-2 px-4 rounded">
             Reportar una falla
