@@ -107,8 +107,8 @@ function RegistroInspeccionSalida() {
       });
       navigate('/');
     } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-      alert(error.message || 'Error al enviar el formulario.');
+      console.error('Error al enviar el formulario:', error instanceof Error ? error.message : String(error));
+      alert('Error al enviar el formulario.');
     } finally {
       setIsSubmitting(false);
     }
