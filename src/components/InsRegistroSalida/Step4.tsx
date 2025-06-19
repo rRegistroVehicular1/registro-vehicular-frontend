@@ -1,4 +1,3 @@
-// components/StepLlantas.tsx
 import { Llanta } from '@/types/llantas';
 
 interface StepCuatroProps {
@@ -60,21 +59,35 @@ function StepCuatro({
         return true;
     };
 
+    // Determinar qué imagen mostrar según la cantidad de llantas
+    const getImageSource = () => {
+        switch(llantas.length) {
+            case 4:
+                return "/assets/Inspeccion_4llantas.jpg";
+            case 6:
+                return "/assets/Inspeccion_6llantas.jpg";
+            case 10:
+                return "/assets/Inspeccion_10llantas.jpg";
+            default:
+                return "/assets/Inspeccion_4llantas.jpg";
+        }
+    };
+
     return (
         <div className="w-full">
             <h2 className="text-xl font-bold mb-4 text-center">{titulo}</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
-                {/* Imagen de referencia - Se mantiene igual */}
+                {/* Imagen de referencia - Ahora dinámica según cantidad de llantas */}
                 <div className="flex justify-center items-center order-1 md:order-1 mb-4 md:mb-0 md:h-[calc(100vh-200px)] md:sticky md:top-20">
                     <img
-                        src="/assets/Inspeccion_10llantas.jpg"
-                        alt="Diagrama de inspección de llantas"
+                        src={getImageSource()}
+                        alt={`Diagrama de inspección de ${llantas.length} llantas`}
                         className="max-w-full max-h-[70vh] w-auto object-contain border border-gray-200 rounded-lg shadow-sm"
                     />
                 </div>
                 
-                {/* Opciones de llantas - Se mantiene igual */}
+                {/* Opciones de llantas */}
                 <div className="order-2 md:order-2">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {llantas.map((llanta, index) => (
@@ -127,7 +140,7 @@ function StepCuatro({
                 </div>
             </div>
 
-            {/* Observaciones Generales - Se mantiene igual */}
+            {/* Observaciones Generales */}
             <div className="mt-4">
                 <label className="block font-bold mb-2">Observación General:</label>
                 <textarea
@@ -139,7 +152,7 @@ function StepCuatro({
                 />
             </div>
 
-            {/* Botones de navegación - Se mantiene igual */}
+            {/* Botones de navegación */}
             <div className="flex justify-between mt-6 w-full">
                 <button
                     type="button"
