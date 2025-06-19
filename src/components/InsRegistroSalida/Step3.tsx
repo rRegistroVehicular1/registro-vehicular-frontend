@@ -15,7 +15,6 @@ type Step3Props = {
     onNext: () => void;
     datos: string[];
     actualizarLlantasPorCantidad: (cantidad: number) => void;
-    vehiculosMap: Record<string, { tipo: string; llantas: number }>;
 }
 
 function StepTres({ 
@@ -37,9 +36,10 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
-    const [vehiculosMap, setVehiculosMap] = useState<{tipos: Record<string, string>, llantas: Record<string, number>}>({tipos: {}, llantas: {}});
+    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
+    const [cantidadLlantasMap, setCantidadLlantasMap] = useState<Record<string, number>>({});
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -64,15 +64,25 @@ function StepTres({
       }
     };
 
-    // Función para obtener el mapeo de placas a tipos de vehículo y cantidad de llantas
-    const fetchTiposVehiculoYLlantas = async () => {
+    // Función para obtener el mapeo de placas a tipos de vehículo
+    const fetchTiposVehiculo = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo-y-llantas`);
+            const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
             setVehiculosMap(response.data);
         } catch (error) {
-            console.error('Error al obtener tipos de vehículo y llantas:', error);
+            console.error('Error al obtener tipos de vehículo:', error);
         }
     }
+
+    // Nueva función para obtener cantidad de llantas
+    const fetchCantidadLlantas = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
+            setCantidadLlantasMap(response.data);
+        } catch (error) {
+            console.error('Error al obtener cantidad de llantas:', error);
+        }
+    };
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
         console.log('Placa seleccionada:', selectedPlaca);
@@ -139,27 +149,30 @@ function StepTres({
     
     useEffect(() => {
         fetchPlacas();
-        fetchTiposVehiculoYLlantas();
+        fetchTiposVehiculo();
+        fetchCantidadLlantas(); // Nueva llamada
     }, []);
 
     useEffect(() => {
         if (placa) {
             fetchLastOdometro(placa);
             
-            // Buscar el tipo de vehículo y cantidad de llantas correspondiente a la placa seleccionada
+            // Buscar el tipo de vehículo y cantidad de llantas correspondiente
             if (vehiculosMap[placa]) {
-                const { tipo, llantas } = vehiculosMap[placa];
-                setTipoVehiculo(tipo.toLowerCase());
-                actualizarLlantasPorCantidad(llantas);
+                const tipo = vehiculosMap[placa].toLowerCase();
+                setTipoVehiculo(tipo);
+            }
+            
+            if (cantidadLlantasMap[placa]) {
+                actualizarLlantasPorCantidad(cantidadLlantasMap[placa]);
             } else {
-                setTipoVehiculo(''); // Limpiar si no se encuentra
-                // Default a 4 llantas si no se encuentra la placa
+                // Valor por defecto si no hay información de llantas
                 actualizarLlantasPorCantidad(4);
             }
         } else {
             setLastOdometro(null);
         }
-    }, [placa, vehiculosMap]);
+    }, [placa, vehiculosMap, cantidadLlantasMap]);
 
     useEffect(() => {
         if (odometroSalida && lastOdometro !== null) {
@@ -195,7 +208,7 @@ function StepTres({
 
     const handleTipoVehiculoChange = (value: string) => {
         setTipoVehiculo(value);
-        // Ya no actualizamos llantas aquí, solo por cantidad desde la placa
+        // Ya no actualizamos llantas aquí, solo mantenemos esta línea por si acaso
     };
 
     return (
