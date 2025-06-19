@@ -21,47 +21,64 @@ import { Llanta } from '@/types/llantas';
 
 function RegistroInspeccionSalida() {
   const {
-    placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
-    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, 
-    step, setStep, datos, setDatos
+    placa, 
+    setPlaca, 
+    conductor, 
+    setConductor, 
+    sucursal, 
+    setSucursal,
+    tipoVehiculo, 
+    setTipoVehiculo, 
+    odometroSalida, 
+    setOdometroSalida, 
+    step, 
+    setStep, 
+    datos, 
+    setDatos
   } = Variables1();
 
+  // Nuevo estado para mapeo de cantidad de llantas
+  const [cantidadLlantasMap, setCantidadLlantasMap] = useState<Record<string, number>>({});
+
   const {
-    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas,
+    llantas, 
+    setLlantas, 
+    observacionGeneralLlantas, 
+    setObservacionGeneralLlantas, 
     actualizarLlantasPorCantidad
   } = Variables2();
 
   const {
-    fluidos, setFluidos, observacionGeneralFluido, setObservacionGeneralFluido,
-    parametrosVisuales, setParametrosVisuales, observacionGeneralVisuales, setObservacionGeneralVisuales
+    fluidos, 
+    setFluidos, 
+    observacionGeneralFluido, 
+    setObservacionGeneralFluido,
+    parametrosVisuales, 
+    setParametrosVisuales, 
+    observacionGeneralVisuales, 
+    setObservacionGeneralVisuales
   } = Variables3();
 
   const {
-    luces, setLuces, insumos, setInsumos
+    luces, 
+    setLuces, 
+    insumos, 
+    setInsumos
   } = Variables4();
 
   const {
-    documentacion, setDocumentacion, danosCarroceria, setDanosCarroceria
+    documentacion, 
+    setDocumentacion, 
+    danosCarroceria, 
+    setDanosCarroceria
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [vehiculosMap, setVehiculosMap] = useState<Record<string, { tipo: string; llantas: number }>>({});
-  
   const navigate = useNavigate();
 
   useEffect(() => {
     setStep(2); // Inicializa step en 2 al cargar el componente
-    fetchVehiculosData();
   }, []);
-
-  const fetchVehiculosData = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo-y-llantas`);
-      setVehiculosMap(response.data);
-    } catch (error) {
-      console.error('Error al obtener tipos de vehículo y llantas:', error);
-    }
-  };
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -76,13 +93,14 @@ function RegistroInspeccionSalida() {
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
     try {
-      // Validar que las llantas coincidan con la cantidad esperada
-      const cantidadEsperada = vehiculosMap.llantas[placa] || 4;
-      const llantasEnviadas = llantas.length;
+      // Obtener cantidad de llantas esperada para la placa seleccionada
+      const cantidadEsperada = cantidadLlantasMap[placa] || 4;
       
-      if (llantasEnviadas !== cantidadEsperada) {
-        throw new Error(`La placa ${placa} requiere ${cantidadEsperada} llantas, pero se enviaron ${llantasEnviadas}`);
+      // Validar que las llantas coincidan con la cantidad esperada
+      if (llantas.length !== cantidadEsperada) {
+        throw new Error(`La placa ${placa} requiere ${cantidadEsperada} llantas, pero se enviaron ${llantas.length}`);
       }
 
       await handleSubmit({
@@ -102,26 +120,39 @@ function RegistroInspeccionSalida() {
         documentacion, 
         danosCarroceria
       });
+      
       navigate('/');
     } catch (error) {
-      console.error('Error al enviar el formulario:', error instanceof Error ? error.message : String(error));
-      alert('Error al enviar el formulario.');
+      console.error('Error al enviar el formulario:', error);
+      alert(error.message || 'Error al enviar el formulario.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  useEffect(() => {
-    const obtenerPlacas = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-        setDatos(response.data);
-      } catch (error) {
-        console.error('Error al obtener los datos:', error);
-      }
-    };
+  // Función para obtener el mapeo de cantidad de llantas
+  const fetchCantidadLlantas = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
+      setCantidadLlantasMap(response.data);
+    } catch (error) {
+      console.error('Error al obtener cantidad de llantas:', error);
+    }
+  };
 
-    obtenerPlacas();
+  // Función para obtener datos de placas incluyendo cantidad de llantas
+  const fetchPlacas = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+      setDatos(response.data);
+    } catch (error) {
+      console.error('Error al obtener los datos:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlacas();
+    fetchCantidadLlantas();
   }, []);
 
   return (
@@ -140,6 +171,7 @@ function RegistroInspeccionSalida() {
       </p>
 
       <div className="w-full max-w-3xl bg-white p-6 rounded shadow-md">
+
         {step === 2 && (
           <StepDos
             sucursal={sucursal}
@@ -161,11 +193,11 @@ function RegistroInspeccionSalida() {
             onPrevious={handlePreviousStep} 
             onNext={handleNextStep} 
             datos={datos}
-            vehiculosMap={vehiculosMap}
             actualizarLlantasPorCantidad={actualizarLlantasPorCantidad}
+            cantidadLlantasMap={cantidadLlantasMap}
           />
         )}
-        
+
         {step === 4 && (
           <StepCuatro
             llantas={llantas}
@@ -236,7 +268,7 @@ function RegistroInspeccionSalida() {
             isSubmitting={isSubmitting}
           />
         )}
-        
+
         <a href="/falla">
           <button className="w-full mt-10 bg-green-500 text-white py-2 px-4 rounded">
             Reportar una falla
