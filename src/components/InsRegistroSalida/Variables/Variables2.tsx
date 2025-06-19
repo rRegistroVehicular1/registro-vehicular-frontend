@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Llanta } from '@/types/llantas';
 
 function Variables2() {
-  // 1. Definir todas las llantas posibles (10 posiciones)
+  // Definir todas las llantas posibles (4, 6 y 10 llantas)
   const todasLlantas: Llanta[] = [
     { id: 1, nombre: '1 - Delantera Izquierda', posicion: 'delantera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
     { id: 2, nombre: '2 - Delantera Derecha', posicion: 'delantera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
@@ -22,28 +22,45 @@ function Variables2() {
 
   // Función para actualizar llantas según cantidad (4, 6 o 10)
   const actualizarLlantasPorCantidad = (cantidad: number) => {
-    let llantasIds: number[] = [];
+    let llantasFiltradas: Llanta[] = [];
     
     switch(cantidad) {
       case 4:
-        llantasIds = [1, 2, 5, 7]; // Delanteras + traseras básicas
+        // 4 llantas: 1, 2, 5, 7
+        llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
         break;
       case 6:
-        llantasIds = [1, 2, 5, 6, 7, 8]; // Delanteras + traseras + extras traseras
+        // 6 llantas: 1, 2, 5, 6, 7, 8
+        llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 6, 7, 8].includes(llanta.id));
         break;
       case 10:
-        llantasIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Todas las llantas
+        // 10 llantas: todas
+        llantasFiltradas = [...todasLlantas];
         break;
       default:
-        llantasIds = [1, 2, 5, 7]; // Default a 4 llantas
+        // Por defecto 4 llantas
+        console.warn(`Cantidad de llantas no reconocida: ${cantidad}. Usando 4 llantas por defecto.`);
+        llantasFiltradas = todasLlantas.filter(llanta => [1, 2, 5, 7].includes(llanta.id));
     }
     
-    // Filtrar las llantas según los IDs permitidos
-    const llantasFiltradas = todasLlantas.filter(llanta => 
-      llantasIds.includes(llanta.id)
-    );
+    // Ordenar las llantas por ID para mantener consistencia
+    llantasFiltradas.sort((a, b) => a.id - b.id);
     
-    setLlantas(llantasFiltradas);
+    // Reiniciar los estados de las llantas
+    const llantasReseteadas = llantasFiltradas.map(llanta => ({
+      ...llanta,
+      fp: false,
+      pe: false,
+      pa: false,
+      desgaste: false
+    }));
+    
+    setLlantas(llantasReseteadas);
+  };
+
+  // Función para manejar cambios en las llantas (opcional, si se necesita)
+  const handleLlantasChange = (nuevasLlantas: Llanta[]) => {
+    setLlantas(nuevasLlantas);
   };
 
   return {
@@ -51,8 +68,8 @@ function Variables2() {
     setLlantas,
     observacionGeneralLlantas,
     setObservacionGeneralLlantas,
-    actualizarLlantasPorCantidad, // Exportar la nueva función
-    todasLlantas // Exportar para referencia si es necesario
+    actualizarLlantasPorCantidad,
+    handleLlantasChange // Opcional, según necesidad
   };
 }
 
