@@ -15,7 +15,6 @@ type Step3Props = {
     onNext: () => void;
     datos: string[];
     actualizarLlantasPorCantidad: (cantidad: number) => void;
-    actualizarLlantasPorTipo?: (tipo: string) => void;
 }
 
 function StepTres({ 
@@ -37,10 +36,9 @@ function StepTres({
     const [loadingPlacas, setLoadingPlacas] = useState(true);
     const [loadingOdometro, setLoadingOdometro] = useState(false);
     const [lastOdometro, setLastOdometro] = useState<number | null>(null);
-    const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
+    const [vehiculosMap, setVehiculosMap] = useState<{tipos: Record<string, string>, llantas: Record<string, number>}>({tipos: {}, llantas: {}});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
-    const [llantasMap, setLlantasMap] = useState<Record<string, number>>({});
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -68,11 +66,8 @@ function StepTres({
     // Función para obtener el mapeo de placas a tipos de vehículo y cantidad de llantas
     const fetchTiposVehiculoYLlantas = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo`);
-            if (response.data) {
-                setVehiculosMap(response.data.tipos || {});
-                setLlantasMap(response.data.llantas || {});
-            }
+            const response = await axios.get(`${BASE_URL}/placas/get-tipos-vehiculo-y-llantas`);
+            setVehiculosMap(response.data);
         } catch (error) {
             console.error('Error al obtener tipos de vehículo y llantas:', error);
         }
@@ -150,26 +145,28 @@ function StepTres({
         if (placa) {
             fetchLastOdometro(placa);
             
-            // Buscar el tipo de vehículo y cantidad de llantas correspondiente
-            if (vehiculosMap[placa]) {
-                const tipo = vehiculosMap[placa].toLowerCase();
+            // Buscar el tipo de vehículo y cantidad de llantas correspondiente a la placa seleccionada
+            if (vehiculosMap.tipos[placa]) {
+                const tipo = vehiculosMap.tipos[placa].toLowerCase();
+                const cantidadLlantas = vehiculosMap.llantas[placa] || 4;
+                
                 setTipoVehiculo(tipo);
-            }
-            
-            if (llantasMap[placa]) {
-                actualizarLlantasPorCantidad(llantasMap[placa]);
+                actualizarLlantasPorCantidad(cantidadLlantas);
             } else {
-                actualizarLlantasPorCantidad(4); // Valor por defecto
+                setTipoVehiculo(''); // Limpiar si no se encuentra
+                // Default a 4 llantas si no se encuentra la placa
+                actualizarLlantasPorCantidad(4);
             }
         } else {
             setLastOdometro(null);
         }
-    }, [placa, vehiculosMap, llantasMap]);
+    }, [placa]);
 
     useEffect(() => {
         if (odometroSalida && lastOdometro !== null) {
             const currentValue = Number(odometroSalida);
             if (!isNaN(currentValue) && currentValue < lastOdometro) {
+                // El campo ya se marca en rojo por la clase CSS
                 console.log(`Advertencia: Odómetro actual (${currentValue}) es menor que el último registro (${lastOdometro})`);
             }
         }
@@ -195,6 +192,11 @@ function StepTres({
         console.log(`placa: ${placa} - conductor: ${conductor} - tipoVehiculo: ${tipoVehiculo} - odometroSalida: ${odometroSalida}`)
 
         return true;
+    };
+
+    const handleTipoVehiculoChange = (value: string) => {
+        setTipoVehiculo(value);
+        // Ya no actualizamos llantas aquí, solo por cantidad desde la placa
     };
 
     return (
@@ -259,7 +261,7 @@ function StepTres({
                 Tipo de Vehículo:
                 <select
                     value={tipoVehiculo}
-                    onChange={(e) => setTipoVehiculo(e.target.value)}
+                    onChange={(e) => handleTipoVehiculoChange(e.target.value)}
                     className="mt-1 p-2 border rounded w-full"
                     required
                 >
