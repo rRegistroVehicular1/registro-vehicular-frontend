@@ -122,13 +122,16 @@ function RegistroInspeccionSalida() {
       });
       
       navigate('/');
-    } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-      alert(error.message || 'Error al enviar el formulario.');
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('Error al enviar el formulario:', error.message);
+        } else {
+            console.error('Error desconocido al enviar el formulario');
+        }
+        alert('Error al enviar el formulario.');
     } finally {
-      setIsSubmitting(false);
+        setIsSubmitting(false);
     }
-  };
 
   // Función para obtener el mapeo de cantidad de llantas
   const fetchCantidadLlantas = async () => {
