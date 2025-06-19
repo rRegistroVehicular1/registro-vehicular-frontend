@@ -281,5 +281,6 @@ function RegistroInspeccionSalida() {
     </div>
   );
 }
+}
 
 export default RegistroInspeccionSalida;
