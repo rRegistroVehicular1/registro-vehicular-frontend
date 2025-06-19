@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Llanta } from '@/types/llantas';
 
 function Variables2() {
-  // Definición de todas las llantas posibles (para 4, 6 y 10 llantas)
+  // 1. Definir todas las llantas posibles (10 posiciones)
   const todasLlantas: Llanta[] = [
     { id: 1, nombre: '1 - Delantera Izquierda', posicion: 'delantera', lado: 'izquierda', fp: false, pe: false, pa: false, desgaste: false },
     { id: 2, nombre: '2 - Delantera Derecha', posicion: 'delantera', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false },
@@ -16,60 +16,43 @@ function Variables2() {
     { id: 10, nombre: '10 - Central Derecha', posicion: 'central', lado: 'derecha', fp: false, pe: false, pa: false, desgaste: false }
   ];
 
-  // Estado para las llantas seleccionadas
+  // Estado unificado para todas las llantas
   const [llantas, setLlantas] = useState<Llanta[]>([]);
   const [observacionGeneralLlantas, setObservacionGeneralLlantas] = useState('');
 
-  // Función para actualizar llantas según la cantidad
+  // Función para actualizar llantas según cantidad (4, 6 o 10)
   const actualizarLlantasPorCantidad = (cantidad: number) => {
-    let llantasSeleccionadas: Llanta[] = [];
+    let llantasIds: number[] = [];
     
     switch(cantidad) {
       case 4:
-        // Para 4 llantas: Delanteras (1,2) y Traseras (5,7)
-        llantasSeleccionadas = todasLlantas.filter(llanta => 
-          [1, 2, 5, 7].includes(llanta.id)
-        );
+        llantasIds = [1, 2, 5, 7]; // Delanteras + traseras básicas
         break;
-        
       case 6:
-        // Para 6 llantas: Delanteras (1,2), Traseras (5,7) y Extras (6,8)
-        llantasSeleccionadas = todasLlantas.filter(llanta => 
-          [1, 2, 5, 6, 7, 8].includes(llanta.id)
-        );
+        llantasIds = [1, 2, 5, 6, 7, 8]; // Delanteras + traseras + extras traseras
         break;
-        
       case 10:
-        // Para 10 llantas: Todas las llantas
-        llantasSeleccionadas = [...todasLlantas];
+        llantasIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Todas las llantas
         break;
-        
       default:
-        // Por defecto (si no es 4,6 o 10) usar 4 llantas
-        llantasSeleccionadas = todasLlantas.filter(llanta => 
-          [1, 2, 5, 7].includes(llanta.id)
-        );
+        llantasIds = [1, 2, 5, 7]; // Default a 4 llantas
     }
     
-    setLlantas(llantasSeleccionadas);
-  };
-
-  // Función para actualizar el estado de una llanta específica
-  const actualizarLlanta = (id: number, cambios: Partial<Llanta>) => {
-    setLlantas(prevLlantas => 
-      prevLlantas.map(llanta => 
-        llanta.id === id ? { ...llanta, ...cambios } : llanta
-      )
+    // Filtrar las llantas según los IDs permitidos
+    const llantasFiltradas = todasLlantas.filter(llanta => 
+      llantasIds.includes(llanta.id)
     );
+    
+    setLlantas(llantasFiltradas);
   };
 
   return {
     llantas,
     setLlantas,
-    actualizarLlanta,
     observacionGeneralLlantas,
     setObservacionGeneralLlantas,
-    actualizarLlantasPorCantidad  // Exportamos la nueva función
+    actualizarLlantasPorCantidad, // Exportar la nueva función
+    todasLlantas // Exportar para referencia si es necesario
   };
 }
 
