@@ -45,10 +45,7 @@ function RegistroInspeccionSalida() {
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [vehiculosMap, setVehiculosMap] = useState<{tipos: Record<string, string>, llantas: Record<string, number>}>({
-    tipos: {},
-    llantas: {}
-  });
+  const [vehiculosMap, setVehiculosMap] = useState<Record<string, { tipo: string; llantas: number }>>({});
   
   const navigate = useNavigate();
 
