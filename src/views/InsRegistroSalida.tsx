@@ -168,7 +168,7 @@ function RegistroInspeccionSalida() {
             onPrevious={handlePreviousStep} 
             onNext={handleNextStep} 
             datos={datos}
-            actualizarLlantasPorTipo={actualizarLlantasPorCantidad} // Actualizado
+            actualizarLlantasPorCantidad={actualizarLlantasPorCantidad}
           />
         )}
 
