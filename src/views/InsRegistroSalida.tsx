@@ -21,64 +21,60 @@ import { Llanta } from '@/types/llantas';
 
 function RegistroInspeccionSalida() {
   const {
-    placa, 
-    setPlaca, 
-    conductor, 
-    setConductor, 
-    sucursal, 
-    setSucursal,
-    tipoVehiculo, 
-    setTipoVehiculo, 
-    odometroSalida, 
-    setOdometroSalida, 
-    step, 
-    setStep, 
-    datos, 
-    setDatos
+    placa, setPlaca, conductor, setConductor, sucursal, setSucursal,
+    tipoVehiculo, setTipoVehiculo, odometroSalida, setOdometroSalida, 
+    step, setStep, datos, setDatos
   } = Variables1();
 
-  // Nuevo estado para mapeo de cantidad de llantas
-  const [cantidadLlantasMap, setCantidadLlantasMap] = useState<Record<string, number>>({});
+  // Inicializar en paso 2 (selección de sucursal)
+  useEffect(() => {
+    setStep(2);
+  }, []);
 
   const {
-    llantas, 
-    setLlantas, 
-    observacionGeneralLlantas, 
-    setObservacionGeneralLlantas, 
-    actualizarLlantasPorCantidad
+    llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas,
+    actualizarLlantasPorCantidad // Cambiado de actualizarLlantasPorTipo
   } = Variables2();
 
   const {
-    fluidos, 
-    setFluidos, 
-    observacionGeneralFluido, 
-    setObservacionGeneralFluido,
-    parametrosVisuales, 
-    setParametrosVisuales, 
-    observacionGeneralVisuales, 
-    setObservacionGeneralVisuales
+    fluidos, setFluidos, observacionGeneralFluido, setObservacionGeneralFluido,
+    parametrosVisuales, setParametrosVisuales, observacionGeneralVisuales, setObservacionGeneralVisuales
   } = Variables3();
 
   const {
-    luces, 
-    setLuces, 
-    insumos, 
-    setInsumos
+    luces, setLuces, insumos, setInsumos
   } = Variables4();
 
   const {
-    documentacion, 
-    setDocumentacion, 
-    danosCarroceria, 
-    setDanosCarroceria
+    documentacion, setDocumentacion, danosCarroceria, setDanosCarroceria
   } = Variables5();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [llantasPorPlaca, setLlantasPorPlaca] = useState<Record<string, number>>({});
   const navigate = useNavigate();
 
+  // Obtener el mapeo de placas a cantidad de llantas
   useEffect(() => {
-    setStep(2); // Inicializa step en 2 al cargar el componente
+    const fetchLlantasPorPlaca = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/placas/get-llantas-por-placa`);
+        setLlantasPorPlaca(response.data);
+      } catch (error) {
+        console.error('Error al obtener llantas por placa:', error);
+        setLlantasPorPlaca({});
+      }
+    };
+
+    fetchLlantasPorPlaca();
   }, []);
+
+  // Actualizar llantas cuando cambia la placa
+  useEffect(() => {
+    if (placa && llantasPorPlaca[placa]) {
+      const cantidad = llantasPorPlaca[placa];
+      actualizarLlantasPorCantidad(cantidad);
+    }
+  }, [placa, llantasPorPlaca]);
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -95,14 +91,6 @@ function RegistroInspeccionSalida() {
     setIsSubmitting(true);
     
     try {
-      // Obtener cantidad de llantas esperada para la placa seleccionada
-      const cantidadEsperada = cantidadLlantasMap[placa] || 4;
-      
-      // Validar que las llantas coincidan con la cantidad esperada
-      if (llantas.length !== cantidadEsperada) {
-        throw new Error(`La placa ${placa} requiere ${cantidadEsperada} llantas, pero se enviaron ${llantas.length}`);
-      }
-
       await handleSubmit({
         placa, 
         conductor, 
@@ -120,42 +108,27 @@ function RegistroInspeccionSalida() {
         documentacion, 
         danosCarroceria
       });
-      
       navigate('/');
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error('Error al enviar el formulario:', error.message);
-        } else {
-            console.error('Error desconocido al enviar el formulario');
-        }
-        alert('Error al enviar el formulario.');
+    } catch (error) {
+      console.error('Error al enviar el formulario:', error);
+      alert('Error al enviar el formulario.');
     } finally {
-        setIsSubmitting(false);
-    }
-
-  // Función para obtener el mapeo de cantidad de llantas
-  const fetchCantidadLlantas = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
-      setCantidadLlantasMap(response.data);
-    } catch (error) {
-      console.error('Error al obtener cantidad de llantas:', error);
+      setIsSubmitting(false);
     }
   };
 
-  // Función para obtener datos de placas incluyendo cantidad de llantas
-  const fetchPlacas = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-      setDatos(response.data);
-    } catch (error) {
-      console.error('Error al obtener los datos:', error);
-    }
-  };
-
+  // Obtener datos de placas al cargar el componente
   useEffect(() => {
-    fetchPlacas();
-    fetchCantidadLlantas();
+    const obtenerPlacas = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
+        setDatos(response.data);
+      } catch (error) {
+        console.error('Error al obtener los datos:', error);
+      }
+    };
+
+    obtenerPlacas();
   }, []);
 
   return (
@@ -174,7 +147,6 @@ function RegistroInspeccionSalida() {
       </p>
 
       <div className="w-full max-w-3xl bg-white p-6 rounded shadow-md">
-
         {step === 2 && (
           <StepDos
             sucursal={sucursal}
@@ -196,8 +168,7 @@ function RegistroInspeccionSalida() {
             onPrevious={handlePreviousStep} 
             onNext={handleNextStep} 
             datos={datos}
-            actualizarLlantasPorCantidad={actualizarLlantasPorCantidad}
-            cantidadLlantasMap={cantidadLlantasMap}
+            actualizarLlantasPorTipo={actualizarLlantasPorCantidad} // Actualizado
           />
         )}
 
@@ -280,7 +251,6 @@ function RegistroInspeccionSalida() {
       </div>
     </div>
   );
-}
 }
 
 export default RegistroInspeccionSalida;
