@@ -44,7 +44,7 @@ function StepTres({
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
       try {
-        const response = await axios.get(`${BASE_URL}/placas/get-data-placas");
+        const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
         
         if (!response.data || !Array.isArray(response.data)) {
           throw new Error('Formato de respuesta inválido');
@@ -75,8 +75,8 @@ function StepTres({
 
     const fetchLlantasPorPlaca = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/placas/get-llantas-por-placa`);
-            setLlantasPorPlaca(response.data);
+            const response = await axios.get(`${BASE_URL}/placas/get-llantas-por-placa`),
+            setLlantasPorPlaca(response.data),
         } catch (error) {
             console.error('Error al obtener llantas por placa:', error);
             setLlantasPorPlaca({});
