@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { BASE_URL } from '@/validation/url';
+import { useState } from 'react';
 
 function Variables1() {
   const [placa, setPlaca] = useState('');
@@ -14,58 +12,33 @@ function Variables1() {
   const [odometroLlegada, setOdometroLlegada] = useState('');
   const [step, setStep] = useState(1);
   const [datos, setDatos] = useState([]);
-  const [cantidadLlantasMap, setCantidadLlantasMap] = useState<Record<string, number>>({});
-
-  // Nueva función para obtener el mapeo de placas a cantidad de llantas
-  const fetchCantidadLlantas = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/placas/get-cantidad-llantas`);
-      setCantidadLlantasMap(response.data);
-    } catch (error) {
-      console.error('Error al obtener cantidad de llantas:', error);
-      setCantidadLlantasMap({});
-    }
-  };
-
-  // Función para obtener la cantidad de llantas de la placa actual
-  const getCantidadLlantas = (): number => {
-    if (!placa || !cantidadLlantasMap[placa]) {
-      return 4; // Valor por defecto si no hay información
-    }
-    return cantidadLlantasMap[placa];
-  };
-
-  // Efecto para cargar los datos iniciales
-  useEffect(() => {
-    fetchCantidadLlantas();
-  }, []);
+  const [cantidadLlantas, setCantidadLlantas] = useState<number>(4); // Nuevo estado para cantidad de llantas
 
   return {
     placa, 
     setPlaca,
-    conductor,
+    conductor, 
     setConductor,
-    sucursal,
+    sucursal, 
     setSucursal,
-    tipoVehiculo,
+    tipoVehiculo, 
     setTipoVehiculo,
-    fecha,
+    fecha, 
     setFecha,
-    horaSalida,
+    horaSalida, 
     setHoraSalida,
-    horaEntrada,
+    horaEntrada, 
     setHoraEntrada,
-    odometroSalida,
+    odometroSalida, 
     setOdometroSalida,
     odometroLlegada,
     setOdometroLlegada,
-    step,
+    step, 
     setStep,
-    datos,
+    datos, 
     setDatos,
-    cantidadLlantasMap,
-    getCantidadLlantas, // Nueva función expuesta
-    fetchCantidadLlantas // Para recargar datos si es necesario
+    cantidadLlantas, // Nuevo valor exportado
+    setCantidadLlantas // Nueva función exportada
   };
 }
 
