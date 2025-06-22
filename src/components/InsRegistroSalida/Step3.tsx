@@ -75,8 +75,8 @@ function StepTres({
 
     const fetchLlantasPorPlaca = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/placas/get-llantas-por-placa`),
-            setLlantasPorPlaca(response.data),
+            const response = await axios.get(`${BASE_URL}/placas/get-llantas-por-placa`);
+            setLlantasPorPlaca(response.data);
         } catch (error) {
             console.error('Error al obtener llantas por placa:', error);
             setLlantasPorPlaca({});
