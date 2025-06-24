@@ -37,7 +37,7 @@ function Home() {
     setIsChecking(true);
     setError("");
 
-    try{
+    try {
       // Primero verificar si la placa existe en la lista
       const placaExists = await checkPlacaExists(placa);
       
@@ -47,19 +47,28 @@ function Home() {
         return;
       }
 
+      // Guardar la placa en localStorage para usarla en el siguiente paso
+      localStorage.setItem('currentPlaca', placa.trim().toUpperCase());
+
       // Si existe, proceder con la lógica actual  
       const result = await handleSubmit(placa, setError);
   
       if (result.data?.rowIndex > 0) {
-          localStorage.setItem("lastPlacaInfo", JSON.stringify({ rowIndex: result.data.rowIndex, placa: placa, estado: result.data?.estado}));// Guarda la placa junto al índice    
+        localStorage.setItem("lastPlacaInfo", JSON.stringify({ 
+          rowIndex: result.data.rowIndex, 
+          placa: placa.trim().toUpperCase()
+        }));
+        
+        if (result.data?.estado === "entrada") {
           navigate("/registro-inspeccion-entrada");
-      } else if (typeof result.data?.rowIndex === "undefined" || result.data?.rowIndex === null) {
-          alert("Esta placa no esta registrada");
+        } else {
           navigate("/registro-inspeccion-salida");
+        }
       } else {
-          alert("Error: No se pudo determinar el estado de la placa.");
+        // Si no hay rowIndex pero la placa existe, ir a registro salida
+        navigate("/registro-inspeccion-salida");
       }
-    }catch (error) {
+    } catch (error) {
       console.error("Error:", error);
       setError("Ocurrió un error al procesar la placa.");
     } finally {
@@ -85,8 +94,9 @@ function Home() {
             type="text"
             value={placa}
             onChange={(e) => setPlaca(e.target.value)}
-            className={`mt-1 p-2 border rounded w-full text-sm sm:text-base ${error ? "border-red-500" : "border-gray-300"
-              }`}
+            className={`mt-1 p-2 border rounded w-full text-sm sm:text-base ${
+              error ? "border-red-500" : "border-gray-300"
+            }`}
             placeholder="Ingrese su placa"
             required
           />
