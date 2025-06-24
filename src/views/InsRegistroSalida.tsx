@@ -28,12 +28,18 @@ function RegistroInspeccionSalida() {
 
   // Inicializar en paso 2 (selección de sucursal)
   useEffect(() => {
+    // Verificar si hay una placa guardada en localStorage
+    const savedPlaca = localStorage.getItem('currentPlaca');
+    if (savedPlaca) {
+      setPlaca(savedPlaca);
+    }
+    
     setStep(2);
   }, []);
 
   const {
     llantas, setLlantas, observacionGeneralLlantas, setObservacionGeneralLlantas,
-    actualizarLlantasPorCantidad // Cambiado de actualizarLlantasPorTipo
+    actualizarLlantasPorCantidad
   } = Variables2();
 
   const {
@@ -108,6 +114,9 @@ function RegistroInspeccionSalida() {
         documentacion, 
         danosCarroceria
       });
+      
+      // Limpiar localStorage al completar el formulario
+      localStorage.removeItem('currentPlaca');
       navigate('/');
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
