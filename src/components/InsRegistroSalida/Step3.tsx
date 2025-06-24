@@ -55,12 +55,30 @@ function StepTres({
           .filter(p => p);
         
         setPlacasList([...new Set(placas)].sort());
+
+        // Buscar y seleccionar la placa almacenada si existe
+        const storedPlaca = localStorage.getItem('currentPlaca');
+        if (storedPlaca && placas.includes(storedPlaca)) {
+          setPlaca(storedPlaca);
+          fetchLastOdometro(storedPlaca);
+          
+          // Actualizar llantas basado en la placa seleccionada
+          const cantidadLlantas = llantasPorPlaca[storedPlaca] || 4;
+          actualizarLlantasPorCantidad(cantidadLlantas);
+          
+          // Mantener lógica existente para tipo de vehículo
+          if (vehiculosMap[storedPlaca]) {
+            setTipoVehiculo(vehiculosMap[storedPlaca].toLowerCase());
+          }
+        }
       } catch (error) {
         console.error('Error al obtener placas:', error);
         setPlacasList([]);
         alert('Error al cargar las placas disponibles');
       } finally {
         setLoadingPlacas(false);
+        // Limpiar la placa almacenada después de usarla
+        localStorage.removeItem('currentPlaca');
       }
     };
 
@@ -143,20 +161,12 @@ function StepTres({
     };
 
     useEffect(() => {
-        // Verificar si hay una placa guardada en localStorage
-        const savedPlaca = localStorage.getItem('currentPlaca');
-        if (savedPlaca) {
-            setPlaca(savedPlaca);
-            fetchLastOdometro(savedPlaca);
-        } else {
-            fetchPlacas();
-        }
-        
         fetchConductores();
         fetchLlantasPorPlaca();
     }, []);
     
     useEffect(() => {
+        fetchPlacas();
         fetchTiposVehiculo();
     }, []);
 
