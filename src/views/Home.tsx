@@ -47,12 +47,12 @@ function Home() {
         return;
       }
 
-      // Guardar la placa en localStorage para usarla en el siguiente paso
-      localStorage.setItem('currentPlaca', placa.trim().toUpperCase());
-
       // Si existe, proceder con la lógica actual  
       const result = await handleSubmit(placa, setError);
-  
+
+      // Almacenar la placa en localStorage para usarla en Step3
+      localStorage.setItem('currentPlaca', placa.trim().toUpperCase());
+
       if (result.data?.rowIndex > 0) {
         localStorage.setItem("lastPlacaInfo", JSON.stringify({ 
           rowIndex: result.data.rowIndex, 
@@ -65,7 +65,6 @@ function Home() {
           navigate("/registro-inspeccion-salida");
         }
       } else {
-        // Si no hay rowIndex pero la placa existe, ir a registro salida
         navigate("/registro-inspeccion-salida");
       }
     } catch (error) {
