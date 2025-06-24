@@ -40,30 +40,28 @@ function StepTres({
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
     const [llantasPorPlaca, setLlantasPorPlaca] = useState<Record<string, number>>({});
-    const [showCustomConductor, setShowCustomConductor] = useState(false);
-    const [customConductor, setCustomConductor] = useState('');
     
     const fetchPlacas = async () => {
-        setLoadingPlacas(true);
-        try {
-            const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
-            
-            if (!response.data || !Array.isArray(response.data)) {
-                throw new Error('Formato de respuesta inválido');
-            }
+      setLoadingPlacas(true);
+      try {
+        const response = await axios.get(`${BASE_URL}/placas/get-data-placas`);
         
-            const placas = response.data
-                .map(p => p?.toString().trim())
-                .filter(p => p);
-            
-            setPlacasList([...new Set(placas)].sort());
-        } catch (error) {
-            console.error('Error al obtener placas:', error);
-            setPlacasList([]);
-            alert('Error al cargar las placas disponibles');
-        } finally {
-            setLoadingPlacas(false);
+        if (!response.data || !Array.isArray(response.data)) {
+          throw new Error('Formato de respuesta inválido');
         }
+    
+        const placas = response.data
+          .map(p => p?.toString().trim())
+          .filter(p => p);
+        
+        setPlacasList([...new Set(placas)].sort());
+      } catch (error) {
+        console.error('Error al obtener placas:', error);
+        setPlacasList([]);
+        alert('Error al cargar las placas disponibles');
+      } finally {
+        setLoadingPlacas(false);
+      }
     };
 
     const fetchTiposVehiculo = async () => {
@@ -87,41 +85,43 @@ function StepTres({
 
     const fetchLastOdometro = async (selectedPlaca: string) => {
         console.log('Placa seleccionada:', selectedPlaca);
-        if (!selectedPlaca) {
-            setLastOdometro(null);
-            return;
-        }
+      if (!selectedPlaca) {
+        setLastOdometro(null);
+        return;
+      }
     
-        setLoadingOdometro(true);
-        try {
-            console.log('Buscando odometro para la placa:', selectedPlaca);
-            const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
-                params: { placa: selectedPlaca }
-            });
-            
-            let odometro = 0;
-            if (typeof response.data === 'number') {
-                odometro = response.data;
-            } else if (response.data?.lastOdometro !== undefined) {
-                odometro = Number(response.data.lastOdometro) || 0;
-            }
-            
-            if (isNaN(odometro)) {
-                throw new Error('Formato de Odómetro inválido');
-            }
-            
-            setLastOdometro(odometro);
-
-            if (odometro > 0 && (!odometroSalida || Number(odometroSalida) < odometro)) {
-                setOdometroSalida(String(odometro));
-            }
-        } catch (error) {
-            console.error('Error al obtener odómetro:', error);
-            setLastOdometro(null);
-            alert('No se pudo obtener el último odómetro');
-        } finally {
-            setLoadingOdometro(false);
+      setLoadingOdometro(true);
+      try {
+        console.log('Buscando odometro para la placa:', selectedPlaca);
+        const response = await axios.get(`${BASE_URL}/ins-registro-entrada/last-odometro`, {
+            params: { placa: selectedPlaca }
+        });
+        
+        // Validar respuesta
+        let odometro = 0;
+        if (typeof response.data === 'number') {
+          odometro = response.data;
+        } else if (response.data?.lastOdometro !== undefined) {
+          odometro = Number(response.data.lastOdometro) || 0;
         }
+        
+        if (isNaN(odometro)) {
+          throw new Error('Formato de Odómetro inválido');
+        }
+        
+        setLastOdometro(odometro);
+
+        // Sugerir automáticamente el último odómetro como valor inicial
+        if (odometro > 0 && (!odometroSalida || Number(odometroSalida) < odometro)) {
+          setOdometroSalida(String(odometro));
+        }
+      } catch (error) {
+        console.error('Error al obtener odómetro:', error);
+        setLastOdometro(null);
+        alert('No se pudo obtener el último odómetro');
+      } finally {
+        setLoadingOdometro(false);
+      }
     };
 
     const fetchConductores = async () => {
@@ -143,12 +143,20 @@ function StepTres({
     };
 
     useEffect(() => {
+        // Verificar si hay una placa guardada en localStorage
+        const savedPlaca = localStorage.getItem('currentPlaca');
+        if (savedPlaca) {
+            setPlaca(savedPlaca);
+            fetchLastOdometro(savedPlaca);
+        } else {
+            fetchPlacas();
+        }
+        
         fetchConductores();
         fetchLlantasPorPlaca();
     }, []);
     
     useEffect(() => {
-        fetchPlacas();
         fetchTiposVehiculo();
     }, []);
 
@@ -156,14 +164,16 @@ function StepTres({
         if (placa) {
             fetchLastOdometro(placa);
             
+            // Actualizar llantas basado en la placa seleccionada
             const cantidadLlantas = llantasPorPlaca[placa] || 4;
             actualizarLlantasPorCantidad(cantidadLlantas);
             
+            // Mantener lógica existente para tipo de vehículo
             if (vehiculosMap[placa]) {
                 const tipo = vehiculosMap[placa].toLowerCase();
                 setTipoVehiculo(tipo);
             } else {
-                setTipoVehiculo('');
+                setTipoVehiculo(''); // Limpiar si no se encuentra
             }
         } else {
             setLastOdometro(null);
@@ -180,14 +190,8 @@ function StepTres({
     }, [odometroSalida, lastOdometro]);
 
     const validateStep3 = () => {
-        if (!placa || !tipoVehiculo || !odometroSalida) {
-            alert("Los campos de placa, tipo de vehículo y odómetro son obligatorios");
-            return false;
-        }
-
-        // Validar conductor (puede ser de la lista o personalizado)
-        if (!conductor && !(showCustomConductor && customConductor)) {
-            alert("Debe seleccionar un conductor o ingresar un nombre");
+        if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
+            alert("Todos los campos son obligatorios");
             return false;
         }
 
@@ -202,31 +206,9 @@ function StepTres({
             return false;
         }
 
-        console.log(`placa: ${placa} - conductor: ${conductor || customConductor} - tipoVehiculo: ${tipoVehiculo} - odometroSalida: ${odometroSalida}`)
+        console.log(`placa: ${placa} - conductor: ${conductor} - tipoVehiculo: ${tipoVehiculo} - odometroSalida: ${odometroSalida}`)
 
         return true;
-    };
-
-    const handleConductorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        if (value === "other") {
-            setShowCustomConductor(true);
-            setConductor("");
-        } else {
-            setShowCustomConductor(false);
-            setCustomConductor("");
-            setConductor(value);
-        }
-    };
-
-    const handleNext = () => {
-        if (validateStep3()) {
-            // Si hay un conductor personalizado, usarlo
-            if (showCustomConductor && customConductor) {
-                setConductor(customConductor);
-            }
-            onNext();
-        }
     };
 
     return (
@@ -263,42 +245,28 @@ function StepTres({
 
             <label className="block mb-4">
                 Nombre del Conductor:
-                <div className="flex flex-col">
-                    <select
-                        value={showCustomConductor ? "other" : conductor}
-                        onChange={handleConductorChange}
-                        className="mt-1 p-2 border rounded w-full"
-                        required
-                        disabled={loadingConductores}
-                    >
-                        {loadingConductores ? (
-                            <option value="">Cargando conductores...</option>
-                        ) : conductoresList.length === 0 ? (
-                            <option value="" disabled>No hay conductores registrados</option>
-                        ) : (
-                            <>
-                                <option value="">Seleccione un conductor</option>
-                                {conductoresList.map((conductorItem, index) => (
-                                    <option key={`${conductorItem}-${index}`} value={conductorItem}>
-                                        {conductorItem}
-                                    </option>
-                                ))}
-                                <option value="other">Otro (ingresar nombre)</option>
-                            </>
-                        )}
-                    </select>
-                    
-                    {showCustomConductor && (
-                        <input
-                            type="text"
-                            value={customConductor}
-                            onChange={(e) => setCustomConductor(e.target.value)}
-                            className="mt-2 p-2 border rounded w-full"
-                            placeholder="Ingrese el nombre del conductor"
-                            required
-                        />
+                <select
+                    value={conductor}
+                    onChange={(e) => setConductor(e.target.value)}
+                    className="mt-1 p-2 border rounded w-full"
+                    required
+                    disabled={loadingConductores}
+                >
+                    {loadingConductores ? (
+                        <option value="">Cargando conductores...</option>
+                    ) : conductoresList.length === 0 ? (
+                        <option value="" disabled>No hay conductores registrados</option>
+                    ) : (
+                        <>
+                            <option value="">Seleccione un conductor</option>
+                            {conductoresList.map((conductorItem, index) => (
+                                <option key={`${conductorItem}-${index}`} value={conductorItem}>
+                                    {conductorItem}
+                                </option>
+                            ))}
+                        </>
                     )}
-                </div>
+                </select>
             </label>
 
             <label className="block mb-4">
@@ -358,7 +326,7 @@ function StepTres({
                 <button 
                     type="button" 
                     className="bg-blue-500 text-white px-4 py-2 rounded" 
-                    onClick={handleNext}
+                    onClick={() => validateStep3() && onNext()}
                     disabled={loadingPlacas || loadingOdometro}
                 >
                     {loadingOdometro ? 'Validando...' : 'Siguiente'}
