@@ -202,7 +202,7 @@ function StepTres({
     }, [odometroSalida, lastOdometro]);
 
     const validateStep3 = () => {
-        if (!placa || !conductor || !tipoVehiculo || !odometroSalida) {
+        if (!placa || !tipoVehiculo || !odometroSalida) {
             alert("Todos los campos son obligatorios");
             return false;
         }
