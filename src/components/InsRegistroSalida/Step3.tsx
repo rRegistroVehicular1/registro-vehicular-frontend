@@ -40,6 +40,8 @@ function StepTres({
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
     const [llantasPorPlaca, setLlantasPorPlaca] = useState<Record<string, number>>({});
+    const [showCustomConductor, setShowCustomConductor] = useState(false);
+    const [customConductor, setCustomConductor] = useState('');
     
     const fetchPlacas = async () => {
       setLoadingPlacas(true);
@@ -205,6 +207,11 @@ function StepTres({
             return false;
         }
 
+        if (!conductor && !(showCustomConductor && customConductor)) {
+            alert("Debe seleccionar un conductor o ingresar un nombre");
+            return false;
+        }
+
         const odometroValue = Number(odometroSalida);
         if (isNaN(odometroValue) || odometroValue < 0){
             alert("Odómetro debe ser un número valido y positivo");
@@ -216,9 +223,31 @@ function StepTres({
             return false;
         }
 
-        console.log(`placa: ${placa} - conductor: ${conductor} - tipoVehiculo: ${tipoVehiculo} - odometroSalida: ${odometroSalida}`)
+        console.log(`placa: ${placa} - conductor: ${conductor || customConductor} - tipoVehiculo: ${tipoVehiculo} - odometroSalida: ${odometroSalida}`)
 
         return true;
+    };
+
+    const handleConductorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        if (value === "other") {
+            setShowCustomConductor(true);
+            setConductor("");
+        } else {
+            setShowCustomConductor(false);
+            setCustomConductor("");
+            setConductor(value);
+        }
+    };
+
+    const handleNext = () => {
+        if (validateStep3()) {
+            // Si hay un conductor personalizado, usarlo
+            if (showCustomConductor && customConductor) {
+                setConductor(customConductor);
+            }
+            onNext();
+        }
     };
 
     return (
@@ -255,28 +284,42 @@ function StepTres({
 
             <label className="block mb-4">
                 Nombre del Conductor:
-                <select
-                    value={conductor}
-                    onChange={(e) => setConductor(e.target.value)}
-                    className="mt-1 p-2 border rounded w-full"
-                    required
-                    disabled={loadingConductores}
-                >
-                    {loadingConductores ? (
-                        <option value="">Cargando conductores...</option>
-                    ) : conductoresList.length === 0 ? (
-                        <option value="" disabled>No hay conductores registrados</option>
-                    ) : (
-                        <>
-                            <option value="">Seleccione un conductor</option>
-                            {conductoresList.map((conductorItem, index) => (
-                                <option key={`${conductorItem}-${index}`} value={conductorItem}>
-                                    {conductorItem}
-                                </option>
-                            ))}
-                        </>
+                <div className="flex flex-col">
+                    <select
+                        value={showCustomConductor ? "other" : conductor}
+                        onChange={handleConductorChange}
+                        className="mt-1 p-2 border rounded w-full"
+                        required
+                        disabled={loadingConductores}
+                    >
+                        {loadingConductores ? (
+                            <option value="">Cargando conductores...</option>
+                        ) : conductoresList.length === 0 ? (
+                            <option value="" disabled>No hay conductores registrados</option>
+                        ) : (
+                            <>
+                                <option value="">Seleccione un conductor</option>
+                                {conductoresList.map((conductorItem, index) => (
+                                    <option key={`${conductorItem}-${index}`} value={conductorItem}>
+                                        {conductorItem}
+                                    </option>
+                                ))}
+                                <option value="other">Otro (ingresar nombre)</option>
+                            </>
+                        )}
+                    </select>
+                    
+                    {showCustomConductor && (
+                        <input
+                            type="text"
+                            value={customConductor}
+                            onChange={(e) => setCustomConductor(e.target.value)}
+                            className="mt-2 p-2 border rounded w-full"
+                            placeholder="Ingrese el nombre del conductor"
+                            required
+                        />
                     )}
-                </select>
+                </div>
             </label>
 
             <label className="block mb-4">
