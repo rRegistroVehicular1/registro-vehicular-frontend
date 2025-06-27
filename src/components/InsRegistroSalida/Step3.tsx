@@ -12,7 +12,7 @@ type Step3Props = {
     odometroSalida: string;
     setOdometroSalida: (value: string) => void;
     onPrevious: () => void;
-    onNext: (conductorData?: any) => void;
+    onNext: () => void;
     datos: string[];
     actualizarLlantasPorCantidad: (cantidad: number) => void;
 }
@@ -241,13 +241,12 @@ function StepTres({
     };
 
     const handleNext = () => {
-      if (validateStep3()) {
-        // Si hay un conductor personalizado, usarlo
-        const finalConductor = showCustomConductor && customConductor ? customConductor : conductor;
-        setConductor(finalConductor); // Asegurarse de que el estado se actualice
-        
-        onNext();
-      }
+        if (validateStep3()) {
+            // Si hay un conductor personalizado, usarlo
+            const finalConductor = showCustomConductor && customConductor ? customConductor : conductor;
+            setConductor(finalConductor); // Asegurarse de que el estado se actualice
+            onNext();
+        }
     };
 
     return (
