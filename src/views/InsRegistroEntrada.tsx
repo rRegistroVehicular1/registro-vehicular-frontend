@@ -122,46 +122,48 @@ function RegistroInspeccionEntrada() {
                             )}
                         </label>
                     </div>
-                    <p>(Coloque SI, NO o N/A en la acción ó parametros que apliquen)</p>
-                    {formData.revisiones.map((item, index) => (
-                        <div key={index} className="p-4 bg-gray-50 border rounded">
-                            <label className="block text-gray-700 font-semibold mb-2">
-                                {item.descripcion}
-                            </label>
-                            <div className="flex space-x-4">
-                                <label className="flex items-center">
-                                    <input
-                                        type="radio"
-                                        name={`respuesta-${index}`}
-                                        checked={item.opcion === true}
-                                        onChange={() => handleInputChange(index, true)}
-                                        className="form-radio h-5 w-5"
-                                    />
-                                    <span className="ml-2">Sí</span>
+                    <div>
+                        <h2 className="text-2xl font-bold mb-4 text-center"> (Coloque SI, NO o N/A en la acción ó parametros que apliquen) </h2>
+                        {formData.revisiones.map((item, index) => (
+                            <div key={index} className="p-4 bg-gray-50 border rounded">
+                                <label className="block text-gray-700 font-semibold mb-2">
+                                    {item.descripcion}
                                 </label>
-                                <label className="flex items-center">
-                                    <input
-                                        type="radio"
-                                        name={`respuesta-${index}`}
-                                        checked={item.opcion === false}
-                                        onChange={() => handleInputChange(index, false)}
-                                        className="form-radio h-5 w-5"
-                                    />
-                                    <span className="ml-2">No</span>
-                                </label>
-                                <label className="flex items-center">
-                                    <input
-                                        type="radio"
-                                        name={`respuesta-${index}`}
-                                        checked={item.opcion === undefined}
-                                        onChange={() => handleInputChange(index, undefined)}
-                                        className="form-radio h-5 w-5"
-                                    />
-                                    <span className="ml-2">N/A</span>
-                                </label>
+                                <div className="flex space-x-4">
+                                    <label className="flex items-center">
+                                        <input
+                                            type="radio"
+                                            name={`respuesta-${index}`}
+                                            checked={item.opcion === true}
+                                            onChange={() => handleInputChange(index, true)}
+                                            className="form-radio h-5 w-5"
+                                        />
+                                        <span className="ml-2">Sí</span>
+                                    </label>
+                                    <label className="flex items-center">
+                                        <input
+                                            type="radio"
+                                            name={`respuesta-${index}`}
+                                            checked={item.opcion === false}
+                                            onChange={() => handleInputChange(index, false)}
+                                            className="form-radio h-5 w-5"
+                                        />
+                                        <span className="ml-2">No</span>
+                                    </label>
+                                    <label className="flex items-center">
+                                        <input
+                                            type="radio"
+                                            name={`respuesta-${index}`}
+                                            checked={item.opcion === undefined}
+                                            onChange={() => handleInputChange(index, undefined)}
+                                            className="form-radio h-5 w-5"
+                                        />
+                                        <span className="ml-2">N/A</span>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                     <div className="md:col-span-2">
                         <label className="block text-gray-700 font-semibold mb-2">
                             Observación General
