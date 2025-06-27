@@ -124,7 +124,7 @@ function RegistroInspeccionEntrada() {
                     </div>
                     {formData.revisiones.map((item, index) => (
                         <div key={index} className="p-4 bg-gray-50 border rounded">
-                            <p>(Coloque SI, NO o N/A en la columna que aplique)</p>
+                            <p>(Coloque SI, NO o N/A en la acción ó parametros que apliquen)</p>
                             <label className="block text-gray-700 font-semibold mb-2">
                                 {item.descripcion}
                             </label>
