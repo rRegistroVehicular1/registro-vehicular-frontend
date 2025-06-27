@@ -243,9 +243,8 @@ function StepTres({
     const handleNext = () => {
         if (validateStep3()) {
             // Si hay un conductor personalizado, usarlo
-            if (showCustomConductor && customConductor) {
-                setConductor(customConductor);
-            }
+            const finalConductor = showCustomConductor && customConductor ? customConductor : conductor;
+            setConductor(finalConductor); // Asegurarse de que el estado se actualice
             onNext();
         }
     };
