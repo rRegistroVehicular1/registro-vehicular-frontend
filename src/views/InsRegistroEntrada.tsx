@@ -13,7 +13,7 @@ function RegistroInspeccionEntrada() {
     }>(() => ({
         revisiones: getInitialFormData().revisiones.map((revision) => ({
             ...revision,
-            opcion: null,
+            opcion: undefined,
         })),
         observacion: '',
         odometro: '',
