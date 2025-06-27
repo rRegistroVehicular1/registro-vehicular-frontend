@@ -76,7 +76,7 @@ function RegistroInspeccionSalida() {
     }
   }, [placa, llantasPorPlaca]);
 
-  const handleNextStep = () => {
+  const handleNextStep = (conductorData?: any) => {
     setStep(step + 1);
   };
 
