@@ -207,8 +207,9 @@ function StepTres({
             return false;
         }
 
-        if (!conductor && !(showCustomConductor && customConductor)) {
-            alert("Debe seleccionar un conductor o ingresar un nombre");
+        const finalConductor = showCustomConductor ? customConductor : conductor;
+        if (!finalConductor || finalConductor.trim() === '') {
+            alert("Debe seleccionar o ingresar un nombre de conductor válido");
             return false;
         }
 
