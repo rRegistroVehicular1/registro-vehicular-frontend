@@ -199,7 +199,7 @@ function Falla() {
                             )}
                         </div>
                     </div>
-
+                </div>
                 <div className="flex flex-col md:flex-row justify-between md:space-x-4 space-y-4 md:space-y-0">
                     <div className="w-full md:w-1/2">
                         <label className="block text-gray-700">N° Placa:</label>
