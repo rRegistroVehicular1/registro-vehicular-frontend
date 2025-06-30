@@ -11,6 +11,19 @@ function Home() {
   const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchVehiculos = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/placas/get-vehiculos`);
+        setVehiculosMap(response.data);
+      } catch (error) {
+        console.error('Error al obtener vehículos:', error);
+      }
+    };
+    fetchVehiculos();
+  }, []);
+  
+
   const handleClear = () => {
     setPlaca("");
     setError("");
@@ -54,7 +67,7 @@ function Home() {
       // Almacenar la placa en localStorage para usarla en Step3
       localStorage.setItem('currentPlaca', placa.trim().toUpperCase());
 
-      // Almacenar la placa para el formulario de fallas
+      // Almacenar ambos datos para el formulario de fallas
       const vehiculo = vehiculosMap[placa.trim().toUpperCase()] || '';
       localStorage.setItem('fallaData', JSON.stringify({
         placa: placa.trim().toUpperCase(),
