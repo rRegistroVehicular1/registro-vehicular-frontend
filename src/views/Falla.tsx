@@ -82,11 +82,12 @@ function Falla() {
         fetchVehiculos();
         fetchPlacas();
 
-        const storedFallaPlaca = localStorage.getItem('fallaPlaca');
-          if (storedFallaPlaca) {
-            setPlaca(storedFallaPlaca);
-            handlePlacaChange(storedFallaPlaca); // Esto también establecerá el vehículo correspondiente
-            localStorage.removeItem('fallaPlaca'); // Limpiar después de usar
+        const fallaData = localStorage.getItem('fallaData');
+          if (fallaData) {
+            const { placa, vehiculo } = JSON.parse(fallaData);
+            setPlaca(placa);
+            setVehiculo(vehiculo);
+            localStorage.removeItem('fallaData'); // Limpiar después de usar
           }
     }, []);
 
