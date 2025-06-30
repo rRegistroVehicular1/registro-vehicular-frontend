@@ -54,7 +54,11 @@ function Home() {
       localStorage.setItem('currentPlaca', placa.trim().toUpperCase());
 
       // Almacenar la placa para el formulario de fallas
-      localStorage.setItem('fallaPlaca', placa.trim().toUpperCase());
+      const vehiculo = vehiculosMap[placa.trim().toUpperCase()] || '';
+      localStorage.setItem('fallaData', JSON.stringify({
+        placa: placa.trim().toUpperCase(),
+        vehiculo
+      }));
 
       if (result.data?.rowIndex > 0) {
         localStorage.setItem("lastPlacaInfo", JSON.stringify({ 
