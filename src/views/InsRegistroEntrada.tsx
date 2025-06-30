@@ -67,7 +67,7 @@ function RegistroInspeccionEntrada() {
             setFormData({
                 revisiones: getInitialFormData().revisiones.map((revision) => ({
                     descripcion: revision.descripcion,
-                    opcion: undefined,
+                    opcion: null,
                 })),
                 observacion: '',
                 odometro:"",
