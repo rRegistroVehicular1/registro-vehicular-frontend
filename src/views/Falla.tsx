@@ -81,6 +81,13 @@ function Falla() {
     useEffect(() => {
         fetchVehiculos();
         fetchPlacas();
+
+        const storedFallaPlaca = localStorage.getItem('fallaPlaca');
+          if (storedFallaPlaca) {
+            setPlaca(storedFallaPlaca);
+            handlePlacaChange(storedFallaPlaca); // Esto también establecerá el vehículo correspondiente
+            localStorage.removeItem('fallaPlaca'); // Limpiar después de usar
+          }
     }, []);
 
     // Función para manejar el cambio de placa
