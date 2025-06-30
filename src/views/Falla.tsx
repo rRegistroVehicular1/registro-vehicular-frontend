@@ -18,6 +18,8 @@ function Falla() {
     const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
     const [conductoresList, setConductoresList] = useState<string[]>([]);
     const [loadingConductores, setLoadingConductores] = useState(true);
+    const [showCustomConductor, setShowCustomConductor] = useState(false);
+    const [customConductor, setCustomConductor] = useState('');
 
     const navigate = useNavigate();
 
@@ -97,7 +99,9 @@ function Falla() {
         event.preventDefault();
         setIsSubmitting(true);
 
-        const Successful = await handleSubmitFallas(event, sucursal, fecha, conductor, vehiculo, placa, detalles);
+        const conductorToUse = showCustomConductor && customConductor ? customConductor : conductor;
+        
+        const Successful = await handleSubmitFallas(event, sucursal, fecha, conductorToUse, vehiculo, placa, detalles);
 
         if (Successful) {
             setTimeout(() => {
@@ -145,32 +149,56 @@ function Falla() {
                             className="w-full mt-1 p-2 border border-gray-300 rounded"
                         />
                     </div>
+                    
                     <div className="w-full md:w-1/2">
                         <label className="block text-gray-700">Nombre del Conductor:</label>
-                        <select
-                            value={conductor}
-                            onChange={(e) => setConductor(e.target.value)}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                            required
-                            disabled={loadingConductores}
-                        >
-                            {loadingConductores ? (
-                                <option value="">Cargando conductores...</option>
-                            ) : conductoresList.length === 0 ? (
-                                <option value="" disabled>No hay conductores registrados</option>
-                            ) : (
-                                <>
-                                    <option value="">Seleccione un conductor</option>
-                                    {conductoresList.map((conductorItem, index) => (
-                                        <option key={`${conductorItem}-${index}`} value={conductorItem}>
-                                            {conductorItem}
-                                        </option>
-                                    ))}
-                                </>
+                        <div className="flex flex-col">
+                            <select
+                                value={showCustomConductor ? "other" : conductor}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value === "other") {
+                                        setShowCustomConductor(true);
+                                        setConductor("");
+                                    } else {
+                                        setShowCustomConductor(false);
+                                        setCustomConductor("");
+                                        setConductor(value);
+                                    }
+                                }}
+                                className="w-full mt-1 p-2 border border-gray-300 rounded"
+                                required
+                                disabled={loadingConductores}
+                            >
+                                {loadingConductores ? (
+                                    <option value="">Cargando conductores...</option>
+                                ) : conductoresList.length === 0 ? (
+                                    <option value="" disabled>No hay conductores registrados</option>
+                                ) : (
+                                    <>
+                                        <option value="">Seleccione un conductor</option>
+                                        {conductoresList.map((conductorItem, index) => (
+                                            <option key={`${conductorItem}-${index}`} value={conductorItem}>
+                                                {conductorItem}
+                                            </option>
+                                        ))}
+                                        <option value="other">Otro (ingresar nombre)</option>
+                                    </>
+                                )}
+                            </select>
+                            
+                            {showCustomConductor && (
+                                <input
+                                    type="text"
+                                    value={customConductor}
+                                    onChange={(e) => setCustomConductor(e.target.value)}
+                                    className="mt-2 p-2 border border-gray-300 rounded w-full"
+                                    placeholder="Ingrese el nombre del conductor"
+                                    required
+                                />
                             )}
-                        </select>
+                        </div>
                     </div>
-                </div>
 
                 <div className="flex flex-col md:flex-row justify-between md:space-x-4 space-y-4 md:space-y-0">
                     <div className="w-full md:w-1/2">
