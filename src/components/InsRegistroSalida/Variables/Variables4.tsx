@@ -21,7 +21,7 @@ function Variables4(){
           { id: 2, nombre: 'Conos', disponibleSi: false, disponibleNo: false, disponibleNA: false },
           { id: 3, nombre: 'Triángulos', disponibleSi: false, disponibleNo: false, disponibleNA: false },
           { id: 4, nombre: 'Cuñas', disponibleSi: false, disponibleNo: false, disponibleNA: false },
-          { id: 5, nombre: 'Extintor (EN ESTE CASO MARQUE (SI) VIGENTE O (NO) PARA NO VIGENTE)', disponibleSi: false, disponibleNo: false, disponibleNA: false },
+          { id: 5, nombre: 'Extintor (EN ESTE CASO MARQUE (SI) PARA VIGENTE O (NO) PARA NO VIGENTE)', disponibleSi: false, disponibleNo: false, disponibleNA: false },
           { id: 6, nombre: 'Llanta de repuesto', disponibleSi: false, disponibleNo: false, disponibleNA: false },
           { id: 7, nombre: 'Gato', disponibleSi: false, disponibleNo: false, disponibleNA: false },
           { id: 8, nombre: 'Carretilla, según equipo', disponibleSi: false, disponibleNo: false, disponibleNA: false },
