@@ -7,7 +7,7 @@ import { BASE_URL } from "../validation/url";
 function Falla() {
 
     const [sucursal, setSucursal] = useState("");
-    const [fecha, setFecha] = useState("");
+    const [fecha, setFecha] = useState(new Date().toISOString().split('T')[0]);
     const [conductor, setConductor] = useState("");
     const [vehiculo, setVehiculo] = useState("");
     const [placa, setPlaca] = useState("");
@@ -146,7 +146,9 @@ function Falla() {
                             onChange={(e) => setFecha(e.target.value)}
                             type="date"
                             name="fecha"
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-100"
+                            readOnly
+                            required
                         />
                     </div>
                     
