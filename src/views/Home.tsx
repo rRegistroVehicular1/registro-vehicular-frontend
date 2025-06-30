@@ -53,6 +53,9 @@ function Home() {
       // Almacenar la placa en localStorage para usarla en Step3
       localStorage.setItem('currentPlaca', placa.trim().toUpperCase());
 
+      // Almacenar la placa para el formulario de fallas
+      localStorage.setItem('fallaPlaca', placa.trim().toUpperCase());
+
       if (result.data?.rowIndex > 0) {
         localStorage.setItem("lastPlacaInfo", JSON.stringify({ 
           rowIndex: result.data.rowIndex, 
