@@ -8,6 +8,7 @@ function Home() {
   const [placa, setPlaca] = useState("");
   const [error, setError] = useState("");
   const [isChecking, setIsChecking] = useState(false);
+  const [vehiculosMap, setVehiculosMap] = useState<Record<string, string>>({});
   const navigate = useNavigate();
 
   const handleClear = () => {
