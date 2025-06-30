@@ -13,7 +13,7 @@ function RegistroInspeccionEntrada() {
     }>(() => ({
         revisiones: getInitialFormData().revisiones.map((revision) => ({
             ...revision,
-            opcion: undefined,
+            opcion: null,
         })),
         observacion: '',
         odometro: '',
@@ -50,7 +50,7 @@ function RegistroInspeccionEntrada() {
         fetchLastOdometroSalida();
     }, []);
 
-    const handleInputChange = (index: number, value: boolean | undefined) => {
+    const handleInputChange = (index: number, value: boolean | null) => {
         const newRevisiones = [...formData.revisiones];
         newRevisiones[index].opcion = value;
         setFormData({
@@ -154,8 +154,8 @@ function RegistroInspeccionEntrada() {
                                         <input
                                             type="radio"
                                             name={`respuesta-${index}`}
-                                            checked={item.opcion === undefined}
-                                            onChange={() => handleInputChange(index, undefined)}
+                                            checked={item.opcion === null}
+                                            onChange={() => handleInputChange(index, null)}
                                             className="form-radio h-5 w-5"
                                         />
                                         <span className="ml-2">N/A</span>
